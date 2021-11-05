@@ -25,18 +25,19 @@ class _TextJFormFieldState extends State<TextJFormField> {
       obscureText: widget.property.format == PropertyFormat.password,
       initialValue: widget.property.defaultValue ?? '',
       onSaved: widget.onSaved,
+      maxLength: widget.property.maxLength,
       inputFormatters: [textInputCustomFormatter(widget.property.format)],
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? value) {
         if (widget.property.required && value != null && value.isEmpty) {
           return 'Required';
         }
-        if (widget.property.minLength != null &&
-            value != null &&
-            value.isNotEmpty &&
-            value.length <= widget.property.minLength!) {
-          return 'should NOT be shorter than ${widget.property.minLength} characters';
+        if (value != null && widget.property.minLength != null) {
+          if (value.length <= widget.property.minLength!) {
+            return 'should NOT be shorter than ${widget.property.minLength} characters';
+          }
         }
+
         return null;
       },
       decoration: InputDecoration(
@@ -85,7 +86,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
         textInputFormatter = EmailTextInputJsonFormatter();
         break;
       default:
-        textInputFormatter = DefaultTextInputJsonFormatter();
+        textInputFormatter = DefaultTextInputJsonFormatter(pattern:widget.property.pattern);
         break;
     }
     return textInputFormatter;

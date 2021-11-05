@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 
 class DefaultTextInputJsonFormatter extends TextInputFormatter {
+  final String? pattern;
+  DefaultTextInputJsonFormatter({this.pattern});
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
@@ -9,8 +11,14 @@ class DefaultTextInputJsonFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    if (!RegExp(r'[A-Za-z]').hasMatch(newValue.text)) {
-      return oldValue;
+    if (pattern != null) {
+      if (!RegExp('$pattern').hasMatch(newValue.text)) {
+        return oldValue;
+      }
+    } else {
+      if (!RegExp(r'[A-Za-z]').hasMatch(newValue.text)) {
+        return oldValue;
+      }
     }
 
     return newValue.copyWith(
