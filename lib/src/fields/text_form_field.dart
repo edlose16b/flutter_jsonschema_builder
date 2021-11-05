@@ -32,12 +32,19 @@ class _TextJFormFieldState extends State<TextJFormField> {
         if (widget.property.required && value != null && value.isEmpty) {
           return 'Required';
         }
-        if (value != null && widget.property.minLength != null) {
+
+         if (value != null && widget.property.minLength != null) {
           if (value.length <= widget.property.minLength!) {
             return 'should NOT be shorter than ${widget.property.minLength} characters';
           }
         }
 
+        // if (widget.property.minLength != null &&
+        //     value != null &&
+        //     value.isNotEmpty &&
+        //     value.length <= widget.property.minLength!) {
+        //   return 'should NOT be shorter than ${widget.property.minLength} characters';
+        // }
         return null;
       },
       decoration: InputDecoration(

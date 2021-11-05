@@ -20,42 +20,77 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 class SchemaProperty extends Schema {
-  SchemaProperty(
-      {required String id,
-      required SchemaType type,
-      String? title,
-      String? description,
-      this.defaultValue,
-      this.enumm,
-      this.enumNames,
-      this.required = false,
-      this.format = PropertyFormat.general,
-      this.minLength,
-      this.maxLength,
-      this.pattern})
-      : super(
+  SchemaProperty({
+    required String id,
+    required SchemaType type,
+    String? title,
+    String? description,
+    this.defaultValue,
+    this.enumm,
+    this.enumNames,
+    this.required = false,
+    this.format = PropertyFormat.general,
+    this.minLength,
+    this.maxLength,
+    this.pattern,
+  }) : super(
           id: id,
           title: title ?? 'no-title',
           type: type,
           description: description,
         );
 
-  factory SchemaProperty.fromJson(String id, Map<String, dynamic> json) {
+  factory SchemaProperty.fromJson(
+    String id,
+    Map<String, dynamic> json, {
+    Schema? parent,
+  }) {
     final property = SchemaProperty(
-        id: id,
-        title: json['title'],
-        type: schemaTypeFromString(json['type']),
-        format: propertyFormatFromString(json['format']),
-        defaultValue: json['default'],
-        description: json['description'],
-        // enums
-        enumm: json['enum'],
-        enumNames: json['enumNames'],
-        minLength: json['minLength'],
-        maxLength: json['maxLength'],
-        pattern: json['pattern']);
+      id: id,
+      title: json['title'],
+      type: schemaTypeFromString(json['type']),
+      format: propertyFormatFromString(json['format']),
+      defaultValue: json['default'],
+      description: json['description'],
+      // enums
+      enumm: json['enum'],
+      enumNames: json['enumNames'],
+      minLength: json['minLength'],
+      maxLength: json['maxLength'],
+      pattern: json['pattern'],
+    );
+    property.parentIdKey = parent?.idKey;
 
     return property;
+  }
+
+  @override
+  SchemaProperty copyWith({
+    required String id,
+    String? parentIdKey,
+  }) {
+    var newSchema = SchemaProperty(
+      id: id,
+      title: title,
+      type: type,
+      description: description,
+      format: format,
+      defaultValue: defaultValue,
+      enumNames: enumNames,
+      enumm: enumm,
+      required: required,
+    )
+      ..autoFocus = autoFocus
+      ..emptyValue = emptyValue
+      ..help = help
+      ..maxLength = maxLength
+      ..minLength = minLength
+      ..widget = widget
+      ..parentIdKey = parentIdKey ?? this.parentIdKey
+      ..oneOf = oneOf
+      ..required = required;
+
+    return newSchema;
   }
 
   PropertyFormat format;

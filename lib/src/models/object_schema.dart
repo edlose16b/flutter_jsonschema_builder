@@ -4,6 +4,7 @@ class SchemaObject extends Schema {
   SchemaObject({
     required String id,
     this.required = const [],
+    this.dependencies,
     String? title,
     String? description,
   }) : super(
@@ -13,7 +14,11 @@ class SchemaObject extends Schema {
           description: description,
         );
 
-  factory SchemaObject.fromJson(String id, Map<String, dynamic> json) {
+  factory SchemaObject.fromJson(
+    String id,
+    Map<String, dynamic> json, {
+    Schema? parent,
+  }) {
     final schema = SchemaObject(
       id: id,
       title: json['title'],
@@ -21,13 +26,41 @@ class SchemaObject extends Schema {
       required: json["required"] != null
           ? List<String>.from(json["required"].map((x) => x))
           : [],
+      dependencies: json['dependencies'],
     );
 
+    schema.parentIdKey = parent?.idKey;
     schema.setProperties(json['properties'], schema);
     schema.setOneOf(json['oneOf'], schema);
 
     return schema;
   }
+
+  @override
+  Schema copyWith({
+    required String id,
+    String? parentIdKey,
+  }) {
+    var newSchema = SchemaObject(
+      id: id,
+      title: title,
+      description: description,
+    )
+      ..parentIdKey = parentIdKey ?? this.parentIdKey
+      ..type = type
+      ..dependencies = dependencies
+      ..oneOf = oneOf
+      ..required = required;
+
+    final otherProperties = properties!; //.map((p) => p.copyWith(id: p.id));
+
+    newSchema.properties = otherProperties
+        .map((e) => e.copyWith(id: e.id, parentIdKey: newSchema.idKey))
+        .toList();
+
+    return newSchema;
+  }
+
   // ! Getters
   bool get isGenesis => id == kGenesisIdKey;
 
@@ -35,10 +68,18 @@ class SchemaObject extends Schema {
   List<String> required;
   List<Schema>? properties;
 
+  /// the dependencies keyword from an earlier draft of JSON Schema
+  /// (note that this is not part of the latest JSON Schema spec, though).
+  /// Dependencies can be used to create dynamic schemas that change fields based on what data is entered
+  Map<String, dynamic>? dependencies;
+
+  /// A [Schema] with [oneOf] is valid if exactly one of the subschemas is valid.
   List<Schema>? oneOf;
 
   void setProperties(
-      Map<String, Map<String, dynamic>>? properties, SchemaObject schema) {
+    Map<String, Map<String, dynamic>>? properties,
+    SchemaObject schema,
+  ) {
     if (properties == null) return;
     var props = <Schema>[];
 

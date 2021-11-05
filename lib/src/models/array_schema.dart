@@ -1,5 +1,12 @@
 import '../models/models.dart';
 
+extension SchemaArrayX on SchemaArray {
+  bool get isMultipleFile {
+    return items.first is SchemaProperty &&
+        (items.first as SchemaProperty).format == PropertyFormat.dataurl;
+  }
+}
+
 class SchemaArray extends Schema {
   SchemaArray({
     required String id,
@@ -7,14 +14,19 @@ class SchemaArray extends Schema {
     this.minItems,
     this.maxItems,
     this.uniqueItems = true,
+    this.items = const [],
   }) : super(
           id: id,
           title: title ?? 'no-title',
           type: SchemaType.array,
         );
 
-  factory SchemaArray.fromJson(String id, Map<String, dynamic> json) {
-    final property = SchemaArray(
+  factory SchemaArray.fromJson(
+    String id,
+    Map<String, dynamic> json, {
+    Schema? parent,
+  }) {
+    final schemaArray = SchemaArray(
       id: id,
       title: json['title'],
       minItems: json['minItems'],
@@ -22,22 +34,53 @@ class SchemaArray extends Schema {
       uniqueItems: json['uniqueItems'] ?? true,
     );
 
+    schemaArray.parentIdKey = parent?.idKey;
+
     if (json['items'] is Object) {
-      property.items = Schema.fromJson(
+      final newSchema = Schema.fromJson(
         json['items'],
-        // id: 'oemano',
-        parent: property,
+        id: '0',
+        parent: schemaArray,
       );
+
+      schemaArray.items = [newSchema];
     } else {
-      property.items = (json['items'] as List<Map<String, dynamic>>)
-          .map((e) => Schema.fromJson(e));
+      schemaArray.items = (json['items'] as List<Map<String, dynamic>>)
+          .map((e) => Schema.fromJson(
+                e,
+                id: '0',
+                parent: schemaArray,
+              ))
+          .toList();
     }
 
-    return property;
+    return schemaArray;
+  }
+
+  @override
+  SchemaArray copyWith({
+    required String id,
+    String? parentIdKey,
+  }) {
+    var newSchema = SchemaArray(
+      id: id,
+      title: title,
+      maxItems: maxItems,
+      minItems: minItems,
+      uniqueItems: uniqueItems,
+    )
+      ..parentIdKey = parentIdKey ?? this.parentIdKey
+      ..type = type;
+
+    newSchema.items = items
+        .map((e) => e.copyWith(id: e.id, parentIdKey: newSchema.idKey))
+        .toList();
+
+    return newSchema;
   }
 
   /// can be array of [Schema] or [Schema]
-  dynamic items;
+  List<Schema> items;
 
   int? minItems;
   int? maxItems;
