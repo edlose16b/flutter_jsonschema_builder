@@ -20,17 +20,20 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 class SchemaProperty extends Schema {
-  SchemaProperty({
-    required String id,
-    required SchemaType type,
-    String? title,
-    String? description,
-    this.defaultValue,
-    this.enumm,
-    this.enumNames,
-    this.required = false,
-    this.format = PropertyFormat.general,
-  }) : super(
+  SchemaProperty(
+      {required String id,
+      required SchemaType type,
+      String? title,
+      String? description,
+      this.defaultValue,
+      this.enumm,
+      this.enumNames,
+      this.required = false,
+      this.format = PropertyFormat.general,
+      this.minLength,
+      this.maxLength,
+      this.pattern})
+      : super(
           id: id,
           title: title ?? 'no-title',
           type: type,
@@ -39,16 +42,18 @@ class SchemaProperty extends Schema {
 
   factory SchemaProperty.fromJson(String id, Map<String, dynamic> json) {
     final property = SchemaProperty(
-      id: id,
-      title: json['title'],
-      type: schemaTypeFromString(json['type']),
-      format: propertyFormatFromString(json['format']),
-      defaultValue: json['default'],
-      description: json['description'],
-      // enums
-      enumm: json['enum'],
-      enumNames: json['enumNames'],
-    );
+        id: id,
+        title: json['title'],
+        type: schemaTypeFromString(json['type']),
+        format: propertyFormatFromString(json['format']),
+        defaultValue: json['default'],
+        description: json['description'],
+        // enums
+        enumm: json['enum'],
+        enumNames: json['enumNames'],
+        minLength: json['minLength'],
+        maxLength: json['maxLength'],
+        pattern: json['pattern']);
 
     return property;
   }
@@ -67,6 +72,7 @@ class SchemaProperty extends Schema {
   bool required;
   bool? autoFocus;
   int? minLength, maxLength;
+  String? pattern;
 
   // not suported yet
   String? widget, emptyValue, help = '';
