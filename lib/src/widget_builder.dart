@@ -23,7 +23,7 @@ class JsonForm extends StatefulWidget {
 }
 
 class _JsonFormState extends State<JsonForm> {
-  late SchemaObject schema;
+  late SchemaObject mainSchema;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -37,7 +37,8 @@ class _JsonFormState extends State<JsonForm> {
 
   @override
   void initState() {
-    schema =
+    print('initState');
+    mainSchema =
         Schema.fromJson(widget.jsonSchema, id: kGenesisIdKey) as SchemaObject;
 
     super.initState();
@@ -45,6 +46,10 @@ class _JsonFormState extends State<JsonForm> {
 
   @override
   Widget build(BuildContext context) {
+    print('😧😮‍💨');
+
+    // print(widget.jsonSchema);
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -54,25 +59,32 @@ class _JsonFormState extends State<JsonForm> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      print('0' == '');
+                      inspect(mainSchema);
+                    },
+                    child: const Text('INSPECT'),
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const SizedBox(width: double.infinity),
                       Text(
-                        schema.title,
+                        mainSchema.title,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       // const Divider(color: Colors.black),
-                      if (schema.description != null)
+                      if (mainSchema.description != null)
                         Text(
-                          schema.description!,
+                          mainSchema.description!,
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
                     ],
                   ),
                   Container(
                     padding: const EdgeInsets.all(10.0),
-                    child: _buildFormFromSchema(schema),
+                    child: _buildFormFromSchema(mainSchema),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -203,57 +215,77 @@ class _JsonFormState extends State<JsonForm> {
   }
 
   Widget _buildArray(SchemaArray schema) {
-    print(schema);
-    if (schema.items is List) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Array ' + schema.idKey),
-          ...(schema.items as List).map((e) => _buildFormFromSchema(e)).toList()
-        ],
-      );
-    } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            schema.title,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          if (schema.description != null)
-            Text(
-              schema.description!,
-              style: Theme.of(context).textTheme.bodyText2,
+    Widget widget;
+    widget = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _GeneralSubtitle(
+          title: schema.title,
+          description: schema.description,
+          mainSchemaTitle: mainSchema.title,
+        ),
+        ...schema.items.map((e) {
+          final index = schema.items.indexOf(e);
+          return Column(
+            children: [
+              if (index >= 1)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        schema.items.removeAt(index);
+                      });
+                    },
+                    icon: const Icon(Icons.remove),
+                    label: const Text('Eliminar item'),
+                  ),
+                ),
+              _buildFormFromSchema(e),
+              if (schema.items.length > 1) const Divider(),
+              const SizedBox(height: 10),
+            ],
+          );
+        }).toList(),
+      ],
+    );
+
+    return Column(
+      children: [
+        widget,
+        if (!schema.isMultipleFile)
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: () {
+                // inspect(schema);
+                final newSchemaObject = schema.items.first
+                    .copyWith(id: schema.items.length.toString());
+
+                schema.items.add(newSchemaObject);
+
+                inspect(schema);
+                setState(() {});
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Añadir Item'),
             ),
-          _buildFormFromSchema(schema.items)
-        ],
-      );
-    }
+          ),
+      ],
+    );
   }
 
   Widget _buildObject(SchemaObject schema) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (this.schema.title != schema.title && schema.title != _kNoTitle)
-          Text(
-            schema.title,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-        if (schema.description != null)
-          Text(
-            schema.description!,
-            style: Theme.of(context).textTheme.bodyText2,
-          ),
-        if (this.schema.title != schema.title) const SizedBox(height: 25),
+        _GeneralSubtitle(
+          title: schema.title,
+          description: schema.description,
+          mainSchemaTitle: mainSchema.title,
+        ),
         if (schema.properties != null)
-          ...schema.properties!.map((e) => _buildFormFromSchema(e)).toList()
+          ...schema.properties!.map((e) => _buildFormFromSchema(e)).toList(),
       ],
     );
   }
@@ -301,4 +333,52 @@ class _JsonFormState extends State<JsonForm> {
       }
     }
   }
+}
+
+class _GeneralSubtitle extends StatelessWidget {
+  const _GeneralSubtitle({
+    Key? key,
+    required this.title,
+    this.description,
+    this.mainSchemaTitle,
+  }) : super(key: key);
+
+  final String title;
+  final String? description, mainSchemaTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (mainSchemaTitle != title && title != _kNoTitle)
+          Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+        if (description != null)
+          Text(
+            description!,
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+      ],
+    );
+  }
+
+  // if (mainSchema.title != schema.title && schema.title != _kNoTitle)
+  //         Text(
+  //           schema.title,
+  //           style: Theme.of(context)
+  //               .textTheme
+  //               .subtitle1!
+  //               .copyWith(fontWeight: FontWeight.bold),
+  //         ),
+  //       if (schema.description != null)
+  //         Text(
+  //           schema.description!,
+  //           style: Theme.of(context).textTheme.bodyText2,
+  //         ),
+  //       if (mainSchema.title != schema.title) const SizedBox(height: 25),
 }

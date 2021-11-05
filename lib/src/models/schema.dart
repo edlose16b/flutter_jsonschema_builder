@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import '../models/models.dart';
 // Esto transforma el JSON a Modelos
@@ -20,7 +22,7 @@ class Schema {
     required this.type,
     this.title = 'no-title',
     this.description,
-    this.parent,
+    this.parentIdKey,
   });
 
   factory Schema.fromJson(
@@ -32,20 +34,20 @@ class Schema {
 
     switch (schemaTypeFromString(json['type'])) {
       case SchemaType.object:
-        schema = SchemaObject.fromJson(id, json);
+        schema = SchemaObject.fromJson(id, json, parent: parent);
         break;
 
       case SchemaType.array:
-        schema = SchemaArray.fromJson(id, json);
+        schema = SchemaArray.fromJson(id, json, parent: parent);
 
         break;
 
       default:
-        schema = SchemaProperty.fromJson(id, json);
+        schema = SchemaProperty.fromJson(id, json, parent: parent);
         break;
     }
 
-    return schema..parent = parent;
+    return schema;
   }
 
   // props
@@ -55,34 +57,44 @@ class Schema {
   SchemaType type;
 
   // util props
-  Schema? parent;
+  String? parentIdKey;
 
   /// it lets us know the key in the formData Map {key}
   String get idKey {
-    if (parent != null && !parent!.id.contains(kGenesisIdKey)) {
-      if (parent!.id == kNoIdKey) {
-        var parentParent = parent?.parent;
-        bool parentParentIsArray = parentParent?.type == SchemaType.array;
+    print('----');
+    print('idKey[$id] | parentIdKey[$parentIdKey]');
 
-        if (parentParentIsArray) {
-          parentParent = parentParent as SchemaArray;
-          var totalChilds = 0;
-          if (parentParent.items is List) {
-            totalChilds = parentParent.items.length;
-          }
+    if (parentIdKey != null && parentIdKey != (kGenesisIdKey)) {
+      print('😱 😱 resultado es ${_appendId(parentIdKey!, id)} ');
 
-          return _appendId('${parentParent.idKey}.$totalChilds', id);
-        }
-
-        return _appendId(parentParent!.idKey, id);
+      if (this is SchemaProperty &&
+          (this as SchemaProperty).format == PropertyFormat.dataurl) {
+        return parentIdKey!;
       }
 
-      return _appendId(parent!.idKey, id);
+      return _appendId(parentIdKey!, id);
     }
+    print('😱 resultado es $id');
 
     return id;
   }
 
-  String _appendId(String path, String id) =>
-      id != kNoIdKey ? '$path.$id' : path;
+  String _appendId(String path, String id) {
+    final key = id != kNoIdKey ? '$path.$id' : path;
+
+    return key;
+  }
+
+  Schema copyWith({
+    required String id,
+    String? parentIdKey,
+  }) {
+    return Schema(
+      id: id,
+      type: type,
+      title: title,
+      description: description,
+      parentIdKey: parentIdKey ?? this.parentIdKey,
+    );
+  }
 }
