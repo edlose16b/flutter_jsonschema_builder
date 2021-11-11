@@ -11,8 +11,10 @@ String? inputValidationJsonSchema(
       property.minLength != null) {
     return 'should NOT be shorter than ${property.minLength} characters';
   }
-
-  if (!(isURL(newValue) && (property.format == PropertyFormat.uri))) {
-    return 'you should enter a uri';
+  
+  if ((property.format == PropertyFormat.uri)) {
+    if (!(isURL(newValue))) {
+      return 'you should enter a uri';
+    }
   }
 }
