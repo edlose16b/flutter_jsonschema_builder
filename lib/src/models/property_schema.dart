@@ -1,6 +1,6 @@
 import '../models/models.dart';
 
-enum PropertyFormat { general, password, date, datetime, email, dataurl, url }
+enum PropertyFormat { general, password, date, datetime, email, dataurl, uri }
 
 PropertyFormat propertyFormatFromString(String? value) {
   switch (value) {
@@ -14,6 +14,8 @@ PropertyFormat propertyFormatFromString(String? value) {
       return PropertyFormat.email;
     case 'data-url':
       return PropertyFormat.dataurl;
+    case 'uri':
+      return PropertyFormat.uri;
     default:
       return PropertyFormat.general;
   }

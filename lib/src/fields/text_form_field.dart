@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_form/src/utils/input_validation_json_schema.dart';
 
 import '../utils/utils.dart';
 import '../models/models.dart';
@@ -29,23 +30,10 @@ class _TextJFormFieldState extends State<TextJFormField> {
       inputFormatters: [textInputCustomFormatter(widget.property.format)],
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (String? value) {
-        if (widget.property.required && value != null && value.isEmpty) {
-          return 'Required';
+        if (value != null) {
+          return inputValidationJsonSchema(
+              newValue: value, property: widget.property);
         }
-
-         if (value != null && widget.property.minLength != null) {
-          if (value.length <= widget.property.minLength!) {
-            return 'should NOT be shorter than ${widget.property.minLength} characters';
-          }
-        }
-
-        // if (widget.property.minLength != null &&
-        //     value != null &&
-        //     value.isNotEmpty &&
-        //     value.length <= widget.property.minLength!) {
-        //   return 'should NOT be shorter than ${widget.property.minLength} characters';
-        // }
-        return null;
       },
       decoration: InputDecoration(
         labelText: widget.property.required
@@ -78,7 +66,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
       case PropertyFormat.dataurl:
         textInputType = TextInputType.text;
         break;
-      case PropertyFormat.url:
+      case PropertyFormat.uri:
         textInputType = TextInputType.url;
         break;
     }
@@ -93,7 +81,8 @@ class _TextJFormFieldState extends State<TextJFormField> {
         textInputFormatter = EmailTextInputJsonFormatter();
         break;
       default:
-        textInputFormatter = DefaultTextInputJsonFormatter(pattern:widget.property.pattern);
+        textInputFormatter =
+            DefaultTextInputJsonFormatter(pattern: widget.property.pattern);
         break;
     }
     return textInputFormatter;
