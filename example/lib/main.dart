@@ -77,7 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
           "type": "string",
           "enum": ["foo", "bar", "fuzz"]
         }
-      }
+      },
+      "datetime": {"type": "string", "format": "date-time"},
+      "date": {"type": "string", "format": "date", "default": "11-11-2021"}
     }
   };
 

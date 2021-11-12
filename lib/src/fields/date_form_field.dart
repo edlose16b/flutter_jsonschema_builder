@@ -20,8 +20,16 @@ class DateJFormField extends StatefulWidget {
 }
 
 class _DateJFormFieldState extends State<DateJFormField> {
-  final txtDateCtrl = MaskedTextController(mask: '00-00-0000');
+  late TextEditingController txtDateCtrl;
   final formatter = DateFormat('dd-MM-yyyy');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    txtDateCtrl =
+        TextEditingController(text: widget.property.defaultValue ?? '');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
