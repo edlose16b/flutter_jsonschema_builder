@@ -8,7 +8,7 @@ PropertyFormat propertyFormatFromString(String? value) {
       return PropertyFormat.password;
     case 'date':
       return PropertyFormat.date;
-    case 'datetime':
+    case 'date-time':
       return PropertyFormat.datetime;
     case 'email':
       return PropertyFormat.email;
