@@ -2,11 +2,12 @@
 
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/general_subtitle_widget.dart';
 
-import './fields/fields.dart';
-import './models/models.dart';
+import '../fields/fields.dart';
+import '../models/models.dart';
 
-const String _kNoTitle = 'no-title';
+const String kNoTitle = 'no-title';
 
 class JsonForm extends StatefulWidget {
   const JsonForm({
@@ -219,10 +220,11 @@ class _JsonFormState extends State<JsonForm> {
     widget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _GeneralSubtitle(
+        GeneralSubtitle(
           title: schema.title,
           description: schema.description,
           mainSchemaTitle: mainSchema.title,
+          nainSchemaDescription: mainSchema.description,
         ),
         ...schema.items.map((e) {
           final index = schema.items.indexOf(e);
@@ -279,10 +281,11 @@ class _JsonFormState extends State<JsonForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _GeneralSubtitle(
+        GeneralSubtitle(
           title: schema.title,
           description: schema.description,
           mainSchemaTitle: mainSchema.title,
+          nainSchemaDescription: mainSchema.description,
         ),
         if (schema.properties != null)
           ...schema.properties!.map((e) => _buildFormFromSchema(e)).toList(),
@@ -333,52 +336,4 @@ class _JsonFormState extends State<JsonForm> {
       }
     }
   }
-}
-
-class _GeneralSubtitle extends StatelessWidget {
-  const _GeneralSubtitle({
-    Key? key,
-    required this.title,
-    this.description,
-    this.mainSchemaTitle,
-  }) : super(key: key);
-
-  final String title;
-  final String? description, mainSchemaTitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (mainSchemaTitle != title && title != _kNoTitle)
-          Text(
-            title,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-        if (description != null)
-          Text(
-            description!,
-            style: Theme.of(context).textTheme.bodyText2,
-          ),
-      ],
-    );
-  }
-
-  // if (mainSchema.title != schema.title && schema.title != _kNoTitle)
-  //         Text(
-  //           schema.title,
-  //           style: Theme.of(context)
-  //               .textTheme
-  //               .subtitle1!
-  //               .copyWith(fontWeight: FontWeight.bold),
-  //         ),
-  //       if (schema.description != null)
-  //         Text(
-  //           schema.description!,
-  //           style: Theme.of(context).textTheme.bodyText2,
-  //         ),
-  //       if (mainSchema.title != schema.title) const SizedBox(height: 25),
 }
