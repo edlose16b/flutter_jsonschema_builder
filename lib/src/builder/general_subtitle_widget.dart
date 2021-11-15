@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
+import 'package:flutter_jsonschema_form/src/models/models.dart';
 
 class GeneralSubtitle extends StatelessWidget {
   const GeneralSubtitle({

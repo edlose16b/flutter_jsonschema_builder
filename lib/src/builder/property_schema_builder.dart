@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
@@ -18,17 +19,18 @@ class PropertySchemaBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget _field = const SizedBox.shrink();
 
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+
     if (schemaProperty.enumm != null) {
       _field = DropDownJFormField(
         property: schemaProperty,
         onSaved: (val) {
           log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
-          WidgetBuilderInherited.of(context).updateObjectData(
-            WidgetBuilderInherited.of(context).data,
+          widgetBuilderInherited.updateObjectData(
+            widgetBuilderInherited.data,
             schemaProperty.idKey,
             val,
           );
-          //updateObjectData(data, schemaProperty.idKey, val);
         },
       );
     } else {
@@ -40,12 +42,11 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaProperty,
               onSaved: (val) {
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
-                WidgetBuilderInherited.of(context).updateObjectData(
-                  WidgetBuilderInherited.of(context).data,
+                widgetBuilderInherited.updateObjectData(
+                  widgetBuilderInherited.data,
                   schemaProperty.idKey,
                   val,
                 );
-                //updateObjectData(data, schemaProperty.idKey, val);
               },
             );
             break;
@@ -56,12 +57,11 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaProperty,
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
-                WidgetBuilderInherited.of(context).updateObjectData(
-                  WidgetBuilderInherited.of(context).data,
+                widgetBuilderInherited.updateObjectData(
+                  widgetBuilderInherited.data,
                   schemaProperty.idKey,
                   val,
                 );
-                //updateObjectData(data, schemaProperty.idKey, val);
               },
             );
             break;
@@ -71,12 +71,11 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaProperty,
               onSaved: (val) {
                 log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
-                WidgetBuilderInherited.of(context).updateObjectData(
-                  WidgetBuilderInherited.of(context).data,
+                widgetBuilderInherited.updateObjectData(
+                  widgetBuilderInherited.data,
                   schemaProperty.idKey,
                   val,
                 );
-                //updateObjectData(data, schemaProperty.idKey, val);
               });
           break;
         case SchemaType.integer:
@@ -85,12 +84,11 @@ class PropertySchemaBuilder extends StatelessWidget {
             property: schemaProperty,
             onSaved: (val) {
               log('onSaved: NumberJFormField ${schemaProperty.idKey}  : $val');
-              WidgetBuilderInherited.of(context).updateObjectData(
-                WidgetBuilderInherited.of(context).data,
+              widgetBuilderInherited.updateObjectData(
+                widgetBuilderInherited.data,
                 schemaProperty.idKey,
                 val,
               );
-              //updateObjectData(data, schemaProperty.idKey, val);
             },
           );
           break;
@@ -99,12 +97,11 @@ class PropertySchemaBuilder extends StatelessWidget {
             property: schemaProperty,
             onSaved: (val) {
               log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
-              WidgetBuilderInherited.of(context).updateObjectData(
-                WidgetBuilderInherited.of(context).data,
+              widgetBuilderInherited.updateObjectData(
+                widgetBuilderInherited.data,
                 schemaProperty.idKey,
                 val,
               );
-              //updateObjectData(data, schemaProperty.idKey, val);
             },
           );
           break;
@@ -113,12 +110,11 @@ class PropertySchemaBuilder extends StatelessWidget {
             property: schemaProperty,
             onSaved: (val) {
               log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
-              WidgetBuilderInherited.of(context).updateObjectData(
-                WidgetBuilderInherited.of(context).data,
+              widgetBuilderInherited.updateObjectData(
+                widgetBuilderInherited.data,
                 schemaProperty.idKey,
                 val,
               );
-              //updateObjectData(data, schemaProperty.idKey, val);
             },
           );
       }

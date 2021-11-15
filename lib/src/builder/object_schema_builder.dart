@@ -31,4 +31,6 @@ class ObjectSchemaBuilder extends StatelessWidget {
       ],
     );
   }
+
+  void prueba1(String value, SchemaProperty schemaProperty) {}
 }
