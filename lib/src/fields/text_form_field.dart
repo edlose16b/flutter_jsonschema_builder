@@ -29,6 +29,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
       maxLength: widget.property.maxLength,
       inputFormatters: [textInputCustomFormatter(widget.property.format)],
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      onChanged: (value) {},
       validator: (String? value) {
         if (value != null) {
           return inputValidationJsonSchema(

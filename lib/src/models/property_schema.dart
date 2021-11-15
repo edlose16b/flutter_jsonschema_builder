@@ -110,6 +110,7 @@ class SchemaProperty extends Schema {
   bool? autoFocus;
   int? minLength, maxLength;
   String? pattern;
+  dynamic dependents;
 
   // not suported yet
   String? widget, emptyValue, help = '';
