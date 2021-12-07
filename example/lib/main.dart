@@ -52,174 +52,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   final json = {
-      "title": "Antecedentes de la persona declarante",
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "Razón social",
-          "default": "Tesla"
-          // "format": "password"
+    "title": "Property dependencies",
+    "description": "These samples are best viewed without live validation.",
+    "type": "object",
+    "properties": {
+      "unidirectional": {
+        "title": "Unidirectional",
+        "src":
+            "https://spacetelescope.github.io/understanding-json-schema/reference/object.html#dependencies",
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "credit_card": {"type": "number"},
+          "billing_address": {"type": "string"}
         },
-        "cola": {
-          "type": "string",
-          "title": "Gaseosa preferida",
-          "default": "coca",
-          "enum": ["coca", "pepsi", "7up"],
-          "enumNames": ['Coca Cola', 'Pepsi', "7 Up"]
-        },
-        "birthday": {
-          "type": "string",
-          "format": "date",
-          "title": "Fecha de constitución",
-          "default": "04/09/1998"
-        },
-        "dni": {"type": "string", "title": "ID", "default": "Tax Tesla"},
-        "company_address": {
-          "type": "object",
-          "title": "Domicilio social",
-          "properties": {
-            "street": {
-              "type": "string",
-              "title": "Dirección",
-              "default": "Av. Tesla"
-            },
-            "city": {
-              "type": "string",
-              "title": "Ciudad",
-              "default": "City Tesla"
-            },
-            "number_house": {
-              "type": "string",
-              "title": "Número de Casa",
-              "default": "AB123"
-            }
-          },
-          "required": ["street", "city", "number_house"]
-        },
-        "people": {
-          "type": "array",
-          "title": "Personas",
-          "minItems": 1,
-          "items": {
-            "type": "object",
-            "properties": {
-              "first_name": {"type": "string", "title": "Nombre"},
-              "last_name": {"type": "string", "title": "Apellido"},
-              "id_number": {
-                "type": "string",
-                "title": "Número de documento de identidad"
-              },
-              "id_documents": {
-                "type": "array",
-                "uniqueItems": true,
-                "minItems": 1,
-                "maxItems": 2,
-                "title": "Documentos de identidad (frente y reverso)",
-                "items": {"type": "string", "format": "data-url"}
-              }
-            },
-            "required": ["first_name", "last_name", "id_number", "id_documents"]
-          }
-        },
-        "website": {
-          "type": "string",
-          "title": "Sitio web",
-          "default": "tesla.com"
-        },
-        "contact_number": {
-          "type": "string",
-          "title": "Número de contacto",
-          "default": "987654321"
-        },
-        "contact_email": {
-          "type": "string",
-          "title": "Email de contacto",
-          "format": "email",
-          "default": "info@tesla.com"
-        },
-        "society_type": {
-          "type": "string",
-          "title": "Tipo de sociedad",
-          "default": "random text",
-          "oneOf": [
-            {
-              "type": "string",
-              "title": "Sociedad anónima",
-              "enum": ["anonym"]
-            },
-            {
-              "type": "string",
-              "title": "Sociedad de responsabilidad limitada",
-              "enum": ["limited_responsability"]
-            },
-            {
-              "type": "string",
-              "title": "Empresa individual de responsabilidad limitada",
-              "enum": ["individual_limited_responsability"]
-            },
-            {
-              "type": "string",
-              "title": "Otro",
-              "enum": ["another"]
-            }
-          ]
+        "required": ["name"],
+        "dependencies": {
+          "credit_card": ["billing_address"]
         }
       },
-      "required": [
-        "name",
-        "birthday",
-        "dni",
-        "society_type",
-        "people",
-        "company_address",
-        "website",
-        "contact_number",
-        "contact_email",
-        "cola"
-      ],
-      "dependencies": {
-        "society_type": {
-          "oneOf": [
-            {
-              "properties": {
-                "society_type": {
-                  "enum": ["anonym"]
-                }
-              }
-            },
-            {
-              "properties": {
-                "society_type": {
-                  "enum": ["another"]
-                },
-                "society_other_name": {
-                  "type": "string",
-                  "title": "Específique tipo de sociedad"
-                }
-              },
-              "required": ["society_other_name"]
-            },
-            {
-              "properties": {
-                "society_type": {
-                  "enum": ["limited_responsability"]
-                }
-              }
-            },
-            {
-              "properties": {
-                "society_type": {
-                  "enum": ["individual_limited_responsability"]
-                }
-              }
-            }
-          ]
+      "bidirectional": {
+        "title": "Bidirectional",
+        "src":
+            "https://spacetelescope.github.io/understanding-json-schema/reference/object.html#dependencies",
+        "description":
+            "Dependencies are not bidirectional, you can, of course, define the bidirectional dependencies explicitly.",
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "credit_card": {"type": "number"},
+          "billing_address": {"type": "string"}
+        },
+        "required": ["name"],
+        "dependencies": {
+          "credit_card": ["billing_address"],
+          "billing_address": ["credit_card"]
         }
       }
-    };
+    }
+  };
 
   @override
   Widget build(BuildContext context) {

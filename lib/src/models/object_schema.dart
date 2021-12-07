@@ -82,13 +82,12 @@ class SchemaObject extends Schema {
   ) {
     if (properties == null) return;
     var props = <Schema>[];
-
     properties.forEach((key, _property) {
       final isRequired = schema.required.contains(key);
       final dependents = schema.dependencies?[key];
 
       Schema? property;
-
+      print('Esta es $_property');
       property = Schema.fromJson(
         _property,
         id: key,
@@ -101,12 +100,13 @@ class SchemaObject extends Schema {
         // Asignamos las propiedades que dependen de este
         if (dependencies != null) {
           property.dependents = dependents;
+          print('==================');
+          print(dependents);
         }
       }
 
       props.add(property);
     });
-
     this.properties = props;
   }
 

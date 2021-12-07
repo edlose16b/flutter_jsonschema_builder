@@ -6,14 +6,32 @@ import 'package:flutter_jsonschema_form/src/models/models.dart';
 class ObjectSchemaBuilder extends StatelessWidget {
   const ObjectSchemaBuilder({
     Key? key,
+    this.id,
     required this.mainSchema,
     required this.schemaObject,
   }) : super(key: key);
-
+  final String? id;
   final Schema mainSchema;
   final SchemaObject schemaObject;
   @override
   Widget build(BuildContext context) {
+    print(schemaObject.dependencies);
+    print(schemaObject.properties);
+    int ttt = 0;
+    if (schemaObject != null) {
+      schemaObject.dependencies?.forEach((key, value) {
+        schemaObject.properties?.forEach((element) {
+          if (key == element.id) {
+            schemaObject.required.addAll(value);
+            schemaObject.copyWith(id: element.id);
+            print(schemaObject.required);
+            print(++ttt);
+            print(value.first);
+          }
+        });
+      });
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,10 +42,13 @@ class ObjectSchemaBuilder extends StatelessWidget {
           nainSchemaDescription: mainSchema.description,
         ),
         if (schemaObject.properties != null)
-          ...schemaObject.properties!
-              .map((e) =>
-                  FormFromSchemaBuilder(mainSchema: mainSchema, schema: e))
-              .toList(),
+          ...schemaObject.properties!.map((e) {
+            return FormFromSchemaBuilder(
+              mainSchema: mainSchema,
+              schema: e,
+              id: e.id,
+            );
+          }).toList(),
       ],
     );
   }

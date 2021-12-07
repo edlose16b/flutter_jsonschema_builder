@@ -22,20 +22,21 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 class SchemaProperty extends Schema {
-  SchemaProperty({
-    required String id,
-    required SchemaType type,
-    String? title,
-    String? description,
-    this.defaultValue,
-    this.enumm,
-    this.enumNames,
-    this.required = false,
-    this.format = PropertyFormat.general,
-    this.minLength,
-    this.maxLength,
-    this.pattern,
-  }) : super(
+  SchemaProperty(
+      {required String id,
+      required SchemaType type,
+      String? title,
+      String? description,
+      this.defaultValue,
+      this.enumm,
+      this.enumNames,
+      this.required = false,
+      this.format = PropertyFormat.general,
+      this.minLength,
+      this.maxLength,
+      this.pattern,
+      this.dependents})
+      : super(
           id: id,
           title: title ?? 'no-title',
           type: type,
@@ -48,19 +49,19 @@ class SchemaProperty extends Schema {
     Schema? parent,
   }) {
     final property = SchemaProperty(
-      id: id,
-      title: json['title'],
-      type: schemaTypeFromString(json['type']),
-      format: propertyFormatFromString(json['format']),
-      defaultValue: json['default'],
-      description: json['description'],
-      // enums
-      enumm: json['enum'],
-      enumNames: json['enumNames'],
-      minLength: json['minLength'],
-      maxLength: json['maxLength'],
-      pattern: json['pattern'],
-    );
+        id: id,
+        title: json['title'],
+        type: schemaTypeFromString(json['type']),
+        format: propertyFormatFromString(json['format']),
+        defaultValue: json['default'],
+        description: json['description'],
+        // enums
+        enumm: json['enum'],
+        enumNames: json['enumNames'],
+        minLength: json['minLength'],
+        maxLength: json['maxLength'],
+        pattern: json['pattern'],
+        dependents: json['dependents']);
     property.parentIdKey = parent?.idKey;
 
     return property;

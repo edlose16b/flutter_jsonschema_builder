@@ -9,10 +9,11 @@ import 'package:flutter_jsonschema_form/src/models/models.dart';
 class PropertySchemaBuilder extends StatelessWidget {
   const PropertySchemaBuilder({
     Key? key,
+    this.id,
     required this.mainSchema,
     required this.schemaProperty,
   }) : super(key: key);
-
+  final String? id;
   final Schema mainSchema;
   final SchemaProperty schemaProperty;
   @override
@@ -20,7 +21,6 @@ class PropertySchemaBuilder extends StatelessWidget {
     Widget _field = const SizedBox.shrink();
 
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
-
     if (schemaProperty.enumm != null) {
       _field = DropDownJFormField(
         property: schemaProperty,
@@ -69,6 +69,7 @@ class PropertySchemaBuilder extends StatelessWidget {
 
           _field = TextJFormField(
               property: schemaProperty,
+              id: id,
               onSaved: (val) {
                 log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
                 widgetBuilderInherited.updateObjectData(

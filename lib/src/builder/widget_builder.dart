@@ -114,15 +114,18 @@ class _JsonFormState extends State<JsonForm> {
 class FormFromSchemaBuilder extends StatelessWidget {
   const FormFromSchemaBuilder({
     Key? key,
+    this.id,
     required this.mainSchema,
     required this.schema,
   }) : super(key: key);
   final Schema mainSchema;
   final Schema schema;
+  final String? id;
   @override
   Widget build(BuildContext context) {
     if (schema is SchemaProperty) {
       return PropertySchemaBuilder(
+        id:id,
         mainSchema: mainSchema,
         schemaProperty: schema as SchemaProperty,
       );
@@ -136,6 +139,7 @@ class FormFromSchemaBuilder extends StatelessWidget {
 
     if (schema is SchemaObject) {
       return ObjectSchemaBuilder(
+        id: id,
         mainSchema: mainSchema,
         schemaObject: schema as SchemaObject,
       );
