@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/models.dart';
+import 'package:flutter_jsonschema_form/src/utils/boolean_parsing.dart';
 
 class CheckboxJFormField extends StatefulWidget {
   const CheckboxJFormField({
@@ -19,7 +20,9 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
   @override
   Widget build(BuildContext context) {
     return FormField<bool>(
-      initialValue: widget.property.defaultValue ?? false,
+      initialValue: (widget.property.defaultValue is String)
+          ? widget.property.defaultValue.toBoolean() ?? false
+          : widget.property.defaultValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) {
         if (widget.property.required) {
