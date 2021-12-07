@@ -19,7 +19,9 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
   @override
   Widget build(BuildContext context) {
     return FormField<bool>(
-      initialValue: widget.property.defaultValue ?? false,
+      initialValue: (widget.property.defaultValue is String)
+          ? widget.property.defaultValue.toLowerCase() == 'true'
+          : widget.property.defaultValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) {
         if (widget.property.required) {
