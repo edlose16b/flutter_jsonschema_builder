@@ -11,6 +11,11 @@ class ObjectSchemaPropertyDependencyEvent extends ObjectSchemaEvent {
   final SchemaObject schemaObject;
 }
 
+class ObjectSchemaSchemaDependencyEvent extends ObjectSchemaEvent {
+  ObjectSchemaSchemaDependencyEvent({required this.schemaObject});
+  final SchemaObject schemaObject;
+}
+
 class ObjectSchemaInherited extends InheritedWidget {
   const ObjectSchemaInherited({
     Key? key,
@@ -35,25 +40,30 @@ class ObjectSchemaInherited extends InheritedWidget {
     return needsRepint;
   }
 
-  void listenChangeProperty(
-      String value, bool isRequired, SchemaProperty schemaProperty) async {
-    print('value: $value a -> : $isRequired ');
-
+  void listenChangeProperty(bool active, SchemaProperty schemaProperty) async {
     schemaProperty.dependents;
 
     if (schemaProperty.dependents is List<String>) {
       for (var element in schemaObject.properties!) {
         if ((schemaProperty.dependents as List).contains(element.id)) {
           if (element is SchemaProperty) {
-            print('Este element ${element.id} es ahora $isRequired');
-            element.required = isRequired;
+            print('Este element ${element.id} es ahora $active');
+            element.required = active;
           }
         }
       }
+      listen(ObjectSchemaPropertyDependencyEvent(schemaObject: schemaObject));
+    } else if (schemaProperty.dependents is Schema) {
+      final _schema = schemaProperty.dependents;
+
+      if (active) {
+        schemaObject.properties!.add(_schema);
+      } else {
+        schemaObject.properties!
+            .removeWhere((element) => element.id == _schema.idKey);
+      }
+
+      listen(ObjectSchemaSchemaDependencyEvent(schemaObject: schemaObject));
     }
-
-    
-
-    listen(ObjectSchemaPropertyDependencyEvent(schemaObject: schemaObject));
   }
 }

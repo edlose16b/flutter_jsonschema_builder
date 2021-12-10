@@ -31,6 +31,7 @@ class Schema {
     Schema? parent,
   }) {
     Schema schema;
+    json['type'] ??= 'object';
 
     switch (schemaTypeFromString(json['type'])) {
       case SchemaType.object:
@@ -74,9 +75,7 @@ class Schema {
   }
 
   String _appendId(String path, String id) {
-    final key = id != kNoIdKey ? '$path.$id' : path;
-
-    return key;
+    return id != kNoIdKey ? (path.isNotEmpty ? '$path.' : '') + id : path;
   }
 
   Schema copyWith({

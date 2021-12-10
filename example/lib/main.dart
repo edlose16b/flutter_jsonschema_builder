@@ -58,12 +58,28 @@ class _MyHomePageState extends State<MyHomePage> {
     "properties": {
       "name": {"type": "string", "title": "Nombre", "default": "Juan"},
       "lastname": {"type": "string", "title": "Apellido", "default": "Casper"},
+      "ateo": {
+        "type": "boolean",
+        "title": "¿Crees en Dios?",
+        "default": "false"
+      },
+      "god": {
+        "type": "string",
+        "title": "¿En qué Dios crees?",
+      },
     },
     "required": [
       "name",
+      "ateo"
     ],
     "dependencies": {
-      "name": ["lastname"],
+      "lastname": {
+        "properties": {
+          "billing_address": {"type": "string"}
+        },
+        "required": ["billing_address"]
+      },
+      "ateo" : ["god"]
     }
   };
 

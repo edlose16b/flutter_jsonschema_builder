@@ -31,6 +31,12 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
             widget.schemaObject = value.schemaObject;
           });
         }
+
+        if (value is ObjectSchemaSchemaDependencyEvent) {
+          setState(() {
+            widget.schemaObject = value.schemaObject;
+          });
+        }
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -70,7 +70,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             },
             onChange: (value) {
               print('🦊🦊🦊🦊 value $value');
-              listenStringForPropertyDependencies(context, value);
+              dispatchStringEventToParent(context, value);
             },
           );
           break;
@@ -87,8 +87,12 @@ class PropertySchemaBuilder extends StatelessWidget {
         case SchemaType.boolean:
           _field = CheckboxJFormField(
             property: schemaProperty,
+            onChange: (value) {
+              dispatchBooleanEventToParent(context, value);
+            },
             onSaved: (val) {
               log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
+
               updateData(context, val);
             },
           );
@@ -125,15 +129,22 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   // @temp Functions
-  void listenStringForPropertyDependencies(BuildContext context, String value) {
+  /// Cuando se valida si es string o no
+  void dispatchStringEventToParent(BuildContext context, String value) {
     if (value.isEmpty) {
       ObjectSchemaInherited.of(context)
-          .listenChangeProperty(value, false, schemaProperty);
+          .listenChangeProperty(false, schemaProperty);
     }
 
     if (value.isNotEmpty) {
       ObjectSchemaInherited.of(context)
-          .listenChangeProperty(value, true, schemaProperty);
+          .listenChangeProperty(true, schemaProperty);
     }
+  }
+
+  /// Cuando se valida si es true o false
+  void dispatchBooleanEventToParent(BuildContext context, bool value) {
+    ObjectSchemaInherited.of(context)
+        .listenChangeProperty(value, schemaProperty);
   }
 }
