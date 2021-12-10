@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jsonschema_form/src/utils/input_validation_json_schema.dart';
@@ -6,17 +8,35 @@ import '../utils/utils.dart';
 import '../models/models.dart';
 
 class TextJFormField extends StatefulWidget {
-  const TextJFormField(
-      {Key? key, required this.property, required this.onSaved})
-      : super(key: key);
+  const TextJFormField({
+    Key? key,
+    required this.property,
+    required this.onSaved,
+    this.onChange,
+  }) : super(key: key);
 
   final SchemaProperty property;
   final void Function(String?) onSaved;
+  final ValueChanged<String>? onChange;
+
   @override
   _TextJFormFieldState createState() => _TextJFormFieldState();
 }
 
 class _TextJFormFieldState extends State<TextJFormField> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -29,9 +49,22 @@ class _TextJFormFieldState extends State<TextJFormField> {
       maxLength: widget.property.maxLength,
       inputFormatters: [textInputCustomFormatter(widget.property.format)],
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      onChanged: (value) {},
+      onEditingComplete: () {
+        print('AL FINALIZAR');
+      },
+      onChanged: (value) {
+        if (_timer != null && _timer!.isActive) {
+          print('Cancelando');
+          _timer!.cancel();
+        }
+
+        _timer = Timer(const Duration(seconds: 1), () {
+          if (widget.onChange != null) widget.onChange!(value);
+        });
+        print('AL CAMBIAR');
+      },
       validator: (String? value) {
-        if (value != null) {
+        if (widget.property.required && value != null) {
           return inputValidationJsonSchema(
               newValue: value, property: widget.property);
         }
