@@ -59,7 +59,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                     );
 
                     if (result != null) {
-                      field.didChange(result.files);
+                      change(field, result.files);
                     }
                   },
                   child: const Text('Elegir archivos'),
@@ -76,11 +76,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
                       trailing: IconButton(
                         icon: const Icon(Icons.close, size: 14),
                         onPressed: () {
-                          field.didChange(
-                            field.value!
-                              ..removeWhere(
-                                  (element) => element.path == file.path),
-                          );
+                          change(
+                              field,
+                              field.value!
+                                ..removeWhere(
+                                    (element) => element.path == file.path));
                         },
                       ),
                     );
@@ -93,5 +93,13 @@ class _FileJFormFieldState extends State<FileJFormField> {
         ),
       ],
     );
+  }
+
+  void change(
+      FormFieldState<List<PlatformFile>> field, List<PlatformFile>? values) {
+    field.didChange(values);
+    if (widget.onChanged != null) {
+      widget.onChanged!(values?.map((e) => e.toFile).toList());
+    }
   }
 }

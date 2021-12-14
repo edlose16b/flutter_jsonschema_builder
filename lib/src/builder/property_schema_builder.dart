@@ -34,6 +34,9 @@ class PropertySchemaBuilder extends StatelessWidget {
           log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
           updateData(context, val);
         },
+        onChanged: (value) {
+          dispatchBooleanEventToParent(context, value != null);
+        },
       );
     } else {
       switch (schemaProperty.type) {
@@ -46,6 +49,9 @@ class PropertySchemaBuilder extends StatelessWidget {
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
               },
+              onChanged: (value) {
+                dispatchBooleanEventToParent(context, value != null);
+              },
             );
             break;
           }
@@ -56,6 +62,13 @@ class PropertySchemaBuilder extends StatelessWidget {
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
+              },
+              onChanged: (value) {
+                //TODO: Cuando es array no obitnee el depents
+                dispatchBooleanEventToParent(
+                  context,
+                  value != null && value.isNotEmpty,
+                );
               },
             );
             break;
@@ -80,6 +93,12 @@ class PropertySchemaBuilder extends StatelessWidget {
             onSaved: (val) {
               log('onSaved: NumberJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
+            },
+            onChanged: (value) {
+              dispatchBooleanEventToParent(
+                context,
+                value != null && value.isNotEmpty,
+              );
             },
           );
           break;
@@ -144,7 +163,9 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   /// Cuando se valida si es true o false
   void dispatchBooleanEventToParent(BuildContext context, bool value) {
-    ObjectSchemaInherited.of(context)
-        .listenChangeProperty(value, schemaProperty);
+    if (value != schemaProperty.isDependentsActive) {
+      ObjectSchemaInherited.of(context)
+          .listenChangeProperty(value, schemaProperty);
+    }
   }
 }

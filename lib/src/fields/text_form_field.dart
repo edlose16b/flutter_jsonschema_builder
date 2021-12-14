@@ -51,19 +51,12 @@ class _TextJFormFieldState extends State<TextJFormField> {
       maxLength: widget.property.maxLength,
       inputFormatters: [textInputCustomFormatter(widget.property.format)],
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      onEditingComplete: () {
-        print('AL FINALIZAR');
-      },
       onChanged: (value) {
-        if (_timer != null && _timer!.isActive) {
-          print('Cancelando');
-          _timer!.cancel();
-        }
+        if (_timer != null && _timer!.isActive) _timer!.cancel();
 
         _timer = Timer(const Duration(seconds: 1), () {
           if (widget.onChanged != null) widget.onChanged!(value);
         });
-        print('AL CAMBIAR');
       },
       validator: (String? value) {
         if (widget.property.required && value != null) {

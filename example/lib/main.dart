@@ -58,26 +58,47 @@ class _MyHomePageState extends State<MyHomePage> {
     "properties": {
       "name": {"type": "string", "title": "Nombre", "default": "Juan"},
       "lastname": {"type": "string", "title": "Apellido", "default": "Casper"},
-      "ateo": {
-        "type": "boolean",
-        "title": "¿Crees en Dios?",
-        "default": "false"
-      },
-      "god": {
-        "type": "string",
-        "title": "¿En qué Dios crees?",
-      },
+      // "drinker": {
+      //   "type": "boolean",
+      //   "title": "¿Tomas gaseosa?",
+      //   "default": "false"
+      // },
+      // "cola": {
+      //   "type": "string",
+      //   "title": "¿Qué gaseosa tomas?",
+      // },
+      // "birthday": {
+      //   "type": "string",
+      //   "format": "date",
+      //   "title": "Fecha de constitución",
+      //   "default": "04/09/1998"
+      // },
+      // "cola": {
+      //   "type": "string",
+      //   "title": "Gaseosa preferida",
+      //   "default": "coca",
+      //   "enum": ["coca", "pepsi", "7up"],
+      //   "enumNames": ['Coca Cola', 'Pepsi', "7 Up"]
+      // },
+      "id_documents": {
+        "type": "array",
+        "uniqueItems": true,
+        "minItems": 1,
+        "maxItems": 2,
+        "title": "Documentos de identidad (frente y reverso)",
+        "items": {"type": "string", "format": "data-url"}
+      }
     },
-    "required": ["name", "ateo"],
+    "required": ["name", "drinker"],
     "dependencies": {
-      "name": ["lastname"],
-      "lastname": {
-        "properties": {
-          "billing_address": {"type": "string"}
-        },
-        "required": ["billing_address"]
-      },
-      "ateo": ["god"]
+      "id_documents": ["lastname"],
+      // "lastname": {
+      //   "properties": {
+      //     "billing_address": {"type": "string"}
+      //   },
+      //   "required": ["billing_address"]
+      // },
+      // "drinker": ["cola"]
     }
   };
 
