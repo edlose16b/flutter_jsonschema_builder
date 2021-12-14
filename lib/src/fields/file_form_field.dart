@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 
 import '../models/models.dart';
 import './shared.dart';
@@ -13,14 +14,18 @@ extension on PlatformFile {
   }
 }
 
-class FileJFormField extends StatefulWidget {
+class FileJFormField extends PropertyFieldWidget<List<File>?> {
   const FileJFormField({
     Key? key,
-    required this.property,
-    required this.onSaved,
-  }) : super(key: key);
-  final SchemaProperty property;
-  final void Function(List<File>?) onSaved;
+    required SchemaProperty property,
+    required final ValueSetter<List<File>?> onSaved,
+    ValueChanged<List<File>?>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();

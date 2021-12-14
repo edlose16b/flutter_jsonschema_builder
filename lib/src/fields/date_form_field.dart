@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:intl/intl.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 
 import '../models/models.dart';
 import '..//utils/date_text_input_json_formatter.dart';
 
-class DateJFormField extends StatefulWidget {
+class DateJFormField extends PropertyFieldWidget<DateTime> {
   const DateJFormField({
     Key? key,
-    required this.property,
-    required this.onSaved,
-  }) : super(key: key);
-
-  final SchemaProperty property;
-  final void Function(DateTime?)? onSaved;
+    required SchemaProperty property,
+    required final ValueSetter<DateTime?> onSaved,
+    ValueChanged<DateTime>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _DateJFormFieldState createState() => _DateJFormFieldState();
@@ -53,7 +57,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
                 );
                 if (date != null) txtDateCtrl.text = formatter.format(date);
 
-                widget.onSaved!(date);
+                widget.onSaved(date);
               },
             ),
           ),

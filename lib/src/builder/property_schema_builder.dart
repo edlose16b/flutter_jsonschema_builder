@@ -19,7 +19,6 @@ class PropertySchemaBuilder extends StatelessWidget {
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
 
-  Timer? _timer;
   late WidgetBuilderInherited widgetBuilderInherited;
 
   @override
@@ -68,7 +67,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
             },
-            onChange: (value) {
+            onChanged: (value) {
               print('🦊🦊🦊🦊 value $value');
               dispatchStringEventToParent(context, value);
             },
@@ -87,7 +86,7 @@ class PropertySchemaBuilder extends StatelessWidget {
         case SchemaType.boolean:
           _field = CheckboxJFormField(
             property: schemaProperty,
-            onChange: (value) {
+            onChanged: (value) {
               dispatchBooleanEventToParent(context, value);
             },
             onSaved: (val) {
@@ -104,6 +103,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
             },
+            onChanged: (value) {},
           );
       }
     }
@@ -131,12 +131,12 @@ class PropertySchemaBuilder extends StatelessWidget {
   // @temp Functions
   /// Cuando se valida si es string o no
   void dispatchStringEventToParent(BuildContext context, String value) {
-    if (value.isEmpty) {
+    if (value.isEmpty && schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(false, schemaProperty);
     }
 
-    if (value.isNotEmpty) {
+    if (value.isNotEmpty && !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(true, schemaProperty);
     }

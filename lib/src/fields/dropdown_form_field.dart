@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
-class DropDownJFormField extends StatefulWidget {
+class DropDownJFormField extends PropertyFieldWidget<dynamic> {
   const DropDownJFormField({
     Key? key,
-    required this.property,
-    required this.onSaved,
-  }) : super(key: key);
-
-  final SchemaProperty property;
-  final void Function(dynamic)? onSaved;
+    required SchemaProperty property,
+    required final ValueSetter<dynamic> onSaved,
+    ValueChanged<dynamic>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _DropDownJFormFieldState createState() => _DropDownJFormFieldState();

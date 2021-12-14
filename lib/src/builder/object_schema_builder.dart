@@ -24,18 +24,8 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
     return ObjectSchemaInherited(
       schemaObject: widget.schemaObject,
       listen: (value) {
-        print('new value $value');
-
-        if (value is ObjectSchemaPropertyDependencyEvent) {
-          setState(() {
-            widget.schemaObject = value.schemaObject;
-          });
-        }
-
-        if (value is ObjectSchemaSchemaDependencyEvent) {
-          setState(() {
-            widget.schemaObject = value.schemaObject;
-          });
+        if (value is ObjectSchemaDependencyEvent) {
+          setState(() => widget.schemaObject = value.schemaObject);
         }
       },
       child: Column(

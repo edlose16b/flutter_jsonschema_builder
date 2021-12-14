@@ -2,22 +2,24 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/utils/input_validation_json_schema.dart';
 
 import '../utils/utils.dart';
 import '../models/models.dart';
 
-class TextJFormField extends StatefulWidget {
+class TextJFormField extends PropertyFieldWidget<String> {
   const TextJFormField({
     Key? key,
-    required this.property,
-    required this.onSaved,
-    this.onChange,
-  }) : super(key: key);
-
-  final SchemaProperty property;
-  final void Function(String?) onSaved;
-  final ValueChanged<String>? onChange;
+    required SchemaProperty property,
+    required final ValueSetter<String?> onSaved,
+    required final ValueChanged<String> onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _TextJFormFieldState createState() => _TextJFormFieldState();
@@ -59,7 +61,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
         }
 
         _timer = Timer(const Duration(seconds: 1), () {
-          if (widget.onChange != null) widget.onChange!(value);
+          if (widget.onChanged != null) widget.onChanged!(value);
         });
         print('AL CAMBIAR');
       },

@@ -4,16 +4,14 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 
-class ObjectSchemaEvent {}
-
-class ObjectSchemaPropertyDependencyEvent extends ObjectSchemaEvent {
-  ObjectSchemaPropertyDependencyEvent({required this.schemaObject});
+class ObjectSchemaEvent {
+  ObjectSchemaEvent({required this.schemaObject});
   final SchemaObject schemaObject;
 }
 
-class ObjectSchemaSchemaDependencyEvent extends ObjectSchemaEvent {
-  ObjectSchemaSchemaDependencyEvent({required this.schemaObject});
-  final SchemaObject schemaObject;
+class ObjectSchemaDependencyEvent extends ObjectSchemaEvent {
+  ObjectSchemaDependencyEvent({required SchemaObject schemaObject})
+      : super(schemaObject: schemaObject);
 }
 
 class ObjectSchemaInherited extends InheritedWidget {
@@ -40,9 +38,8 @@ class ObjectSchemaInherited extends InheritedWidget {
     return needsRepint;
   }
 
+  /// esta funcion comunica
   void listenChangeProperty(bool active, SchemaProperty schemaProperty) async {
-    schemaProperty.dependents;
-
     if (schemaProperty.dependents is List<String>) {
       for (var element in schemaObject.properties!) {
         if ((schemaProperty.dependents as List).contains(element.id)) {
@@ -52,7 +49,9 @@ class ObjectSchemaInherited extends InheritedWidget {
           }
         }
       }
-      listen(ObjectSchemaPropertyDependencyEvent(schemaObject: schemaObject));
+
+      schemaProperty.isDependentsActive = active;
+      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
     } else if (schemaProperty.dependents is Schema) {
       final _schema = schemaProperty.dependents;
 
@@ -63,7 +62,9 @@ class ObjectSchemaInherited extends InheritedWidget {
             .removeWhere((element) => element.id == _schema.idKey);
       }
 
-      listen(ObjectSchemaSchemaDependencyEvent(schemaObject: schemaObject));
+      schemaProperty.isDependentsActive = active;
+
+      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
     }
   }
 }

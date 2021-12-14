@@ -68,18 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
         "title": "¿En qué Dios crees?",
       },
     },
-    "required": [
-      "name",
-      "ateo"
-    ],
+    "required": ["name", "ateo"],
     "dependencies": {
+      "name": ["lastname"],
       "lastname": {
         "properties": {
           "billing_address": {"type": "string"}
         },
         "required": ["billing_address"]
       },
-      "ateo" : ["god"]
+      "ateo": ["god"]
     }
   };
 

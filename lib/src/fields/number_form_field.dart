@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
-class NumberJFormField extends StatefulWidget {
-  const NumberJFormField(
-      {Key? key, required this.property, required this.onSaved})
-      : super(key: key);
-
-  final SchemaProperty property;
-  final void Function(String?)? onSaved;
+class NumberJFormField extends PropertyFieldWidget<String?> {
+  const NumberJFormField({
+    Key? key,
+    required SchemaProperty property,
+    required final ValueSetter<String?> onSaved,
+    ValueChanged<String?>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _NumberJFormFieldState createState() => _NumberJFormFieldState();
