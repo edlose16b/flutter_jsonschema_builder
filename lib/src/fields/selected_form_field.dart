@@ -26,12 +26,23 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
         return true;
       }(),
     );
+    late OneOfModel customObject;
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
-        OneOfModel customObject = OneOfModel(
-            oneOfModelEnum: widget.property.oneOf![i]['enum'],
-            title: widget.property.oneOf![i]['title'],
-            type: widget.property.oneOf![i]['type']);
+        if (widget.property.id == 'profession') {
+          final titleList = [];
+          final enumString = widget.property.oneOf![i]['enum'].first;
+          titleList.add(widget.property.oneOf![i]['title']);
+          customObject = OneOfModel(
+              oneOfModelEnum: titleList,
+              title: enumString,
+              type: widget.property.oneOf![i]['type']);
+        } else {
+          customObject = OneOfModel(
+              oneOfModelEnum: widget.property.oneOf![i]['enum'],
+              title: widget.property.oneOf![i]['title'],
+              type: widget.property.oneOf![i]['type']);
+        }
         listOfModel.add(customObject);
       }
     }
