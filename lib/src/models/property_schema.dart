@@ -114,6 +114,9 @@ class SchemaProperty extends Schema {
   String? pattern;
   dynamic dependents;
 
+  /// indica si sus dependentes han sido activados por XDependencies
+  bool isDependentsActive = false;
+
   // not suported yet
   String? widget, emptyValue, help = '';
   List<dynamic>? oneOf;

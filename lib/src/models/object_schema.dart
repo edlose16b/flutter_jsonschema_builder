@@ -86,7 +86,6 @@ class SchemaObject extends Schema {
     properties.forEach((key, _property) {
       final isRequired = schema.required.contains(key);
       final dependents = schema.dependencies?[key];
-
       Schema? property;
 
       property = Schema.fromJson(
@@ -99,8 +98,16 @@ class SchemaObject extends Schema {
         property.required = isRequired;
 
         // Asignamos las propiedades que dependen de este
-        if (dependencies != null) {
-          property.dependents = dependents;
+        if (dependencies != null && dependents != null) {
+          if (dependents is List<String>) {
+            property.dependents = dependents;
+          } else {
+            property.dependents = Schema.fromJson(
+              dependents,
+              // id: '',
+              parent: schema,
+            );
+          }
         }
         if (property.oneOf is List) {
           print('===========');

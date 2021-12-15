@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
 import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
 
-class SelectedFormField extends StatefulWidget {
-  const SelectedFormField(
-      {Key? key, required this.property, required this.onSaved})
-      : super(key: key);
-
-  final SchemaProperty property;
-  final void Function(dynamic)? onSaved;
+class SelectedFormField extends PropertyFieldWidget<dynamic> {
+  const SelectedFormField({
+    Key? key,
+    required SchemaProperty property,
+    required final ValueSetter<dynamic> onSaved,
+    ValueChanged<dynamic>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _SelectedFormFieldState createState() => _SelectedFormFieldState();
@@ -66,7 +72,9 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
             }
           },
           items: _buildItems(),
-          onChanged: (value) {},
+          onChanged: (value) {
+            if (widget.onChanged != null) widget.onChanged!(value);
+          },
           onSaved: widget.onSaved,
         ),
         const SizedBox(height: 15),

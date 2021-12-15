@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 
 import '../models/models.dart';
 import './shared.dart';
@@ -13,14 +14,18 @@ extension on PlatformFile {
   }
 }
 
-class FileJFormField extends StatefulWidget {
+class FileJFormField extends PropertyFieldWidget<List<File>?> {
   const FileJFormField({
     Key? key,
-    required this.property,
-    required this.onSaved,
-  }) : super(key: key);
-  final SchemaProperty property;
-  final void Function(List<File>?) onSaved;
+    required SchemaProperty property,
+    required final ValueSetter<List<File>?> onSaved,
+    ValueChanged<List<File>?>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -54,7 +59,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                     );
 
                     if (result != null) {
-                      field.didChange(result.files);
+                      change(field, result.files);
                     }
                   },
                   child: const Text('Elegir archivos'),
@@ -71,11 +76,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
                       trailing: IconButton(
                         icon: const Icon(Icons.close, size: 14),
                         onPressed: () {
-                          field.didChange(
-                            field.value!
-                              ..removeWhere(
-                                  (element) => element.path == file.path),
-                          );
+                          change(
+                              field,
+                              field.value!
+                                ..removeWhere(
+                                    (element) => element.path == file.path));
                         },
                       ),
                     );
@@ -88,5 +93,13 @@ class _FileJFormFieldState extends State<FileJFormField> {
         ),
       ],
     );
+  }
+
+  void change(
+      FormFieldState<List<PlatformFile>> field, List<PlatformFile>? values) {
+    field.didChange(values);
+    if (widget.onChanged != null) {
+      widget.onChanged!(values?.map((e) => e.toFile).toList());
+    }
   }
 }

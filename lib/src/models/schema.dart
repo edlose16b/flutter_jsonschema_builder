@@ -31,6 +31,7 @@ class Schema {
     Schema? parent,
   }) {
     Schema schema;
+    json['type'] ??= 'object';
 
     switch (schemaTypeFromString(json['type'])) {
       case SchemaType.object:
@@ -61,12 +62,7 @@ class Schema {
 
   /// it lets us know the key in the formData Map {key}
   String get idKey {
-    print('----');
-    print('idKey[$id] | parentIdKey[$parentIdKey]');
-
     if (parentIdKey != null && parentIdKey != (kGenesisIdKey)) {
-      print('😱 😱 resultado es ${_appendId(parentIdKey!, id)} ');
-
       if (this is SchemaProperty &&
           (this as SchemaProperty).format == PropertyFormat.dataurl) {
         return parentIdKey!;
@@ -74,15 +70,12 @@ class Schema {
 
       return _appendId(parentIdKey!, id);
     }
-    print('😱 resultado es $id');
 
     return id;
   }
 
   String _appendId(String path, String id) {
-    final key = id != kNoIdKey ? '$path.$id' : path;
-
-    return key;
+    return id != kNoIdKey ? (path.isNotEmpty ? '$path.' : '') + id : path;
   }
 
   Schema copyWith({

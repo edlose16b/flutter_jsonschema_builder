@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
-class CheckboxJFormField extends StatefulWidget {
+class CheckboxJFormField extends PropertyFieldWidget<bool> {
   const CheckboxJFormField({
     Key? key,
-    required this.property,
-    required this.onSaved,
-  }) : super(key: key);
-
-  final SchemaProperty property;
-  final void Function(bool?)? onSaved;
+    required SchemaProperty property,
+    required final ValueSetter<bool?> onSaved,
+    ValueChanged<bool>? onChanged,
+  }) : super(
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+        );
 
   @override
   _CheckboxJFormFieldState createState() => _CheckboxJFormFieldState();
@@ -32,19 +36,24 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
         return null;
       },
       onSaved: (newValue) {
-        widget.onSaved!(newValue);
+        widget.onSaved(newValue);
       },
       builder: (field) {
         return CheckboxListTile(
           value: field.value,
           title: Text(widget.property.title),
-          subtitle: const Text(
-            'Required',
-            style: TextStyle(color: Color(0xFFd32f2f)),
-          ),
+          subtitle: (widget.property.required)
+              ? const Text(
+                  'Required',
+                  style: TextStyle(color: Color(0xFFd32f2f)),
+                )
+              : null,
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: (bool? value) {
             field.didChange(value);
+            if (widget.onChanged != null && value != null) {
+              widget.onChanged!(value);
+            }
           },
         );
       },
