@@ -27,7 +27,6 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
       }(),
     );
     if (widget.property.oneOf is List) {
-      
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
         OneOfModel customObject = OneOfModel(
             oneOfModelEnum: widget.property.oneOf![i]['enum'],
