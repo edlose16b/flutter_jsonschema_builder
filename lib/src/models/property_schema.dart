@@ -1,3 +1,5 @@
+import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
+
 import '../models/models.dart';
 
 enum PropertyFormat { general, password, date, datetime, email, dataurl, uri }
@@ -22,20 +24,21 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 class SchemaProperty extends Schema {
-  SchemaProperty({
-    required String id,
-    required SchemaType type,
-    String? title,
-    String? description,
-    this.defaultValue,
-    this.enumm,
-    this.enumNames,
-    this.required = false,
-    this.format = PropertyFormat.general,
-    this.minLength,
-    this.maxLength,
-    this.pattern,
-  }) : super(
+  SchemaProperty(
+      {required String id,
+      required SchemaType type,
+      String? title,
+      String? description,
+      this.defaultValue,
+      this.enumm,
+      this.enumNames,
+      this.required = false,
+      this.format = PropertyFormat.general,
+      this.minLength,
+      this.maxLength,
+      this.pattern,
+      this.oneOf})
+      : super(
           id: id,
           title: title ?? 'no-title',
           type: type,
@@ -48,19 +51,19 @@ class SchemaProperty extends Schema {
     Schema? parent,
   }) {
     final property = SchemaProperty(
-      id: id,
-      title: json['title'],
-      type: schemaTypeFromString(json['type']),
-      format: propertyFormatFromString(json['format']),
-      defaultValue: json['default'],
-      description: json['description'],
-      // enums
-      enumm: json['enum'],
-      enumNames: json['enumNames'],
-      minLength: json['minLength'],
-      maxLength: json['maxLength'],
-      pattern: json['pattern'],
-    );
+        id: id,
+        title: json['title'],
+        type: schemaTypeFromString(json['type']),
+        format: propertyFormatFromString(json['format']),
+        defaultValue: json['default'],
+        description: json['description'],
+        // enums
+        enumm: json['enum'],
+        enumNames: json['enumNames'],
+        minLength: json['minLength'],
+        maxLength: json['maxLength'],
+        pattern: json['pattern'],
+        oneOf: json['oneOf']);
     property.parentIdKey = parent?.idKey;
 
     return property;
@@ -72,16 +75,16 @@ class SchemaProperty extends Schema {
     String? parentIdKey,
   }) {
     var newSchema = SchemaProperty(
-      id: id,
-      title: title,
-      type: type,
-      description: description,
-      format: format,
-      defaultValue: defaultValue,
-      enumNames: enumNames,
-      enumm: enumm,
-      required: required,
-    )
+        id: id,
+        title: title,
+        type: type,
+        description: description,
+        format: format,
+        defaultValue: defaultValue,
+        enumNames: enumNames,
+        enumm: enumm,
+        required: required,
+        oneOf: oneOf)
       ..autoFocus = autoFocus
       ..emptyValue = emptyValue
       ..help = help
@@ -89,7 +92,6 @@ class SchemaProperty extends Schema {
       ..minLength = minLength
       ..widget = widget
       ..parentIdKey = parentIdKey ?? this.parentIdKey
-      ..oneOf = oneOf
       ..required = required;
 
     return newSchema;
@@ -114,5 +116,5 @@ class SchemaProperty extends Schema {
 
   // not suported yet
   String? widget, emptyValue, help = '';
-  dynamic oneOf;
+  List<dynamic>? oneOf;
 }

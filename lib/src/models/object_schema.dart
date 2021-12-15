@@ -102,6 +102,10 @@ class SchemaObject extends Schema {
         if (dependencies != null) {
           property.dependents = dependents;
         }
+        if (property.oneOf is List) {
+          print('===========');
+          print(property.oneOf);
+        }
       }
 
       props.add(property);
@@ -114,6 +118,8 @@ class SchemaObject extends Schema {
     if (oneOf == null) return;
     var oneOfs = <Schema>[];
     oneOf.forEach((key, _property) {
+      print('??????');
+      print(_property);
       oneOfs.add(Schema.fromJson(_property, id: key, parent: schema));
     });
 
