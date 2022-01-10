@@ -121,14 +121,21 @@ class SchemaObject extends Schema {
     this.properties = props;
   }
 
-  void setOneOf(Map<String, Map<String, dynamic>>? oneOf, SchemaObject schema) {
+  void setOneOf(List<Map<String, dynamic>>? oneOf, SchemaObject schema) {
     if (oneOf == null) return;
     var oneOfs = <Schema>[];
-    oneOf.forEach((key, _property) {
+    print(oneOf);
+    for (var element in oneOf) {
+      print(element);
+      oneOfs.add(Schema.fromJson(element, parent: schema));
+    }
+    /*  oneOf.forEach((key, _property) {
       print('??????');
       print(_property);
       oneOfs.add(Schema.fromJson(_property, id: key, parent: schema));
-    });
+    }); */
+
+    print(oneOfs);
 
     this.oneOf = oneOfs;
   }

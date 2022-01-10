@@ -54,6 +54,38 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final json = {
     "type": "object",
+    "title": "Dirección de residencia",
+    "required": ["country", "city", "street", "postal_code"],
+    "properties": {
+      "city": {
+        "type": "string",
+        "title": "Ciudad de residencia",
+        "maxLength": 64
+      },
+      "street": {
+        "type": "string",
+        "title": "direccion de residencia",
+        "maxLength": 128
+      },
+      "country": {
+        "type": "string",
+        "oneOf": [
+          {
+            "enum": ["TW"],
+            "type": "string",
+            "title": ""
+          },
+          {
+            "enum": ["AF"],
+            "type": "string",
+            "title": "Afghanistan"
+          }
+        ]
+      }
+    }
+  };
+  /* final json = {
+    "type": "object",
     "title": "Tus datos",
     "required": [
       "first_name",
@@ -1828,7 +1860,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
   };
-
+ */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
