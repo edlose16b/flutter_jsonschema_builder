@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../models/models.dart';
 
 class SchemaObject extends Schema {
@@ -109,10 +111,6 @@ class SchemaObject extends Schema {
             );
           }
         }
-        if (property.oneOf is List) {
-          print('===========');
-          print(property.oneOf);
-        }
       }
 
       props.add(property);
@@ -123,7 +121,7 @@ class SchemaObject extends Schema {
 
   void setOneOf(List<dynamic>? oneOf, SchemaObject schema) {
     if (oneOf == null) return;
-    oneOf.map((e) => e as Map<String, dynamic>).toList();
+    oneOf.map((e) => Map<String, dynamic>.from(e));
     var oneOfs = <Schema>[];
     print(oneOf);
     for (var element in oneOf) {
