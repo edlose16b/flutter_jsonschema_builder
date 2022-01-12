@@ -27,14 +27,6 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
           ? widget.property.defaultValue.toLowerCase() == 'true'
           : widget.property.defaultValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        if (widget.property.required) {
-          if (value != null && !value) {
-            return "Required";
-          }
-        }
-        return null;
-      },
       onSaved: (newValue) {
         widget.onSaved(newValue);
       },
@@ -42,12 +34,6 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
         return CheckboxListTile(
           value: field.value,
           title: Text(widget.property.title),
-          subtitle: (widget.property.required)
-              ? const Text(
-                  'Required',
-                  style: TextStyle(color: Color(0xFFd32f2f)),
-                )
-              : null,
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: (bool? value) {
             field.didChange(value);

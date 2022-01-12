@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/object_schema_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
+import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart';
 import 'package:flutter_jsonschema_form/src/fields/selected_form_field.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 
@@ -41,14 +42,15 @@ class PropertySchemaBuilder extends StatelessWidget {
       );
     } else if (schemaProperty.oneOf != null) {
       _field = SelectedFormField(
-          property: schemaProperty,
-          onSaved: (val) {
+        property: schemaProperty,
+        onSaved: (val) {
           log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
           updateData(context, val);
         },
         onChanged: (value) {
           dispatchBooleanEventToParent(context, value != null);
-        },);
+        },
+      );
     } else {
       switch (schemaProperty.type) {
         case SchemaType.string:
@@ -114,17 +116,33 @@ class PropertySchemaBuilder extends StatelessWidget {
           );
           break;
         case SchemaType.boolean:
-          _field = CheckboxJFormField(
-            property: schemaProperty,
-            onChanged: (value) {
-              dispatchBooleanEventToParent(context, value);
-            },
-            onSaved: (val) {
-              log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
+          print(schemaProperty.enumNames?.length);
+          if ((schemaProperty.enumNames?.length ?? 0) > 0) {
+            _field = RadioButtonJFormField(
+              property: schemaProperty,
+              onChanged: (value) {
+                dispatchBooleanEventToParent(context, value != null);
+              },
+              onSaved: (val) {
+                log('onSaved: RadioButtonJFormField ${schemaProperty.idKey}  : $val');
 
-              updateData(context, val);
-            },
-          );
+                updateData(context, val);
+              },
+            );
+          } else {
+            _field = CheckboxJFormField(
+              property: schemaProperty,
+              onChanged: (value) {
+                dispatchBooleanEventToParent(context, value);
+              },
+              onSaved: (val) {
+                log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
+
+                updateData(context, val);
+              },
+            );
+          }
+
           break;
         default:
           _field = TextJFormField(
