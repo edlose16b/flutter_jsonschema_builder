@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import '../models/models.dart';
 
@@ -66,6 +67,8 @@ class SchemaObject extends Schema {
   // ! Getters
   bool get isGenesis => id == kGenesisIdKey;
 
+  bool isOneOf = false;
+
   /// array of required keys
   List<String> required;
   List<Schema>? properties;
@@ -98,10 +101,12 @@ class SchemaObject extends Schema {
 
       if (property is SchemaProperty) {
         property.required = isRequired;
-
         // Asignamos las propiedades que dependen de este
         if (dependencies != null && dependents != null) {
-          if (dependents is List<String>) {
+          if (dependents is Map) {
+            isOneOf = dependents.containsKey("oneOf");
+          }
+          if (dependents is List<String> || isOneOf) {
             property.dependents = dependents;
           } else {
             property.dependents = Schema.fromJson(
@@ -138,4 +143,6 @@ class SchemaObject extends Schema {
 
     this.oneOf = oneOfs;
   }
+
+  void add(SchemaProperty schemaProperty) {}
 }

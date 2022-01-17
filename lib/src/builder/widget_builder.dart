@@ -116,9 +116,11 @@ class FormFromSchemaBuilder extends StatelessWidget {
     Key? key,
     required this.mainSchema,
     required this.schema,
+    this.schemaObject,
   }) : super(key: key);
   final Schema mainSchema;
   final Schema schema;
+  final SchemaObject? schemaObject;
   @override
   Widget build(BuildContext context) {
     if (schema is SchemaProperty) {

@@ -40,6 +40,7 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
           if (widget.schemaObject.properties != null)
             ...widget.schemaObject.properties!
                 .map((e) => FormFromSchemaBuilder(
+                    schemaObject: widget.schemaObject,
                     mainSchema: widget.mainSchema, schema: e))
                 .toList(),
         ],

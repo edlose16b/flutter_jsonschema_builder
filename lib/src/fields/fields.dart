@@ -6,14 +6,16 @@ export 'number_form_field.dart';
 export 'text_form_field.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/models/object_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
+import 'package:flutter_jsonschema_form/src/models/schema.dart';
 
 abstract class PropertyFieldWidget<T> extends StatefulWidget {
   const PropertyFieldWidget({
     Key? key,
     required this.property,
     required this.onSaved,
-    required this.onChanged,
+    required this.onChanged
   }) : super(key: key);
 
   final SchemaProperty property;
