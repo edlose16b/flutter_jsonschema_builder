@@ -194,10 +194,10 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   void dispatchSelectedForDropDownEventToParent(
       BuildContext context, String value) {
-    /* if (value.isNotEmpty && schemaProperty.isDependentsActive) {
+    if (value.isNotEmpty && schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(false, schemaProperty, optionalValue: value);
-    } */
+    }
 
     if (value.isNotEmpty || !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)

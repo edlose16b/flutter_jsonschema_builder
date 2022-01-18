@@ -57,7 +57,12 @@ class ObjectSchemaInherited extends InheritedWidget {
         schemaProperty.isDependentsActive = active;
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       } else if (schemaProperty.dependents.containsKey("oneOf")) {
-        //final _schema = schemaProperty.dependents;
+        // Eliminamos los nuevos imputs agregados
+
+        schemaObject.properties!.removeWhere((element) =>
+            (element is SchemaProperty) &&
+            (element).dependentsAddedBy == schemaProperty.id);
+
         List? listProperty;
         SchemaProperty? schemaProp;
         Map<String, dynamic>? schemaTemp;
@@ -78,39 +83,45 @@ class ObjectSchemaInherited extends InheritedWidget {
                 value.forEach((ky, val) {
                   if (ky == 'enum') {
                     if (value[ky].first == optionalValue) {
+                      print('🧠🧠 $keyPrimary');
+
                       var propertiesTemporal;
-                      schemaTemp?['properties']
-                          ?.removeWhere((key, value) => key == keyPrimary);
-                      SchemaObject temporal = SchemaObject.fromJson(
-                          val.length.toString(), schemaTemp ?? {});
+
+                      final temporal =
+                          SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
 
                       temporal.properties?.forEach((elment) {
-                        propertiesTemporal = elment as SchemaProperty;
-                        schemaProp = propertiesTemporal;
-                        if (schemaProp != null) {
-                          schemaObject.properties!.add(schemaProp!);
+                        if (elment is! SchemaEnum) {
+                          propertiesTemporal = elment as SchemaProperty;
 
-                          schemaProperty.isDependentsActive = active;
+                          schemaProp = propertiesTemporal;
+                          if (schemaProp != null) {
+                            schemaObject.properties!.add(schemaProp!);
 
-                          listen(ObjectSchemaDependencyEvent(
-                              schemaObject: schemaObject));
+                            schemaProperty.isDependentsActive = active;
+                            schemaProp!.dependentsAddedBy = keyPrimary;
+                          }
                         }
                       });
                     }
-                  } /* else {
-                    schemaObject.properties!
-                        .removeWhere((e) => e.id == keyPrimary);
-                    FormFromSchemaBuilder(
-                      mainSchema: mainSchema!,
-                      schema: schemaObject,
-                    );
-                  } */
+                  } else {
+                    // schemaObject.properties!
+                    //     .removeWhere((e) => e.id == keyPrimary);
+                    // FormFromSchemaBuilder(
+                    //   mainSchema: mainSchema!,
+                    //   schema: schemaObject,
+                    // );
+                  }
                 });
               }
             });
           }
         }
+
+        // Actualizamos depsues de todo
+        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       } else if (schemaProperty.dependents is Schema) {
+        print('tttt');
         final _schema = schemaProperty.dependents;
 
         if (active) {
