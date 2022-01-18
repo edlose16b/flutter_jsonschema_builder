@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:developer' as dev;
 import 'dart:ffi';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
@@ -42,8 +43,13 @@ class ObjectSchemaInherited extends InheritedWidget {
 
   /// esta funcion comunica
   void listenChangeProperty(bool active, SchemaProperty schemaProperty,
-      {String? optionalValue, Schema? mainSchema}) async {
+      {String? optionalValue, Schema? mainSchema, String? idOptional}) async {
     try {
+      List? listProperty;
+      SchemaProperty? schemaProp;
+      Map<String, dynamic>? schemaTemp;
+      bool _isSelected = false;
+
       if (schemaProperty.dependents is List<String>) {
         for (var element in schemaObject.properties!) {
           if ((schemaProperty.dependents as List).contains(element.id)) {
@@ -63,9 +69,6 @@ class ObjectSchemaInherited extends InheritedWidget {
             (element is SchemaProperty) &&
             (element).dependentsAddedBy == schemaProperty.id);
 
-        List? listProperty;
-        SchemaProperty? schemaProp;
-        Map<String, dynamic>? schemaTemp;
         if (schemaProperty.dependents is Map) {
           schemaTemp = {};
           schemaProperty.dependents.forEach((key, value) {
@@ -77,42 +80,47 @@ class ObjectSchemaInherited extends InheritedWidget {
           Map propertiesMap = Map.from(schema['properties']);
           if (propertiesMap is Map && schema != null) {
             schemaTemp = schema;
-
             propertiesMap.forEach((keyPrimary, value) {
-              if (value is Map) {
-                value.forEach((ky, val) {
-                  if (ky == 'enum') {
-                    if (value[ky].first == optionalValue) {
-                      print('🧠🧠 $keyPrimary');
+              if (keyPrimary == idOptional) {
+                if (value is Map) {
+                  print(value);
+                  if (value.containsKey('enum')) {
+                    if (value['enum'].first == optionalValue) {
+                      _isSelected = true;
+                      value.forEach((ky, val) {
+                        var propertiesTemporal;
 
-                      var propertiesTemporal;
+                        final temporal =
+                            SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
 
-                      final temporal =
-                          SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
+                        temporal.properties?.forEach((elment) {
+                          if (elment is! SchemaEnum) {
+                            propertiesTemporal = elment as SchemaProperty;
+                            schemaProp = propertiesTemporal;
 
-                      temporal.properties?.forEach((elment) {
-                        if (elment is! SchemaEnum) {
-                          propertiesTemporal = elment as SchemaProperty;
+                            if (schemaProp != null) {
+                              schemaObject.properties!.add(schemaProp!);
 
-                          schemaProp = propertiesTemporal;
-                          if (schemaProp != null) {
-                            schemaObject.properties!.add(schemaProp!);
-
-                            schemaProperty.isDependentsActive = active;
-                            schemaProp!.dependentsAddedBy = keyPrimary;
+                              schemaProperty.isDependentsActive = active;
+                              schemaProp!.dependentsAddedBy = keyPrimary;
+                            }
                           }
-                        }
+                        });
                       });
                     }
-                  } else {
-                    // schemaObject.properties!
-                    //     .removeWhere((e) => e.id == keyPrimary);
-                    // FormFromSchemaBuilder(
-                    //   mainSchema: mainSchema!,
-                    //   schema: schemaObject,
-                    // );
                   }
-                });
+                }
+              } else {
+                if (!_isSelected) {
+                  schemaObject.properties!
+                      .removeWhere((e) => e.id == keyPrimary);
+
+                  schemaProperty.isDependentsActive = active;
+
+                  listen(
+                      ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+                  _isSelected = false;
+                }
               }
             });
           }

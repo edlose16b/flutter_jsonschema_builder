@@ -13,11 +13,10 @@ class SelectedFormField extends PropertyFieldWidget<dynamic> {
       required final ValueSetter<dynamic> onSaved,
       ValueChanged<dynamic>? onChanged})
       : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged
-        );
+            key: key,
+            property: property,
+            onSaved: onSaved,
+            onChanged: onChanged);
 
   @override
   _SelectedFormFieldState createState() => _SelectedFormFieldState();

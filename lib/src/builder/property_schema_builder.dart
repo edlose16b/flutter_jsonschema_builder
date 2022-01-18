@@ -50,7 +50,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
         },
         onChanged: (value) {
-          dispatchSelectedForDropDownEventToParent(context, value);
+          dispatchSelectedForDropDownEventToParent(context, value,
+              id: schemaProperty.id);
         },
       );
     } else {
@@ -118,7 +119,6 @@ class PropertySchemaBuilder extends StatelessWidget {
           );
           break;
         case SchemaType.boolean:
-          print(schemaProperty.enumNames?.length);
           if ((schemaProperty.enumNames?.length ?? 0) > 0) {
             _field = RadioButtonJFormField(
               property: schemaProperty,
@@ -193,15 +193,16 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   void dispatchSelectedForDropDownEventToParent(
-      BuildContext context, String value) {
-    if (value.isNotEmpty && schemaProperty.isDependentsActive) {
+      BuildContext context, String value,
+      {String? id}) {
+    /* if (value.isNotEmpty && schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(false, schemaProperty, optionalValue: value);
-    }
+    } */
 
     if (value.isNotEmpty || !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
-          .listenChangeProperty(true, schemaProperty, optionalValue: value);
+          .listenChangeProperty(true, schemaProperty, optionalValue: value, idOptional: id, mainSchema: mainSchema);
     }
   }
 
