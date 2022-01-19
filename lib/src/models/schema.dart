@@ -11,6 +11,7 @@ enum SchemaType {
   integer,
   object,
   array,
+  enumm,
 }
 SchemaType schemaTypeFromString(String value) {
   return SchemaType.values.where((e) => describeEnum(e) == value).first;
@@ -31,7 +32,16 @@ class Schema {
     Schema? parent,
   }) {
     Schema schema;
+
+// Solucion temporal y personalizada
+    if (json['enum'] != null &&
+        json['enum'] is List<String> &&
+        json['enum'].length == 1) {
+      return SchemaEnum(enumm: json['enum']);
+    }
+
     json['type'] ??= 'object';
+
 
     switch (schemaTypeFromString(json['type'])) {
       case SchemaType.object:
@@ -90,4 +100,16 @@ class Schema {
       parentIdKey: parentIdKey ?? this.parentIdKey,
     );
   }
+}
+
+// Solucion temporal y personalizada
+class SchemaEnum extends Schema {
+  SchemaEnum({required this.enumm})
+      : super(
+          id: kNoIdKey,
+          title: 'no-title',
+          type: SchemaType.enumm,
+        );
+
+  final List<String> enumm;
 }

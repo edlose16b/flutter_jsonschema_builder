@@ -63,7 +63,8 @@ class SchemaProperty extends Schema {
         minLength: json['minLength'],
         maxLength: json['maxLength'],
         pattern: json['pattern'],
-        oneOf: json['oneOf']);
+        oneOf: json['oneOf'],
+        );
     property.parentIdKey = parent?.idKey;
 
     return property;
@@ -115,7 +116,8 @@ class SchemaProperty extends Schema {
   dynamic dependents;
 
   /// indica si sus dependentes han sido activados por XDependencies
-  bool isDependentsActive = false;
+  bool  isDependentsActive = false;
+  String? dependentsAddedBy;
 
   // not suported yet
   String? widget, emptyValue, help = '';

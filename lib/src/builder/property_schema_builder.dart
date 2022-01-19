@@ -8,6 +8,7 @@ import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart';
 import 'package:flutter_jsonschema_form/src/fields/selected_form_field.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
+import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
   PropertySchemaBuilder({
@@ -16,7 +17,6 @@ class PropertySchemaBuilder extends StatelessWidget {
     required this.schemaProperty,
     this.onChangeListen,
   }) : super(key: key);
-
   final Schema mainSchema;
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
@@ -44,11 +44,14 @@ class PropertySchemaBuilder extends StatelessWidget {
       _field = SelectedFormField(
         property: schemaProperty,
         onSaved: (val) {
-          log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
-          updateData(context, val);
+          if (val is OneOfModel) {
+            log('onSaved: DateJFormField  ${schemaProperty.idKey}  : ${val.oneOfModelEnum?.first}');
+            updateData(context, val.oneOfModelEnum?.first);
+          }
         },
         onChanged: (value) {
-          dispatchBooleanEventToParent(context, value != null);
+          dispatchSelectedForDropDownEventToParent(context, value,
+              id: schemaProperty.id);
         },
       );
     } else {
@@ -116,7 +119,6 @@ class PropertySchemaBuilder extends StatelessWidget {
           );
           break;
         case SchemaType.boolean:
-          print(schemaProperty.enumNames?.length);
           if ((schemaProperty.enumNames?.length ?? 0) > 0) {
             _field = RadioButtonJFormField(
               property: schemaProperty,
@@ -187,6 +189,20 @@ class PropertySchemaBuilder extends StatelessWidget {
     if (value.isNotEmpty && !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(true, schemaProperty);
+    }
+  }
+
+  void dispatchSelectedForDropDownEventToParent(
+      BuildContext context, String value,
+      {String? id}) {
+    /* if (value.isNotEmpty && schemaProperty.isDependentsActive) {
+      ObjectSchemaInherited.of(context)
+          .listenChangeProperty(false, schemaProperty, optionalValue: value);
+    } */
+
+    if (value.isNotEmpty || !schemaProperty.isDependentsActive) {
+      ObjectSchemaInherited.of(context)
+          .listenChangeProperty(true, schemaProperty, optionalValue: value, idOptional: id, mainSchema: mainSchema);
     }
   }
 
