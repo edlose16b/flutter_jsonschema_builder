@@ -11,7 +11,7 @@ enum SchemaType {
   integer,
   object,
   array,
-  enumm,
+  enumm
 }
 SchemaType schemaTypeFromString(String value) {
   return SchemaType.values.where((e) => describeEnum(e) == value).first;

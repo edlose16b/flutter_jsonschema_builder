@@ -53,6 +53,7 @@ class SchemaObject extends Schema {
       ..type = type
       ..dependencies = dependencies
       ..oneOf = oneOf
+      ..order = order
       ..required = required;
 
     final otherProperties = properties!; //.map((p) => p.copyWith(id: p.id));
@@ -72,6 +73,7 @@ class SchemaObject extends Schema {
   /// array of required keys
   List<String> required;
   List<Schema>? properties;
+  List<String>? order;
 
   /// the dependencies keyword from an earlier draft of JSON Schema
   /// (note that this is not part of the latest JSON Schema spec, though).
@@ -80,6 +82,40 @@ class SchemaObject extends Schema {
 
   /// A [Schema] with [oneOf] is valid if exactly one of the subschemas is valid.
   List<Schema>? oneOf;
+
+  void setUiSchema(Map<String, dynamic>? uiSchema) {
+    uiSchema?.forEach((key, data) {
+      //print(key);
+      var props = <SchemaProperty>[];
+      for (int i = 0; i < (properties?.length ?? 0); i++) {
+        var propertiesTemp = properties?[i];
+        if (propertiesTemp?.type == SchemaType.boolean) {
+          if (data is Map) {
+            data.forEach((ky, val) {
+              if (propertiesTemp is SchemaProperty) {
+                props.add(SchemaProperty.fromUi(propertiesTemp, val));
+              }
+            });
+          }
+        } else if (propertiesTemp is SchemaProperty) {
+          props.add(SchemaProperty.fromUi(propertiesTemp, uiSchema));
+        }
+      }
+      if (props is List) {
+        for (int i = 0; i < props.length; i++) {
+          //print(props[i].id);
+          for (int j = 0; j < (props[i].order?.length ?? 0); j++) {
+            var propsTemp = props[i];
+            if (props[i].id == props[i].order?[j]) {
+              props.removeAt(i);
+              props.insert((props.length - 1), propsTemp);
+            }
+          }
+        }
+      }
+      this.properties = props;
+    });
+  }
 
   void setProperties(
     Map<String, Map<String, dynamic>>? properties,
@@ -117,7 +153,6 @@ class SchemaObject extends Schema {
           }
         }
       }
-
       props.add(property);
     });
 

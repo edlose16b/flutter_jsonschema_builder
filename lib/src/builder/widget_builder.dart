@@ -13,10 +13,12 @@ class JsonForm extends StatefulWidget {
   const JsonForm({
     Key? key,
     required this.jsonSchema,
+    this.uiSchema,
     required this.onFormDataSaved,
   }) : super(key: key);
 
   final Map<String, dynamic> jsonSchema;
+  final Map<String, dynamic>? uiSchema;
   final void Function(dynamic) onFormDataSaved;
 
   @override
@@ -33,8 +35,9 @@ class _JsonFormState extends State<JsonForm> {
   @override
   void initState() {
     print('initState');
-    mainSchema =
-        Schema.fromJson(widget.jsonSchema, id: kGenesisIdKey) as SchemaObject;
+    mainSchema = (Schema.fromJson(widget.jsonSchema, id: kGenesisIdKey)
+        as SchemaObject)
+      ..setUiSchema(widget.uiSchema);
 
     super.initState();
   }
