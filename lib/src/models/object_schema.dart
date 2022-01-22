@@ -39,6 +39,27 @@ class SchemaObject extends Schema {
     return schema;
   }
 
+  factory SchemaObject.fromUi(
+      SchemaObject prop, Map<String, dynamic> uiSchema) {
+    SchemaObject property = prop;
+    uiSchema.forEach((key, data) {
+      switch (key) {
+        case "ui:order":
+          property.order = data as List<String>;
+          break;
+        case "ui:title":
+          property.title = data as String;
+          break;
+        case "ui:description":
+          property.description = data as String;
+          break;
+        default:
+          break;
+      }
+    });
+    return property;
+  }
+
   @override
   Schema copyWith({
     required String id,
@@ -84,9 +105,10 @@ class SchemaObject extends Schema {
   List<Schema>? oneOf;
 
   void setUiSchema(Map<String, dynamic>? uiSchema) {
+    var props = <Schema>[];
     uiSchema?.forEach((key, data) {
       //print(key);
-      var props = <SchemaProperty>[];
+
       for (int i = 0; i < (properties?.length ?? 0); i++) {
         var propertiesTemp = properties?[i];
         if (propertiesTemp?.type == SchemaType.boolean) {
@@ -97,24 +119,25 @@ class SchemaObject extends Schema {
               }
             });
           }
+        } else if (propertiesTemp is SchemaObject) {
+          props.add(SchemaObject.fromUi(propertiesTemp, uiSchema));
         } else if (propertiesTemp is SchemaProperty) {
           props.add(SchemaProperty.fromUi(propertiesTemp, uiSchema));
         }
       }
-      if (props is List) {
+    });
+    if (props is List) {
+      for (int j = 0; j < ((props.first as dynamic).order?.length ?? 0); j++) {
         for (int i = 0; i < props.length; i++) {
-          //print(props[i].id);
-          for (int j = 0; j < (props[i].order?.length ?? 0); j++) {
-            var propsTemp = props[i];
-            if (props[i].id == props[i].order?[j]) {
-              props.removeAt(i);
-              props.insert((props.length - 1), propsTemp);
-            }
+          var propsTemp = props[i];
+          if (props[i].idKey == (props.first as dynamic).order?[j]) {
+            props.removeAt(i);
+            props.insert((props.length - 1), propsTemp);
           }
         }
       }
-      this.properties = props;
-    });
+    }
+    this.properties = props;
   }
 
   void setProperties(

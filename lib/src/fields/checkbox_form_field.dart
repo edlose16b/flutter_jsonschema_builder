@@ -31,8 +31,9 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
         widget.onSaved(newValue);
       },
       builder: (field) {
+        print(field.value);
         return CheckboxListTile(
-          value: field.value,
+          value: (field.value == null) ? false : field.value,
           title: Text(widget.property.title),
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: (bool? value) {

@@ -14241,10 +14241,10 @@ class _MyHomePageState extends State<MyHomePage> {
   };
 
   final uiSchema = {
-    "boolean": {
+    /* "boolean": {
       "radio": {"ui:widget": "radio"}
-    }
-    /* "ui:order": [
+    } */
+    "ui:order": [
       "short_name",
       "name",
       "tax_payer_registry",
@@ -14268,8 +14268,8 @@ class _MyHomePageState extends State<MyHomePage> {
       "document",
       "phone",
       "email",
-      "address" 
-    ]*/
+      "address"
+    ]
   };
 
   @override
