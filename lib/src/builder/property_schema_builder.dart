@@ -22,16 +22,29 @@ class PropertySchemaBuilder extends StatelessWidget {
   final ValueChanged<dynamic>? onChangeListen;
 
   late WidgetBuilderInherited widgetBuilderInherited;
+  late SchemaProperty schemaPropertySorted;
 
   @override
   Widget build(BuildContext context) {
     Widget _field = const SizedBox.shrink();
 
     widgetBuilderInherited = WidgetBuilderInherited.of(context);
+    if ((schemaProperty.order?.length ?? 0) > 0) {
+      for (var i = 0; i < (schemaProperty.order?.length ?? 0); i++) {
+        // print(i);
 
+        if (schemaProperty.order?[i] == schemaProperty.id) {
+          schemaPropertySorted = schemaProperty;
+        } else {
+          schemaPropertySorted = schemaProperty;
+        }
+      }
+    } else {
+      schemaPropertySorted = schemaProperty;
+    }
     if (schemaProperty.enumm != null) {
       _field = DropDownJFormField(
-        property: schemaProperty,
+        property: schemaPropertySorted,
         onSaved: (val) {
           log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
           updateData(context, val);
@@ -42,7 +55,7 @@ class PropertySchemaBuilder extends StatelessWidget {
       );
     } else if (schemaProperty.oneOf != null) {
       _field = SelectedFormField(
-        property: schemaProperty,
+        property: schemaPropertySorted,
         onSaved: (val) {
           if (val is OneOfModel) {
             log('onSaved: DateJFormField  ${schemaProperty.idKey}  : ${val.oneOfModelEnum?.first}');
@@ -60,7 +73,7 @@ class PropertySchemaBuilder extends StatelessWidget {
           if (schemaProperty.format == PropertyFormat.date ||
               schemaProperty.format == PropertyFormat.datetime) {
             _field = DateJFormField(
-              property: schemaProperty,
+              property: schemaPropertySorted,
               onSaved: (val) {
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
@@ -74,7 +87,7 @@ class PropertySchemaBuilder extends StatelessWidget {
 
           if (schemaProperty.format == PropertyFormat.dataurl) {
             _field = FileJFormField(
-              property: schemaProperty,
+              property: schemaPropertySorted,
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
@@ -91,7 +104,7 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
 
           _field = TextJFormField(
-            property: schemaProperty,
+            property: schemaPropertySorted,
             onSaved: (val) {
               log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
@@ -105,7 +118,7 @@ class PropertySchemaBuilder extends StatelessWidget {
         case SchemaType.integer:
         case SchemaType.number:
           _field = NumberJFormField(
-            property: schemaProperty,
+            property: schemaPropertySorted,
             onSaved: (val) {
               log('onSaved: NumberJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
@@ -119,9 +132,9 @@ class PropertySchemaBuilder extends StatelessWidget {
           );
           break;
         case SchemaType.boolean:
-          if ((schemaProperty.enumNames?.length ?? 0) > 0) {
+          if (schemaProperty.widget == 'radio') {
             _field = RadioButtonJFormField(
-              property: schemaProperty,
+              property: schemaPropertySorted,
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value != null);
               },
@@ -133,7 +146,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             );
           } else {
             _field = CheckboxJFormField(
-              property: schemaProperty,
+              property: schemaPropertySorted,
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value);
               },
@@ -148,7 +161,7 @@ class PropertySchemaBuilder extends StatelessWidget {
           break;
         default:
           _field = TextJFormField(
-            property: schemaProperty,
+            property: schemaPropertySorted,
             onSaved: (val) {
               log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
@@ -195,14 +208,10 @@ class PropertySchemaBuilder extends StatelessWidget {
   void dispatchSelectedForDropDownEventToParent(
       BuildContext context, String value,
       {String? id}) {
-    /* if (value.isNotEmpty && schemaProperty.isDependentsActive) {
-      ObjectSchemaInherited.of(context)
-          .listenChangeProperty(false, schemaProperty, optionalValue: value);
-    } */
-
     if (value.isNotEmpty || !schemaProperty.isDependentsActive) {
-      ObjectSchemaInherited.of(context)
-          .listenChangeProperty(true, schemaProperty, optionalValue: value, idOptional: id, mainSchema: mainSchema);
+      ObjectSchemaInherited.of(context).listenChangeProperty(
+          true, schemaProperty,
+          optionalValue: value, idOptional: id, mainSchema: mainSchema);
     }
   }
 

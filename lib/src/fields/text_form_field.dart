@@ -41,34 +41,37 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      autofocus: (widget.property.autoFocus ?? false),
-      keyboardType: getTextInputTypeFromFormat(widget.property.format),
-      maxLines: widget.property.widget == "textarea" ? null : 1,
-      obscureText: widget.property.format == PropertyFormat.password,
-      initialValue: widget.property.defaultValue ?? '',
-      onSaved: widget.onSaved,
-      maxLength: widget.property.maxLength,
-      inputFormatters: [textInputCustomFormatter(widget.property.format)],
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      onChanged: (value) {
-        if (_timer != null && _timer!.isActive) _timer!.cancel();
+    return AbsorbPointer(
+      absorbing: widget.property.disabled??false,
+          child: TextFormField(
+        autofocus: (widget.property.autoFocus ?? false),
+        keyboardType: getTextInputTypeFromFormat(widget.property.format),
+        maxLines: widget.property.widget == "textarea" ? null : 1,
+        obscureText: widget.property.format == PropertyFormat.password,
+        initialValue: widget.property.defaultValue ?? '',
+        onSaved: widget.onSaved,
+        maxLength: widget.property.maxLength,
+        inputFormatters: [textInputCustomFormatter(widget.property.format)],
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        onChanged: (value) {
+          if (_timer != null && _timer!.isActive) _timer!.cancel();
 
-        _timer = Timer(const Duration(seconds: 1), () {
-          if (widget.onChanged != null) widget.onChanged!(value);
-        });
-      },
-      validator: (String? value) {
-        if (widget.property.required && value != null) {
-          return inputValidationJsonSchema(
-              newValue: value, property: widget.property);
-        }
-      },
-      decoration: InputDecoration(
-        labelText: widget.property.required
-            ? widget.property.title + ' *'
-            : widget.property.title,
-        helperText: widget.property.help,
+          _timer = Timer(const Duration(seconds: 1), () {
+            if (widget.onChanged != null) widget.onChanged!(value);
+          });
+        },
+        validator: (String? value) {
+          if (widget.property.required && value != null) {
+            return inputValidationJsonSchema(
+                newValue: value, property: widget.property);
+          }
+        },
+        decoration: InputDecoration(
+          labelText: widget.property.required
+              ? widget.property.title + ' *'
+              : widget.property.title,
+          helperText: widget.property.help,
+        ),
       ),
     );
   }

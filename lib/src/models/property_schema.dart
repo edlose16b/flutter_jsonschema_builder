@@ -51,22 +51,59 @@ class SchemaProperty extends Schema {
     Schema? parent,
   }) {
     final property = SchemaProperty(
-        id: id,
-        title: json['title'],
-        type: schemaTypeFromString(json['type']),
-        format: propertyFormatFromString(json['format']),
-        defaultValue: json['default'],
-        description: json['description'],
-        // enums
-        enumm: json['enum'],
-        enumNames: json['enumNames'],
-        minLength: json['minLength'],
-        maxLength: json['maxLength'],
-        pattern: json['pattern'],
-        oneOf: json['oneOf'],
-        );
+      id: id,
+      title: json['title'],
+      type: schemaTypeFromString(json['type']),
+      format: propertyFormatFromString(json['format']),
+      defaultValue: json['default'],
+      description: json['description'],
+      // enums
+      enumm: json['enum'],
+      enumNames: json['enumNames'],
+      minLength: json['minLength'],
+      maxLength: json['maxLength'],
+      pattern: json['pattern'],
+      oneOf: json['oneOf'],
+    );
     property.parentIdKey = parent?.idKey;
 
+    return property;
+  }
+
+  factory SchemaProperty.fromUi(
+      SchemaProperty prop, Map<String, dynamic> uiSchema) {
+    SchemaProperty property = prop;
+
+    uiSchema.forEach((key, data) {
+      switch (key) {
+        case "ui:disabled":
+          property.disabled = data as bool;
+          break;
+        case "ui:order":
+          property.order = data as List<String>;
+          break;
+        case "ui:autofocus":
+          property.autoFocus = data as bool;
+          break;
+        case "ui:emptyValue":
+          property.emptyValue = data as String;
+          break;
+        case "ui:title":
+          property.title = data as String;
+          break;
+        case "ui:description":
+          property.description = data as String;
+          break;
+        case "ui:help":
+          property.help = data as String;
+          break;
+        case "ui:widget":
+          property.widget = data as String;
+          break;
+        default:
+          break;
+      }
+    });
     return property;
   }
 
@@ -87,6 +124,9 @@ class SchemaProperty extends Schema {
         required: required,
         oneOf: oneOf)
       ..autoFocus = autoFocus
+      ..order = order
+      ..widget = widget
+      ..disabled = disabled
       ..emptyValue = emptyValue
       ..help = help
       ..maxLength = maxLength
@@ -109,14 +149,16 @@ class SchemaProperty extends Schema {
   dynamic defaultValue;
 
   // propiedades que se llenan con el json
+  bool? disabled;
   bool required;
+  List<String>? order;
   bool? autoFocus;
   int? minLength, maxLength;
   String? pattern;
   dynamic dependents;
 
   /// indica si sus dependentes han sido activados por XDependencies
-  bool  isDependentsActive = false;
+  bool isDependentsActive = false;
   String? dependentsAddedBy;
 
   // not suported yet
