@@ -127,17 +127,24 @@ class SchemaObject extends Schema {
       }
     });
     if (props is List) {
-      for (int j = 0; j < ((props.first as dynamic).order?.length ?? 0); j++) {
-        for (int i = 0; i < props.length; i++) {
-          var propsTemp = props[i];
-          if (props[i].idKey == (props.first as dynamic).order?[j]) {
-            props.removeAt(i);
-            props.insert((props.length - 1), propsTemp);
+      if (props.isNotEmpty) {
+        for (int j = 0;
+            j < ((props.first as dynamic).order?.length ?? 0);
+            j++) {
+          for (int i = 0; i < props.length; i++) {
+            var propsTemp = props[i];
+            if (props[i].idKey == (props.first as dynamic).order?[j]) {
+              props.removeAt(i);
+              props.insert((props.length - 1), propsTemp);
+            }
           }
         }
+        this.properties = props;
+      } else {
+        this.properties = properties;
       }
     }
-    this.properties = props;
+    
   }
 
   void setProperties(
