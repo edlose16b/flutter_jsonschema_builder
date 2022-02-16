@@ -31,7 +31,10 @@ class SchemaObject extends Schema {
           : [],
       dependencies: json['dependencies'],
     );
+    print(json['properties']);
     var propertyMap = Map<String, dynamic>.from(json['properties']);
+    print('==========');
+    print(propertyMap);
     schema.parentIdKey = parent?.idKey;
     schema.setProperties(propertyMap, schema);
     schema.setOneOf(json['oneOf'], schema);
