@@ -150,9 +150,11 @@ class SchemaObject extends Schema {
   }
 
   void setProperties(
-    Map? properties,
+    dynamic properties,
     SchemaObject schema,
   ) {
+    print('???????');
+    print(properties);
     if (properties == null) return;
     var props = <Schema>[];
 
