@@ -31,13 +31,13 @@ class SchemaObject extends Schema {
           : [],
       dependencies: json['dependencies'],
     );
-    print(json['properties']);
-    var propertyMap = Map<String, dynamic>.from(json['properties']);
-    print('==========');
-    print(propertyMap);
     schema.parentIdKey = parent?.idKey;
-    schema.setProperties(propertyMap, schema);
-    schema.setOneOf(json['oneOf'], schema);
+    if (json['properties'] != null) {
+      schema.setProperties(json['properties'], schema);
+    }
+    if (json['oneOf'] != null) {
+      schema.setOneOf(json['oneOf'], schema);
+    }
 
     return schema;
   }
