@@ -31,10 +31,13 @@ class SchemaObject extends Schema {
           : [],
       dependencies: json['dependencies'],
     );
-
     schema.parentIdKey = parent?.idKey;
-    schema.setProperties(json['properties'], schema);
-    schema.setOneOf(json['oneOf'], schema);
+    if (json['properties'] != null) {
+      schema.setProperties(json['properties'], schema);
+    }
+    if (json['oneOf'] != null) {
+      schema.setOneOf(json['oneOf'], schema);
+    }
 
     return schema;
   }
@@ -144,13 +147,14 @@ class SchemaObject extends Schema {
         this.properties = properties;
       }
     }
-    
   }
 
   void setProperties(
-    Map<String, Map<String, dynamic>>? properties,
+    dynamic properties,
     SchemaObject schema,
   ) {
+    print('???????');
+    print(properties);
     if (properties == null) return;
     var props = <Schema>[];
 

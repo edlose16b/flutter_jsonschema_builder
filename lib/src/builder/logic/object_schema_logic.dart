@@ -94,8 +94,9 @@ class ObjectSchemaInherited extends InheritedWidget {
                             SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
 
                         temporal.properties?.forEach((elment) {
-                          if (elment is! SchemaEnum) {
-                            propertiesTemporal = elment as SchemaProperty;
+                          if ((elment is SchemaProperty) &&
+                              elment is! SchemaEnum) {
+                            propertiesTemporal = elment;
                             schemaProp = propertiesTemporal;
 
                             if (schemaProp != null) {
