@@ -83,7 +83,6 @@ class ObjectSchemaInherited extends InheritedWidget {
             propertiesMap.forEach((keyPrimary, value) {
               if (keyPrimary == idOptional) {
                 if (value is Map) {
-                  print(value);
                   if (value.containsKey('enum')) {
                     if (value['enum'].first == optionalValue) {
                       _isSelected = true;
@@ -130,7 +129,7 @@ class ObjectSchemaInherited extends InheritedWidget {
         // Actualizamos depsues de todo
         listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       } else if (schemaProperty.dependents is Schema) {
-        print('tttt');
+       
         final _schema = schemaProperty.dependents;
 
         if (active) {

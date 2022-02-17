@@ -153,8 +153,6 @@ class SchemaObject extends Schema {
     dynamic properties,
     SchemaObject schema,
   ) {
-    print('???????');
-    print(properties);
     if (properties == null) return;
     var props = <Schema>[];
 
@@ -197,18 +195,10 @@ class SchemaObject extends Schema {
     if (oneOf == null) return;
     oneOf.map((e) => Map<String, dynamic>.from(e));
     var oneOfs = <Schema>[];
-    print(oneOf);
     for (var element in oneOf) {
       print(element);
       oneOfs.add(Schema.fromJson(element, parent: schema));
     }
-    /*  oneOf.forEach((key, _property) {
-      print('??????');
-      print(_property);
-      oneOfs.add(Schema.fromJson(_property, id: key, parent: schema));
-    }); */
-
-    print(oneOfs);
 
     this.oneOf = oneOfs;
   }
