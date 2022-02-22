@@ -52,7 +52,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final json = {
+  final json = '''{
     "type": "object",
     "title": "Dirección de residencia",
     "required": ["country", "city", "street", "postal_code"],
@@ -3384,38 +3384,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ]
       }
     }
-  };
-  final uiSchema = {
-    /* "boolean": {
-      "radio": {"ui:widget": "radio"}
-    } */
-    "ui:order": [
-      "short_name",
-      "name",
-      "tax_payer_registry",
-      "birth_date",
-      "father_name",
-      "mother_name",
-      "gender",
-      "nationality",
-      "country_birth",
-      "state_birth",
-      "state_birth_name",
-      "professional_occupation",
-      "wealths",
-      "civil_state",
-      "civil_state_type",
-      "spouse_name",
-      "educational_level",
-      "PPE",
-      "ppe_occupation",
-      "institution_name",
-      "document",
-      "phone",
-      "email",
-      "address"
-    ]
-  };
+  }''';
+
+  final uiSchema = '{"ui:order":["short_name","name","tax_payer_registry","birth_date","father_name","mother_name","gender","nationality","country_birth","state_birth","state_birth_name","professional_occupation","wealths","civil_state","civil_state_type","spouse_name","educational_level","PPE","ppe_occupation","institution_name","document","phone","email","address"]}';
 
   @override
   Widget build(BuildContext context) {

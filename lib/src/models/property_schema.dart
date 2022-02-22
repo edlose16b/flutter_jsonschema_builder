@@ -80,7 +80,7 @@ class SchemaProperty extends Schema {
           property.disabled = data as bool;
           break;
         case "ui:order":
-          property.order = data as List<String>;
+          property.order = List<String>.from(data);
           break;
         case "ui:autofocus":
           property.autoFocus = data as bool;

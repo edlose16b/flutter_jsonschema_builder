@@ -6,6 +6,7 @@ import 'package:flutter_jsonschema_form/src/builder/array_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/object_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/property_schema_builder.dart';
+import 'dart:convert';
 
 import '../models/models.dart';
 
@@ -17,8 +18,8 @@ class JsonForm extends StatefulWidget {
     required this.onFormDataSaved,
   }) : super(key: key);
 
-  final Map<String, dynamic> jsonSchema;
-  final Map<String, dynamic>? uiSchema;
+  final String jsonSchema;
+  final String? uiSchema;
   final void Function(dynamic) onFormDataSaved;
 
   @override
@@ -35,9 +36,11 @@ class _JsonFormState extends State<JsonForm> {
   @override
   void initState() {
     print('initState');
-    mainSchema = (Schema.fromJson(widget.jsonSchema, id: kGenesisIdKey)
-        as SchemaObject)
-      ..setUiSchema(widget.uiSchema);
+
+    mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
+        id: kGenesisIdKey) as SchemaObject)
+      ..setUiSchema(
+          widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
 
     super.initState();
   }
