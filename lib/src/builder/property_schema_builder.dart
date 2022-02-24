@@ -168,7 +168,10 @@ class PropertySchemaBuilder extends StatelessWidget {
               log('onSaved: TextJFormField ${schemaProperty.idKey}  : $val');
               updateData(context, val);
             },
-            onChanged: (value) {},
+            onChanged: (value) {
+              print('🦊🦊🦊🦊 value $value');
+              dispatchStringEventToParent(context, value);
+            },
           );
       }
     }
@@ -219,6 +222,7 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   /// Cuando se valida si es true o false
   void dispatchBooleanEventToParent(BuildContext context, bool value) {
+    print('distpached $value');
     if (value != schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(value, schemaProperty);

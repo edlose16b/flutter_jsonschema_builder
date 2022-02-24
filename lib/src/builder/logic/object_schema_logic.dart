@@ -50,7 +50,7 @@ class ObjectSchemaInherited extends InheritedWidget {
       Map<String, dynamic>? schemaTemp;
       bool _isSelected = false;
 
-      if (schemaProperty.dependents is List<String>) {
+      if (schemaProperty.dependents is List) {
         dev.log('case 1');
         for (var element in schemaObject.properties!) {
           if ((schemaProperty.dependents as List).contains(element.id)) {

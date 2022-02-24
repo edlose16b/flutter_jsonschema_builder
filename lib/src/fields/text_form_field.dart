@@ -67,7 +67,9 @@ class _TextJFormFieldState extends State<TextJFormField> {
                 newValue: value, property: widget.property);
           }
         },
-        style: widget.property.readOnly ? const TextStyle(color: Colors.grey) : null,
+        style: widget.property.readOnly
+            ? const TextStyle(color: Colors.grey)
+            : null,
         decoration: InputDecoration(
           labelText: widget.property.required
               ? widget.property.title + ' *'

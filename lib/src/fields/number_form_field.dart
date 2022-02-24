@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
@@ -21,6 +23,19 @@ class NumberJFormField extends PropertyFieldWidget<String?> {
 }
 
 class _NumberJFormFieldState extends State<NumberJFormField> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -32,6 +47,15 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       onSaved: widget.onSaved,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       readOnly: widget.property.readOnly,
+      onChanged: (value) {
+        print('envia pues cojudo2 ');
+        if (_timer != null && _timer!.isActive) _timer!.cancel();
+
+        _timer = Timer(const Duration(seconds: 1), () {
+          print('envia pues cojudo2 ');
+          if (widget.onChanged != null) widget.onChanged!(value);
+        });
+      },
       style:
           widget.property.readOnly ? const TextStyle(color: Colors.grey) : null,
       validator: (String? value) {

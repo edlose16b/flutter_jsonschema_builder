@@ -174,8 +174,8 @@ class SchemaObject extends Schema {
           if (dependents is Map) {
             isOneOf = dependents.containsKey("oneOf");
           }
-          if (dependents is List<String> || isOneOf) {
-            property.dependents = dependents;
+          if (dependents is List || isOneOf) {
+            property.dependents = dependents as List;
           } else {
             property.dependents = Schema.fromJson(
               dependents,
