@@ -97,11 +97,13 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                   .toSet()
                   .toList()
               : [],
-          onChanged: (OneOfModel? value) {
-            if (widget.onChanged != null)
-              widget.onChanged!(value?.oneOfModelEnum?.first);
-            valueSelected = value;
-          },
+          onChanged: widget.property.readOnly
+              ? null
+              : (OneOfModel? value) {
+                  if (widget.onChanged != null)
+                    widget.onChanged!(value?.oneOfModelEnum?.first);
+                  valueSelected = value;
+                },
           onSaved: widget.onSaved,
         ),
         const SizedBox(height: 15),

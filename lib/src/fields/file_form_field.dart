@@ -53,15 +53,17 @@ class _FileJFormFieldState extends State<FileJFormField> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextButton(
-                  onPressed: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      allowMultiple: true,
-                    );
+                  onPressed: widget.property.readOnly
+                      ? null
+                      : () async {
+                          final result = await FilePicker.platform.pickFiles(
+                            allowMultiple: true,
+                          );
 
-                    if (result != null) {
-                      change(field, result.files);
-                    }
-                  },
+                          if (result != null) {
+                            change(field, result.files);
+                          }
+                        },
                   child: const Text('Elegir archivos'),
                 ),
                 const SizedBox(height: 10),

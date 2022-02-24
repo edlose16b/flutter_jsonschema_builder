@@ -31,6 +31,9 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       autofocus: false,
       onSaved: widget.onSaved,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      readOnly: widget.property.readOnly,
+      style:
+          widget.property.readOnly ? const TextStyle(color: Colors.grey) : null,
       validator: (String? value) {
         if (widget.property.required && value != null && value.isEmpty) {
           return 'Required';

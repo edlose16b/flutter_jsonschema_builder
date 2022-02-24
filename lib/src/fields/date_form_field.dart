@@ -40,33 +40,39 @@ class _DateJFormFieldState extends State<DateJFormField> {
             }
           },
           inputFormatters: [DateTextInputJsonFormatter()],
+          readOnly: widget.property.readOnly,
+          style: widget.property.readOnly
+              ? const TextStyle(color: Colors.grey)
+              : null,
           decoration: InputDecoration(
             hintText: 'DD-MM-YYYY',
             labelText: widget.property.required
                 ? widget.property.title + ' *'
                 : widget.property.title,
             helperText: widget.property.help,
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.date_range_outlined),
-              onPressed: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1998),
-                  lastDate: DateTime.now(),
-                );
-                if (date != null) txtDateCtrl.text = formatter.format(date);
+            suffixIcon: widget.property.readOnly
+                ? null
+                : IconButton(
+                    icon: const Icon(Icons.date_range_outlined),
+                    onPressed: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1998),
+                        lastDate: DateTime.now(),
+                      );
+                      if (date != null)
+                        txtDateCtrl.text = formatter.format(date);
 
-                widget.onSaved(date);
-              },
-            ),
+                      widget.onSaved(date);
+                    },
+                  ),
           ),
           // onChanged: (value) {
           // TODO: Transformar string to date
           //   widget.onChanged(value);
           // },
         ),
-        
       ],
     );
   }

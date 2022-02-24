@@ -24,21 +24,22 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 class SchemaProperty extends Schema {
-  SchemaProperty(
-      {required String id,
-      required SchemaType type,
-      String? title,
-      String? description,
-      this.defaultValue,
-      this.enumm,
-      this.enumNames,
-      this.required = false,
-      this.format = PropertyFormat.general,
-      this.minLength,
-      this.maxLength,
-      this.pattern,
-      this.oneOf})
-      : super(
+  SchemaProperty({
+    required String id,
+    required SchemaType type,
+    String? title,
+    String? description,
+    this.defaultValue,
+    this.enumm,
+    this.enumNames,
+    this.required = false,
+    this.format = PropertyFormat.general,
+    this.minLength,
+    this.maxLength,
+    this.pattern,
+    this.oneOf,
+    this.readOnly = false,
+  }) : super(
           id: id,
           title: title ?? 'no-title',
           type: type,
@@ -64,6 +65,7 @@ class SchemaProperty extends Schema {
       maxLength: json['maxLength'],
       pattern: json['pattern'],
       oneOf: json['oneOf'],
+      readOnly: json['readOnly'] ?? false,
     );
     property.parentIdKey = parent?.idKey;
 
@@ -156,6 +158,7 @@ class SchemaProperty extends Schema {
   int? minLength, maxLength;
   String? pattern;
   dynamic dependents;
+  bool readOnly;
 
   /// indica si sus dependentes han sido activados por XDependencies
   bool isDependentsActive = false;

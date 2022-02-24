@@ -57,16 +57,18 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                             value: i,
                             activeColor: Colors.blue,
                             groupValue: groupValue,
-                            onChanged: (dynamic value) {
-                              print(value);
-                              groupValue = value;
-                              if (value != null) {
-                                field.didChange(groupValue);
-                                if (widget.onChanged != null) {
-                                  widget.onChanged!(groupValue!);
-                                }
-                              }
-                            },
+                            onChanged: widget.property.readOnly
+                                ? null
+                                : (dynamic value) {
+                                    print(value);
+                                    groupValue = value;
+                                    if (value != null) {
+                                      field.didChange(groupValue);
+                                      if (widget.onChanged != null) {
+                                        widget.onChanged!(groupValue!);
+                                      }
+                                    }
+                                  },
                           ),
                           Text(widget.property.enumNames?[i]),
                         ],

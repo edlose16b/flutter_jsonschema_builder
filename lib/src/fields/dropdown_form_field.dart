@@ -51,9 +51,11 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
             }
           },
           items: _buildItems(),
-          onChanged: (value) {
-            if (widget.onChanged != null) widget.onChanged!(value);
-          },
+          onChanged: widget.property.readOnly
+              ? null
+              : (value) {
+                  if (widget.onChanged != null) widget.onChanged!(value);
+                },
           onSaved: widget.onSaved,
         ),
         const SizedBox(height: 15),

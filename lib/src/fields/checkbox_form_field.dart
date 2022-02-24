@@ -36,12 +36,14 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
           value: (field.value == null) ? false : field.value,
           title: Text(widget.property.title),
           controlAffinity: ListTileControlAffinity.leading,
-          onChanged: (bool? value) {
-            field.didChange(value);
-            if (widget.onChanged != null && value != null) {
-              widget.onChanged!(value);
-            }
-          },
+          onChanged: widget.property.readOnly
+              ? null
+              : (bool? value) {
+                  field.didChange(value);
+                  if (widget.onChanged != null && value != null) {
+                    widget.onChanged!(value);
+                  }
+                },
         );
       },
     );

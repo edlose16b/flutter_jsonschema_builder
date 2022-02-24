@@ -42,8 +42,8 @@ class _TextJFormFieldState extends State<TextJFormField> {
   @override
   Widget build(BuildContext context) {
     return AbsorbPointer(
-      absorbing: widget.property.disabled??false,
-          child: TextFormField(
+      absorbing: widget.property.disabled ?? false,
+      child: TextFormField(
         autofocus: (widget.property.autoFocus ?? false),
         keyboardType: getTextInputTypeFromFormat(widget.property.format),
         maxLines: widget.property.widget == "textarea" ? null : 1,
@@ -53,6 +53,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
         maxLength: widget.property.maxLength,
         inputFormatters: [textInputCustomFormatter(widget.property.format)],
         autovalidateMode: AutovalidateMode.onUserInteraction,
+        readOnly: widget.property.readOnly,
         onChanged: (value) {
           if (_timer != null && _timer!.isActive) _timer!.cancel();
 
@@ -66,6 +67,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
                 newValue: value, property: widget.property);
           }
         },
+        style: widget.property.readOnly ? const TextStyle(color: Colors.grey) : null,
         decoration: InputDecoration(
           labelText: widget.property.required
               ? widget.property.title + ' *'
