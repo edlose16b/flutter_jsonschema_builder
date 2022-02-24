@@ -50,6 +50,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           updateData(context, val);
         },
         onChanged: (value) {
+          log('dispatch... $value');
+
           dispatchBooleanEventToParent(context, value != null);
         },
       );
