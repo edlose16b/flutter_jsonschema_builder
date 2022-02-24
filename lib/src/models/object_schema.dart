@@ -175,7 +175,7 @@ class SchemaObject extends Schema {
             isOneOf = dependents.containsKey("oneOf");
           }
           if (dependents is List || isOneOf) {
-            property.dependents = dependents as List;
+            property.dependents = dependents;
           } else {
             property.dependents = Schema.fromJson(
               dependents,
