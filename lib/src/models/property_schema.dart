@@ -68,6 +68,7 @@ class SchemaProperty extends Schema {
       readOnly: json['readOnly'] ?? false,
     );
     property.parentIdKey = parent?.idKey;
+    property.dependentsAddedBy = parent?.dependentsAddedBy;
 
     return property;
   }
@@ -113,6 +114,7 @@ class SchemaProperty extends Schema {
   SchemaProperty copyWith({
     required String id,
     String? parentIdKey,
+    String? dependentsAddedBy,
   }) {
     var newSchema = SchemaProperty(
         id: id,
@@ -135,6 +137,7 @@ class SchemaProperty extends Schema {
       ..minLength = minLength
       ..widget = widget
       ..parentIdKey = parentIdKey ?? this.parentIdKey
+      ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
       ..required = required;
 
     return newSchema;
@@ -162,7 +165,6 @@ class SchemaProperty extends Schema {
 
   /// indica si sus dependentes han sido activados por XDependencies
   bool isDependentsActive = false;
-  String? dependentsAddedBy;
 
   // not suported yet
   String? widget, emptyValue, help = '';

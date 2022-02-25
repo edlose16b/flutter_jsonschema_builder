@@ -32,6 +32,7 @@ class SchemaObject extends Schema {
       dependencies: json['dependencies'],
     );
     schema.parentIdKey = parent?.idKey;
+    schema.dependentsAddedBy = parent?.dependentsAddedBy;
     if (json['properties'] != null) {
       schema.setProperties(json['properties'], schema);
     }
@@ -67,6 +68,7 @@ class SchemaObject extends Schema {
   Schema copyWith({
     required String id,
     String? parentIdKey,
+    String? dependentsAddedBy,
   }) {
     var newSchema = SchemaObject(
       id: id,
@@ -74,6 +76,7 @@ class SchemaObject extends Schema {
       description: description,
     )
       ..parentIdKey = parentIdKey ?? this.parentIdKey
+      ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
       ..type = type
       ..dependencies = dependencies
       ..oneOf = oneOf
@@ -83,7 +86,11 @@ class SchemaObject extends Schema {
     final otherProperties = properties!; //.map((p) => p.copyWith(id: p.id));
 
     newSchema.properties = otherProperties
-        .map((e) => e.copyWith(id: e.id, parentIdKey: newSchema.idKey))
+        .map((e) => e.copyWith(
+              id: e.id,
+              parentIdKey: newSchema.idKey,
+              dependentsAddedBy: newSchema.dependentsAddedBy,
+            ))
         .toList();
 
     return newSchema;

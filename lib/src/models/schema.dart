@@ -4,15 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../models/models.dart';
 // Esto transforma el JSON a Modelos
 
-enum SchemaType {
-  string,
-  number,
-  boolean,
-  integer,
-  object,
-  array,
-  enumm
-}
+enum SchemaType { string, number, boolean, integer, object, array, enumm }
 SchemaType schemaTypeFromString(String value) {
   return SchemaType.values.where((e) => describeEnum(e) == value).first;
 }
@@ -24,6 +16,7 @@ class Schema {
     this.title = 'no-title',
     this.description,
     this.parentIdKey,
+    this.dependentsAddedBy,
   });
 
   factory Schema.fromJson(
@@ -41,7 +34,6 @@ class Schema {
     }
 
     json['type'] ??= 'object';
-
 
     switch (schemaTypeFromString(json['type'])) {
       case SchemaType.object:
@@ -69,6 +61,7 @@ class Schema {
 
   // util props
   String? parentIdKey;
+  String? dependentsAddedBy;
 
   /// it lets us know the key in the formData Map {key}
   String get idKey {
@@ -91,6 +84,7 @@ class Schema {
   Schema copyWith({
     required String id,
     String? parentIdKey,
+    String? dependentsAddedBy,
   }) {
     return Schema(
       id: id,
@@ -98,6 +92,7 @@ class Schema {
       title: title,
       description: description,
       parentIdKey: parentIdKey ?? this.parentIdKey,
+      dependentsAddedBy: dependentsAddedBy ?? this.dependentsAddedBy,
     );
   }
 }

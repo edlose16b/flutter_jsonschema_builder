@@ -20,8 +20,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     return result!;
   }
 
-  void updateObjectData(String path, dynamic value) {
-    var object = data;
+  void updateObjectData(object, String path, dynamic value) {
     print('updateObjectData $object path $path value $value');
 
     final stack = path.split('.');

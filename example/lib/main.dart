@@ -146,9 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "professional_occupation": {
                                     "enum": [
                                         3,
-                                        6,
-                                        8,
-                                        9
+                                        6                                        
                                     ]
                                 }
                             }
@@ -160,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ''';
 
   final uiSchema = null;
-  
+
   // '''{
   //           "ui:order": [
   //               "name",

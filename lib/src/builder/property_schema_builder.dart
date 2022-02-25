@@ -197,7 +197,8 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   void updateData(BuildContext context, dynamic val) {
-    widgetBuilderInherited.updateObjectData(schemaProperty.idKey, val);
+    widgetBuilderInherited.updateObjectData(
+        WidgetBuilderInherited.of(context).data, schemaProperty.idKey, val);
   }
 
   // @temp Functions
@@ -217,10 +218,11 @@ class PropertySchemaBuilder extends StatelessWidget {
   void dispatchSelectedForDropDownEventToParent(
       BuildContext context, dynamic value,
       {String? id}) {
-    value = value.toString();
     print(
         'no funciona o q ptmr: $value   + ${schemaProperty.isDependentsActive}');
-    if (value.isNotEmpty || !schemaProperty.isDependentsActive) {
+
+    if ((value != null && (value is String ? value.isNotEmpty : true)) ||
+        !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context).listenChangeProperty(
           true, schemaProperty,
           optionalValue: value, idOptional: id, mainSchema: mainSchema);

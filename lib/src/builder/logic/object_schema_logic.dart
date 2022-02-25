@@ -43,117 +43,96 @@ class ObjectSchemaInherited extends InheritedWidget {
 
   /// esta funcion comunica
   void listenChangeProperty(bool active, SchemaProperty schemaProperty,
-      {String? optionalValue, Schema? mainSchema, String? idOptional}) async {
+      {dynamic optionalValue, Schema? mainSchema, String? idOptional}) async {
     try {
+      List? listProperty;
+      SchemaProperty? schemaProp;
+      Map<String, dynamic>? schemaTemp;
+      bool _isSelected = false;
 
-    List? listProperty;
-    SchemaProperty? schemaProp;
-    Map<String, dynamic>? schemaTemp;
-    bool _isSelected = false;
+      if (schemaProperty.dependents is List) {
+        dev.log('case 1');
 
-    if (schemaProperty.dependents is List) {
-      dev.log('case 1');
+        // Cuando es una Lista de String y todos ellos ahoran serán requeridos
 
-      // Cuando es una Lista de String y todos ellos ahoran serán requeridos
-
-      for (var element in schemaObject.properties!) {
-        if ((schemaProperty.dependents as List).contains(element.id)) {
-          if (element is SchemaProperty) {
-            print('Este element ${element.id} es ahora $active');
-            element.required = active;
+        for (var element in schemaObject.properties!) {
+          if ((schemaProperty.dependents as List).contains(element.id)) {
+            if (element is SchemaProperty) {
+              print('Este element ${element.id} es ahora $active');
+              element.required = active;
+            }
           }
         }
-      }
 
-      schemaProperty.isDependentsActive = active;
-      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-    } else if (schemaProperty.dependents != null &&
-        schemaProperty.dependents.containsKey("oneOf")) {
-      // Cuando es OneOf
+        schemaProperty.isDependentsActive = active;
+        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+      } else if (schemaProperty.dependents != null &&
+          schemaProperty.dependents.containsKey("oneOf")) {
+        // Cuando es OneOf
 
-      dev.log('case OneOf');
+        dev.log('case OneOf');
+        dev.inspect(schemaProperty);
 
-      // Eliminamos los nuevos imputs agregados
-      schemaObject.properties!.removeWhere((element) =>
-          (element is SchemaProperty) &&
-          (element).dependentsAddedBy == schemaProperty.id);
+        // Eliminamos los nuevos imputs agregados
+        schemaObject.properties!.removeWhere(
+            (element) => (element).dependentsAddedBy == schemaProperty.id);
 
-      if (schemaProperty.dependents is Map) {
-        schemaTemp = {};
-        schemaProperty.dependents.forEach((key, value) {
-          listProperty = value;
-        });
-      }
+        final oneOfs = schemaProperty.dependents['oneOf'];
+        dev.inspect(oneOfs);
 
-      for (var schema in (listProperty ?? [])) {
-        if (schema != null) {
-          final propertiesMap = Map.from(schema['properties']);
+        if (oneOfs is List) {
+          for (Map<String, dynamic> oneOf in oneOfs) {
+            // Verificamos si es el que requerimos
+            if (oneOf.containsKey('properties') &&
+                !oneOf['properties'].containsKey(schemaProperty.id)) continue;
 
-          schemaTemp = schema;
-          propertiesMap.forEach((keyPrimary, value) {
-            if (keyPrimary == idOptional) {
-              dev.log('case2.1');
-              if (value is Map) {
-                if (value.containsKey('enum')) {
-                  if (value['enum'].first == optionalValue) {
-                    _isSelected = true;
-                    value.forEach((ky, val) {
-                      var propertiesTemporal;
+            // Verificamos que tenga la estructura enum correcta
+            if (oneOf['properties'][schemaProperty.id] is! Map ||
+                !oneOf['properties'][schemaProperty.id].containsKey('enum'))
+              continue;
 
-                      final temporal =
-                          SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
+            // Guardamos los valores que se van a condicionar para que salgan los nuevos inputs
 
-                      temporal.properties?.forEach((elment) {
-                        if ((elment is SchemaProperty) &&
-                            elment is! SchemaEnum) {
-                          propertiesTemporal = elment;
-                          schemaProp = propertiesTemporal;
+            final valuesForCondition =
+                oneOf['properties'][schemaProperty.id]['enum'];
 
-                          if (schemaProp != null) {
-                            schemaObject.properties!.add(schemaProp!);
+            // si tiene uno del valor seleccionado en el select, mostramos
+            if (valuesForCondition.contains(optionalValue)) {
+              // Add new propperties
 
-                            schemaProperty.isDependentsActive = active;
-                            schemaProp!.dependentsAddedBy = keyPrimary;
-                          }
-                        }
-                      });
-                    });
-                  }
-                }
-              }
-            } else {
-              dev.log('case2.2');
-              if (!_isSelected) {
-                // schemaObject.properties!.removeWhere((e) => e.id == keyPrimary);
+              final tempSchema = SchemaObject.fromJson(kNoIdKey, oneOf);
 
-                schemaProperty.isDependentsActive = active;
+              final newProperties = tempSchema.properties!
+                  // Quitamos el key del mismo para que no se agregue al arbol de widgets
+                  .where(
+                      (e) => !(e is SchemaObject && e.id == schemaProperty.id))
+                  // Agregamos que fue dependiente de este, para que luego pueda ser eliminado.
+                  .map((e) => e..dependentsAddedBy = schemaProperty.id)
+                  .toList();
 
-                listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-                _isSelected = false;
-              }
+              schemaObject.properties!.addAll(newProperties);
             }
-          });
+          }
         }
+
+        // distpach Event
+        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+      } else if (schemaProperty.dependents is Schema) {
+        // Cuando es un Schema simple
+        dev.log('case 3');
+        final _schema = schemaProperty.dependents;
+
+        if (active) {
+          schemaObject.properties!.add(_schema);
+        } else {
+          schemaObject.properties!
+              .removeWhere((element) => element.id == _schema.idKey);
+        }
+
+        schemaProperty.isDependentsActive = active;
+
+        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       }
-
-      // Actualizamos depsues de todo
-      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-    } else if (schemaProperty.dependents is Schema) {
-      // Cuando es un Schema simple
-      dev.log('case 3');
-      final _schema = schemaProperty.dependents;
-
-      if (active) {
-        schemaObject.properties!.add(_schema);
-      } else {
-        schemaObject.properties!
-            .removeWhere((element) => element.id == _schema.idKey);
-      }
-
-      schemaProperty.isDependentsActive = active;
-
-      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-    }
     } catch (e) {
       print(e.toString());
     }
