@@ -113,7 +113,8 @@ class ObjectSchemaInherited extends InheritedWidget {
                   .map((e) => e..dependentsAddedBy = schemaProperty.id)
                   .toList();
 
-              schemaObject.properties!.insertAll(indexProperty, newProperties);
+              // schemaObject.properties!.insertAll(indexProperty, newProperties);
+              schemaObject.properties!.addAll( newProperties);
             }
           }
         }
