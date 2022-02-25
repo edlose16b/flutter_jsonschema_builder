@@ -57,6 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
     "type": "object",
     "title": "Dirección de residencia",
     "properties": {
+
+        "birth_date": {"type": "string", "title": "Birth Date", "format": "date", "readOnly": true, "default": "05-07-1986"},
         "professional_occupation": {
             "enum": [
                 1,

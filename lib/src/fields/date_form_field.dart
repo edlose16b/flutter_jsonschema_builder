@@ -28,6 +28,14 @@ class _DateJFormFieldState extends State<DateJFormField> {
   final formatter = DateFormat('dd-MM-yyyy');
 
   @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      txtDateCtrl.updateText(widget.property.defaultValue);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -50,15 +58,19 @@ class _DateJFormFieldState extends State<DateJFormField> {
                 ? widget.property.title + ' *'
                 : widget.property.title,
             helperText: widget.property.help,
-            suffixIcon: widget.property.readOnly
-                ? null
-                : IconButton(
-                    icon: const Icon(Icons.date_range_outlined),
-                    onPressed: () async {
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.date_range_outlined),
+              onPressed: widget.property.readOnly
+                  ? null
+                  : () async {
+                      final tempDate = widget.property.defaultValue != null
+                          ? formatter.parse(txtDateCtrl.text)
+                          : DateTime.now();
+
                       final date = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1998),
+                        initialDate: tempDate,
+                        firstDate: DateTime(1960),
                         lastDate: DateTime.now(),
                       );
                       if (date != null)
@@ -66,12 +78,12 @@ class _DateJFormFieldState extends State<DateJFormField> {
 
                       widget.onSaved(date);
                     },
-                  ),
+            ),
           ),
-          // onChanged: (value) {
-          // TODO: Transformar string to date
-          //   widget.onChanged(value);
-          // },
+          onChanged: (value) {
+            if (widget.onChanged != null)
+              widget.onChanged!(formatter.parse(value));
+          },
         ),
       ],
     );
