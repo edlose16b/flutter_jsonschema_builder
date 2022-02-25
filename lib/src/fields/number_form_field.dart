@@ -48,11 +48,9 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       readOnly: widget.property.readOnly,
       onChanged: (value) {
-        print('envia pues cojudo2 ');
         if (_timer != null && _timer!.isActive) _timer!.cancel();
 
         _timer = Timer(const Duration(seconds: 1), () {
-          print('envia pues cojudo2 ');
           if (widget.onChanged != null) widget.onChanged!(value);
         });
       },

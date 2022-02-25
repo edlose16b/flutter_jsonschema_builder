@@ -48,7 +48,7 @@ class SchemaObject extends Schema {
     uiSchema.forEach((key, data) {
       switch (key) {
         case "ui:order":
-          property.order =  List<String>.from(data);
+          property.order = List<String>.from(data);
           break;
         case "ui:title":
           property.title = data as String;

@@ -42,6 +42,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     } else {
       schemaPropertySorted = schemaProperty;
     }
+
     if (schemaProperty.enumm != null) {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
@@ -52,7 +53,10 @@ class PropertySchemaBuilder extends StatelessWidget {
         onChanged: (value) {
           log('dispatch... $value');
 
-          dispatchBooleanEventToParent(context, value != null);
+          // dispatchBooleanEventToParent(context, value != null);
+
+          dispatchSelectedForDropDownEventToParent(context, value,
+              id: schemaProperty.id);
         },
       );
     } else if (schemaProperty.oneOf != null) {
@@ -211,8 +215,11 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   void dispatchSelectedForDropDownEventToParent(
-      BuildContext context, String value,
+      BuildContext context, dynamic value,
       {String? id}) {
+    value = value.toString();
+    print(
+        'no funciona o q ptmr: $value   + ${schemaProperty.isDependentsActive}');
     if (value.isNotEmpty || !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context).listenChangeProperty(
           true, schemaProperty,

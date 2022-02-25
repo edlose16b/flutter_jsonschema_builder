@@ -45,108 +45,115 @@ class ObjectSchemaInherited extends InheritedWidget {
   void listenChangeProperty(bool active, SchemaProperty schemaProperty,
       {String? optionalValue, Schema? mainSchema, String? idOptional}) async {
     try {
-      List? listProperty;
-      SchemaProperty? schemaProp;
-      Map<String, dynamic>? schemaTemp;
-      bool _isSelected = false;
 
-      if (schemaProperty.dependents is List) {
-        dev.log('case 1');
-        for (var element in schemaObject.properties!) {
-          if ((schemaProperty.dependents as List).contains(element.id)) {
-            if (element is SchemaProperty) {
-              print('Este element ${element.id} es ahora $active');
-              element.required = active;
-            }
+    List? listProperty;
+    SchemaProperty? schemaProp;
+    Map<String, dynamic>? schemaTemp;
+    bool _isSelected = false;
+
+    if (schemaProperty.dependents is List) {
+      dev.log('case 1');
+
+      // Cuando es una Lista de String y todos ellos ahoran serán requeridos
+
+      for (var element in schemaObject.properties!) {
+        if ((schemaProperty.dependents as List).contains(element.id)) {
+          if (element is SchemaProperty) {
+            print('Este element ${element.id} es ahora $active');
+            element.required = active;
           }
         }
+      }
 
-        schemaProperty.isDependentsActive = active;
-        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-      } else if (schemaProperty.dependents != null &&
-          schemaProperty.dependents.containsKey("oneOf")) {
-        dev.log('case 2');
+      schemaProperty.isDependentsActive = active;
+      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+    } else if (schemaProperty.dependents != null &&
+        schemaProperty.dependents.containsKey("oneOf")) {
+      // Cuando es OneOf
 
-        // Eliminamos los nuevos imputs agregados
-        schemaObject.properties!.removeWhere((element) =>
-            (element is SchemaProperty) &&
-            (element).dependentsAddedBy == schemaProperty.id);
+      dev.log('case OneOf');
 
-        if (schemaProperty.dependents is Map) {
-          schemaTemp = {};
-          schemaProperty.dependents.forEach((key, value) {
-            listProperty = value;
-          });
-        }
+      // Eliminamos los nuevos imputs agregados
+      schemaObject.properties!.removeWhere((element) =>
+          (element is SchemaProperty) &&
+          (element).dependentsAddedBy == schemaProperty.id);
 
-        for (var schema in (listProperty ?? [])) {
+      if (schemaProperty.dependents is Map) {
+        schemaTemp = {};
+        schemaProperty.dependents.forEach((key, value) {
+          listProperty = value;
+        });
+      }
+
+      for (var schema in (listProperty ?? [])) {
+        if (schema != null) {
           final propertiesMap = Map.from(schema['properties']);
-          if (schema != null) {
-            schemaTemp = schema;
-            propertiesMap.forEach((keyPrimary, value) {
-              if (keyPrimary == idOptional) {
-                dev.log('case2.1');
-                if (value is Map) {
-                  if (value.containsKey('enum')) {
-                    if (value['enum'].first == optionalValue) {
-                      _isSelected = true;
-                      value.forEach((ky, val) {
-                        var propertiesTemporal;
 
-                        final temporal =
-                            SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
+          schemaTemp = schema;
+          propertiesMap.forEach((keyPrimary, value) {
+            if (keyPrimary == idOptional) {
+              dev.log('case2.1');
+              if (value is Map) {
+                if (value.containsKey('enum')) {
+                  if (value['enum'].first == optionalValue) {
+                    _isSelected = true;
+                    value.forEach((ky, val) {
+                      var propertiesTemporal;
 
-                        temporal.properties?.forEach((elment) {
-                          if ((elment is SchemaProperty) &&
-                              elment is! SchemaEnum) {
-                            propertiesTemporal = elment;
-                            schemaProp = propertiesTemporal;
+                      final temporal =
+                          SchemaObject.fromJson(kNoIdKey, schemaTemp ?? {});
 
-                            if (schemaProp != null) {
-                              schemaObject.properties!.add(schemaProp!);
+                      temporal.properties?.forEach((elment) {
+                        if ((elment is SchemaProperty) &&
+                            elment is! SchemaEnum) {
+                          propertiesTemporal = elment;
+                          schemaProp = propertiesTemporal;
 
-                              schemaProperty.isDependentsActive = active;
-                              schemaProp!.dependentsAddedBy = keyPrimary;
-                            }
+                          if (schemaProp != null) {
+                            schemaObject.properties!.add(schemaProp!);
+
+                            schemaProperty.isDependentsActive = active;
+                            schemaProp!.dependentsAddedBy = keyPrimary;
                           }
-                        });
+                        }
                       });
-                    }
+                    });
                   }
                 }
-              } else {
-                dev.log('case2.2');
-                if (!_isSelected) {
-                  // schemaObject.properties!.removeWhere((e) => e.id == keyPrimary);
-
-                  schemaProperty.isDependentsActive = active;
-
-                  listen(
-                      ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-                  _isSelected = false;
-                }
               }
-            });
-          }
+            } else {
+              dev.log('case2.2');
+              if (!_isSelected) {
+                // schemaObject.properties!.removeWhere((e) => e.id == keyPrimary);
+
+                schemaProperty.isDependentsActive = active;
+
+                listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+                _isSelected = false;
+              }
+            }
+          });
         }
-
-        // Actualizamos depsues de todo
-        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-      } else if (schemaProperty.dependents is Schema) {
-        dev.log('case 3');
-        final _schema = schemaProperty.dependents;
-
-        if (active) {
-          schemaObject.properties!.add(_schema);
-        } else {
-          schemaObject.properties!
-              .removeWhere((element) => element.id == _schema.idKey);
-        }
-
-        schemaProperty.isDependentsActive = active;
-
-        listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       }
+
+      // Actualizamos depsues de todo
+      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+    } else if (schemaProperty.dependents is Schema) {
+      // Cuando es un Schema simple
+      dev.log('case 3');
+      final _schema = schemaProperty.dependents;
+
+      if (active) {
+        schemaObject.properties!.add(_schema);
+      } else {
+        schemaObject.properties!
+            .removeWhere((element) => element.id == _schema.idKey);
+      }
+
+      schemaProperty.isDependentsActive = active;
+
+      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+    }
     } catch (e) {
       print(e.toString());
     }
