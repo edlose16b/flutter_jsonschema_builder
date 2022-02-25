@@ -50,6 +50,10 @@ class ObjectSchemaInherited extends InheritedWidget {
       Map<String, dynamic>? schemaTemp;
       bool _isSelected = false;
 
+      // Obtenemos el index del actual property para anadir a abajo de él
+      final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
+      print('index $indexProperty');
+
       if (schemaProperty.dependents is List) {
         dev.log('case 1');
 
@@ -104,13 +108,12 @@ class ObjectSchemaInherited extends InheritedWidget {
 
               final newProperties = tempSchema.properties!
                   // Quitamos el key del mismo para que no se agregue al arbol de widgets
-                  .where(
-                      (e) => !(e is SchemaObject && e.id == schemaProperty.id))
+                  .where((e) => e.id != schemaProperty.id)
                   // Agregamos que fue dependiente de este, para que luego pueda ser eliminado.
                   .map((e) => e..dependentsAddedBy = schemaProperty.id)
                   .toList();
 
-              schemaObject.properties!.addAll(newProperties);
+              schemaObject.properties!.insertAll(indexProperty, newProperties);
             }
           }
         }

@@ -146,7 +146,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "professional_occupation": {
                                     "enum": [
                                         3,
-                                        6                                        
+                                        6
+                                        
                                     ]
                                 }
                             }

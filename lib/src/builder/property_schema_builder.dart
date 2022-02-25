@@ -218,9 +218,6 @@ class PropertySchemaBuilder extends StatelessWidget {
   void dispatchSelectedForDropDownEventToParent(
       BuildContext context, dynamic value,
       {String? id}) {
-    print(
-        'no funciona o q ptmr: $value   + ${schemaProperty.isDependentsActive}');
-
     if ((value != null && (value is String ? value.isNotEmpty : true)) ||
         !schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context).listenChangeProperty(
