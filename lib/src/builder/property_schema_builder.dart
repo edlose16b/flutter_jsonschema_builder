@@ -9,6 +9,7 @@ import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart'
 import 'package:flutter_jsonschema_form/src/fields/selected_form_field.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
+import 'package:intl/intl.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
   PropertySchemaBuilder({
@@ -81,8 +82,10 @@ class PropertySchemaBuilder extends StatelessWidget {
             _field = DateJFormField(
               property: schemaPropertySorted,
               onSaved: (val) {
-                log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
-                updateData(context, val);
+                if (val == null) return;
+                final date = DateFormat('dd-MM-yyyy hh:mm:ss').format(val);
+                log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $date');
+                updateData(context, date);
               },
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value != null);
