@@ -80,6 +80,10 @@ class _DateJFormFieldState extends State<DateJFormField> {
                     },
             ),
           ),
+          onSaved: (value) {
+            if (widget.onSaved != null && value != null)
+              widget.onSaved(formatter.parse(value));
+          },
           onChanged: (value) {
             if (widget.onChanged != null)
               widget.onChanged!(formatter.parse(value));
