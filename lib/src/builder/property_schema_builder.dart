@@ -85,7 +85,13 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaPropertySorted,
               onSaved: (val) {
                 if (val == null) return;
-                final date = DateFormat('dd-MM-yyyy').format(val);
+                String date;
+                if (schemaProperty.format == PropertyFormat.date) {
+                  date = DateFormat('dd-MM-yyyy').format(val);
+                } else {
+                  date = DateFormat('dd-MM-yyyy hh:mm:ss').format(val);
+                }
+
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $date');
                 updateData(context, date);
               },
