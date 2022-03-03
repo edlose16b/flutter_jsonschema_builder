@@ -92,7 +92,6 @@ class _JsonFormState extends State<JsonForm> {
                           // if (_formKey.currentState != null &&
                           //     _formKey.currentState!.validate()) {
                           _formKey.currentState?.save();
-                          
 
                           print(WidgetBuilderInherited.of(context).data);
 

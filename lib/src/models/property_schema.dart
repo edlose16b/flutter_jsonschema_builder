@@ -154,7 +154,6 @@ class SchemaProperty extends Schema {
   List<dynamic>? oneOf;
 
   void setDependents(SchemaObject schema) {
-    print('Intentando anadir dependts de $id');
     final dependents = schema.dependencies?[id];
     // Asignamos las propiedades que dependen de este
     if (schema.dependencies != null && dependents != null) {

@@ -48,14 +48,16 @@ class PropertySchemaBuilder extends StatelessWidget {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
         onSaved: (val) {
-          log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $val');
+          log('onSaved: DropDownJFormField  ${schemaProperty.idKey}  : $val');
           updateData(context, val);
         },
         onChanged: (value) {
           log('dispatch... $value');
 
-          // dispatchBooleanEventToParent(context, value != null);
+          // dispatchBooleanEventToParent(context,false);
 
+          // final setValue =
+          //     !((value is String && value.isEmpty) || value == null);
           dispatchSelectedForDropDownEventToParent(context, value,
               id: schemaProperty.id);
         },
@@ -65,7 +67,7 @@ class PropertySchemaBuilder extends StatelessWidget {
         property: schemaPropertySorted,
         onSaved: (val) {
           if (val is OneOfModel) {
-            log('onSaved: DateJFormField  ${schemaProperty.idKey}  : ${val.oneOfModelEnum?.first}');
+            log('onSaved: SelectedFormField  ${schemaProperty.idKey}  : ${val.oneOfModelEnum?.first}');
             updateData(context, val.oneOfModelEnum?.first);
           }
         },
@@ -83,7 +85,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaPropertySorted,
               onSaved: (val) {
                 if (val == null) return;
-                final date = DateFormat('dd-MM-yyyy hh:mm:ss').format(val);
+                final date = DateFormat('dd-MM-yyyy').format(val);
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $date');
                 updateData(context, date);
               },
