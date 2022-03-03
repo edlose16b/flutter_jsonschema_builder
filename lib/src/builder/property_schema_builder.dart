@@ -28,8 +28,9 @@ class PropertySchemaBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget _field = const SizedBox.shrink();
-
     widgetBuilderInherited = WidgetBuilderInherited.of(context);
+
+    // sort
     if ((schemaProperty.order?.length ?? 0) > 0) {
       for (var i = 0; i < (schemaProperty.order?.length ?? 0); i++) {
         // print(i);
@@ -44,7 +45,19 @@ class PropertySchemaBuilder extends StatelessWidget {
       schemaPropertySorted = schemaProperty;
     }
 
-    if (schemaProperty.enumm != null) {
+    if (schemaProperty.widget == 'radio') {
+      _field = RadioButtonJFormField(
+        property: schemaPropertySorted,
+        onChanged: (value) {
+          dispatchBooleanEventToParent(context, value != null);
+        },
+        onSaved: (val) {
+          log('onSaved: RadioButtonJFormField ${schemaProperty.idKey}  : $val');
+
+          updateData(context, val);
+        },
+      );
+    } else if (schemaProperty.enumm != null) {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
         onSaved: (val) {

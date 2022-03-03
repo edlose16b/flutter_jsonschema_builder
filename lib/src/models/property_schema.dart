@@ -77,19 +77,14 @@ class SchemaProperty extends Schema {
     return property;
   }
 
-  factory SchemaProperty.fromUi(
-      SchemaProperty prop, Map<String, dynamic> uiSchema) {
-    SchemaProperty property = prop;
-
+  void setUi(Map<String, dynamic> uiSchema) {
     // set general ui schema
-    setUiToProperty(property, uiSchema);
+    setUiToProperty(uiSchema);
 
     // set custom ui schema for property
-    if (uiSchema.containsKey(property.id)) {
-      setUiToProperty(property, uiSchema[property.id]);
+    if (uiSchema.containsKey(id)) {
+      setUiToProperty(uiSchema[id]);
     }
-
-    return property;
   }
 
   @override
@@ -171,39 +166,39 @@ class SchemaProperty extends Schema {
       }
     }
   }
-}
 
-setUiToProperty(SchemaProperty property, Map<String, dynamic> uiSchema) {
-  uiSchema.forEach((key, data) {
-    switch (key) {
-      case "ui:disabled":
-        property.disabled = data as bool;
-        break;
-      case "ui:order":
-        property.order = List<String>.from(data);
-        break;
-      case "ui:autofocus":
-        property.autoFocus = data as bool;
-        break;
-      case "ui:emptyValue":
-        property.emptyValue = data as String;
-        break;
-      case "ui:title":
-        property.title = data as String;
-        break;
-      case "ui:description":
-        property.description = data as String;
-        break;
-      case "ui:help":
-        property.help = data as String;
-        break;
-      case "ui:widget":
-        property.widget = data as String;
-        break;
-      default:
-        break;
-    }
-  });
-
-  return property;
+  void setUiToProperty(Map<String, dynamic> uiSchema) {
+    uiSchema.forEach((key, data) {
+      print('key $key data $data');
+      switch (key) {
+        case "ui:disabled":
+          print('aplicamos pues ctmr');
+          disabled = data as bool;
+          break;
+        case "ui:order":
+          order = List<String>.from(data);
+          break;
+        case "ui:autofocus":
+          autoFocus = data as bool;
+          break;
+        case "ui:emptyValue":
+          emptyValue = data as String;
+          break;
+        case "ui:title":
+          title = data as String;
+          break;
+        case "ui:description":
+          description = data as String;
+          break;
+        case "ui:help":
+          help = data as String;
+          break;
+        case "ui:widget":
+          widget = data as String;
+          break;
+        default:
+          break;
+      }
+    });
+  }
 }

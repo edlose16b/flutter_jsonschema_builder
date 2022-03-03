@@ -34,7 +34,7 @@ class SchemaObject extends Schema {
     schema.parentIdKey = parent?.idKey;
 
     schema.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
-    
+
     if (json['properties'] != null) {
       schema.setProperties(json['properties'], schema);
     }
@@ -46,25 +46,22 @@ class SchemaObject extends Schema {
     return schema;
   }
 
-  factory SchemaObject.fromUi(
-      SchemaObject prop, Map<String, dynamic> uiSchema) {
-    SchemaObject property = prop;
+  void setUi(Map<String, dynamic> uiSchema) {
     uiSchema.forEach((key, data) {
       switch (key) {
         case "ui:order":
-          property.order = List<String>.from(data);
+          order = List<String>.from(data);
           break;
         case "ui:title":
-          property.title = data as String;
+          title = data as String;
           break;
         case "ui:description":
-          property.description = data as String;
+          description = data as String;
           break;
         default:
           break;
       }
     });
-    return property;
   }
 
   @override
@@ -118,33 +115,48 @@ class SchemaObject extends Schema {
   List<Schema>? oneOf;
 
   void setUiSchema(Map<String, dynamic>? uiSchema) {
-    var props = <Schema>[];
+    if (uiSchema == null) return;
+    if (properties != null && properties!.isEmpty) return;
 
-    uiSchema?.forEach((key, data) {
-      //print(key);
-
-      for (int i = 0; i < (properties?.length ?? 0); i++) {
-        var propertiesTemp = properties?[i];
-
-        if (propertiesTemp?.type == SchemaType.boolean) {
-          props.add(SchemaProperty.fromUi(
-              propertiesTemp as SchemaProperty, uiSchema));
-          // if (data is Map) {
-          //   data.forEach((ky, val) {
-          //     if (propertiesTemp is SchemaProperty) {
-          //       props.add(SchemaProperty.fromUi(propertiesTemp, val));
-          //     }
-          //   });
-          // }
-
-        } else if (propertiesTemp is SchemaObject) {
-          props.add(SchemaObject.fromUi(propertiesTemp, uiSchema));
-        } else if (propertiesTemp is SchemaProperty) {
-          props.add(SchemaProperty.fromUi(propertiesTemp, uiSchema));
-        }
+    properties?.forEach((_property) {
+      if (_property is SchemaObject) {
+        _property.setUi(uiSchema);
+      } else if (_property is SchemaProperty) {
+        _property.setUi(uiSchema);
       }
     });
 
+    // var props = <Schema>[];
+
+    // // uiSchema?.forEach((key, data) {
+    // //print(key);
+
+    // for (int i = 0; i < (properties?.length ?? 0); i++) {
+    //   var _property = properties?[i];
+
+    //   if (_property?.type == SchemaType.boolean) {
+    //     props.add(SchemaProperty.fromUi(
+    //       _property as SchemaProperty,
+    //       uiSchema,
+    //     ));
+    //     // if (data is Map) {
+    //     //   data.forEach((ky, val) {
+    //     //     if (_property is SchemaProperty) {
+    //     //       props.add(SchemaProperty.fromUi(_property, val));
+    //     //     }
+    //     //   });
+    //     // }
+
+    //   } else if (_property is SchemaObject) {
+    //     props.add(SchemaObject.fromUi(_property, uiSchema));
+    //   } else if (_property is SchemaProperty) {
+    //     props.add(SchemaProperty.fromUi(_property, uiSchema));
+    //   }
+    // }
+    // });
+
+    var props = properties!;
+    // order logic
     if (props is List) {
       if (props.isNotEmpty) {
         for (int j = 0;
