@@ -26,13 +26,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
   @override
   void initState() {
     print(widget.property.defaultValue);
-    groupValue = (widget.property.defaultValue ?? false)
-        // (widget.property.defaultValue is String)
-        //       ? widget.property.defaultValue.toLowerCase() == 'true'
-        //       : widget.property.defaultValue)
-
-        ? 0
-        : 1;
+    groupValue = (widget.property.defaultValue ?? false) ? 0 : 1;
     super.initState();
   }
 
