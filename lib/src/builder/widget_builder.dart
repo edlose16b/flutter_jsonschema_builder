@@ -89,15 +89,15 @@ class _JsonFormState extends State<JsonForm> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          // if (_formKey.currentState != null &&
-                          //     _formKey.currentState!.validate()) {
-                          _formKey.currentState?.save();
+                          if (_formKey.currentState != null &&
+                              _formKey.currentState!.validate()) {
+                            _formKey.currentState?.save();
 
-                          print(WidgetBuilderInherited.of(context).data);
+                            print(WidgetBuilderInherited.of(context).data);
 
-                          widget.onFormDataSaved(
-                              WidgetBuilderInherited.of(context).data);
-                          // }
+                            widget.onFormDataSaved(
+                                WidgetBuilderInherited.of(context).data);
+                          }
                         },
                         child: const Text('Enviar'),
                       ),

@@ -229,12 +229,16 @@ class PropertySchemaBuilder extends StatelessWidget {
   void dispatchSelectedForDropDownEventToParent(
       BuildContext context, dynamic value,
       {String? id}) {
-    if ((value != null && (value is String ? value.isNotEmpty : true)) ||
-        !schemaProperty.isDependentsActive) {
-      ObjectSchemaInherited.of(context).listenChangeProperty(
-          true, schemaProperty,
-          optionalValue: value, idOptional: id, mainSchema: mainSchema);
-    }
+    // if ((value != null && (value is String ? value.isNotEmpty : true))) {
+    //  ||
+    //   !schemaProperty.isDependentsActive
+    ObjectSchemaInherited.of(context).listenChangeProperty(
+        (value != null && (value is String ? value.isNotEmpty : true)),
+        schemaProperty,
+        optionalValue: value,
+        idOptional: id,
+        mainSchema: mainSchema);
+    // }
   }
 
   /// Cuando se valida si es true o false

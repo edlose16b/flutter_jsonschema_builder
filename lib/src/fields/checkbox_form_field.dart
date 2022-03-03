@@ -24,7 +24,7 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
   Widget build(BuildContext context) {
     return FormField<bool>(
       initialValue: widget.property.defaultValue ?? false,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: AutovalidateMode.onUserInteraction, 
       onSaved: (newValue) {
         widget.onSaved(newValue);
       },

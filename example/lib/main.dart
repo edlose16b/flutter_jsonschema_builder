@@ -54,72 +54,132 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
 {
-  "title": "Property dependencies",
-  "description": "These samples are best viewed without live validation.",
-  "type": "object",
-  "properties": {
-    "unidirectional": {
-      "title": "Unidirectional",
-      "src": "https://spacetelescope.github.io/understanding-json-schema/reference/object.html#dependencies",
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "enum": ["",1,2],
-          "enumNames" : ["Seleccione","Lima","Perú"]
+    "title": "A registration form",
+    "description": "A simple form example.",
+    "type": "object",
+    "required": [
+        "firstName",
+        "lastName"
+    ],
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "title": "First name",
+            "default": "Chuck"
         },
-        "credit_card": {
-          "type": "number"
+        "lastName": {
+            "type": "string",
+            "title": "Last name"
         },
-        "billing_address": {
-          "type": "string"
+        "telephone": {
+            "title": "Country Form",
+            "type": "object",
+            "required": [
+                "country",
+                "state"
+            ],
+            "properties": {
+                "country": {
+                    "type": "string",
+                    "title": "Country",
+                    "enum": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "enumNames": [
+                        "Seleccione",
+                        "Perú",
+                        "Chile"
+                    ]
+                }
+            },
+            "dependencies": {
+                "country": {
+                    "oneOf": [
+                        {
+                            "required": [
+                                "state",
+                                "country"
+                            ],
+                            "properties": {
+                                "country": {
+                                    "enum": [
+                                        1
+                                    ]
+                                },
+                                "state": {
+                                    "type": "string",
+                                    "title": "Estado",
+                                    "enum": [
+                                        0,
+                                        1,
+                                        2
+                                    ],
+                                    "enumNames": [
+                                        "Seleccione",
+                                        "Lima",
+                                        "Arequipa"
+                                    ]
+
+                                },
+                                "cola" : {
+                                    "type": "string",
+                                    "title": "Cola"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "state": {
+                    "oneOf": [
+                        {
+                            "required": [
+                                "district",
+                                "state"
+                            ],
+                            "properties": {
+                                "state": {
+                                    "enum": [
+                                        1
+                                    ]
+                                },
+                                "district": {
+                                    "type": "string",
+                                    "title": "Address state name"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
         }
-      },
-      "required": [
-        "name"
-      ],
-      "dependencies": {
-        "name": [
-          "credit_card"
-        ]
-      }
     }
-  }
 }
+
+
   ''';
 
-  final uiSchema = null;
-//    '''
-// {
-//             "ui:order": [
-//                 "name",
-//                 "short_name",
-//                 "tax_payer_registry",
-//                 "birth_date",
-//                 "father_name",
-//                 "mother_name",
-//                 "gender",
-//                 "nationality",
-//                 "country_birth",
-//                 "state_birth",
-//                 "state_birth_name",
-//                 "professional_occupation",
-//                 "institution_name",
-//                 "wealths",
-//                 "civil_state",
-//                 "civil_state_type",
-//                 "spouse_name",
-//                 "educational_level",
-//                 "PPE",
-//                 "ppe_occupation",
-//                 "document",
-//                 "phone",
-//                 "email",
-//                 "address"
-//             ]
-//         }
+  final uiSchema = '''
 
-// ''';
+
+
+{
+    "ui:order": [
+        "country",
+        "province",
+        "subject_comply",
+        "state",
+        "city",
+        "district",
+        "number",
+        "commune",
+        "street",
+        "postal_code"
+    ]
+}
+
+''';
 
   @override
   Widget build(BuildContext context) {
