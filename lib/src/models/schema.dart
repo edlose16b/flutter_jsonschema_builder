@@ -10,14 +10,14 @@ SchemaType schemaTypeFromString(String value) {
 }
 
 class Schema {
-  Schema({
-    required this.id,
-    required this.type,
-    this.title = 'no-title',
-    this.description,
-    this.parentIdKey,
-    this.dependentsAddedBy,
-  });
+  Schema(
+      {required this.id,
+      required this.type,
+      this.title = 'no-title',
+      this.description,
+      this.parentIdKey,
+      List<String>? dependentsAddedBy})
+      : dependentsAddedBy = dependentsAddedBy ?? [];
 
   factory Schema.fromJson(
     Map<String, dynamic> json, {
@@ -61,7 +61,7 @@ class Schema {
 
   // util props
   String? parentIdKey;
-  String? dependentsAddedBy;
+  List<String> dependentsAddedBy = [];
 
   /// it lets us know the key in the formData Map {key}
   String get idKey {
@@ -84,7 +84,7 @@ class Schema {
   Schema copyWith({
     required String id,
     String? parentIdKey,
-    String? dependentsAddedBy,
+    List<String>? dependentsAddedBy,
   }) {
     return Schema(
       id: id,

@@ -35,7 +35,7 @@ class SchemaArray extends Schema {
     );
 
     schemaArray.parentIdKey = parent?.idKey;
-    schemaArray.dependentsAddedBy = parent?.dependentsAddedBy;
+    schemaArray.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
     if (json['items'] is Object) {
       final newSchema = Schema.fromJson(
         json['items'],
@@ -60,7 +60,7 @@ class SchemaArray extends Schema {
   SchemaArray copyWith({
     required String id,
     String? parentIdKey,
-    String? dependentsAddedBy,
+    List<String>? dependentsAddedBy,
   }) {
     var newSchema = SchemaArray(
       id: id,

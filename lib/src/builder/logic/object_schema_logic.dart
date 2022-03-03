@@ -50,6 +50,18 @@ class ObjectSchemaInherited extends InheritedWidget {
       Map<String, dynamic>? schemaTemp;
       bool _isSelected = false;
 
+      // Eliminamos los nuevos imputs agregados
+      schemaObject.properties!.removeWhere(
+        (element) => (element).dependentsAddedBy.contains(schemaProperty.id),
+      );
+
+      // TODO: Falta refrezcar los nuevos inputs en el formulario mmm porque mantiene el estado.
+
+      // distpach Event
+      // listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+
+      // await Future.delayed(const Duration(milliseconds: 500));
+
       // Obtenemos el index del actual property para anadir a abajo de él
       final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
       print('index $indexProperty');
@@ -77,10 +89,6 @@ class ObjectSchemaInherited extends InheritedWidget {
         dev.log('case OneOf');
         dev.inspect(schemaProperty);
 
-        // Eliminamos los nuevos imputs agregados
-        schemaObject.properties!.removeWhere(
-            (element) => (element).dependentsAddedBy == schemaProperty.id);
-
         final oneOfs = schemaProperty.dependents['oneOf'];
         dev.inspect(oneOfs);
 
@@ -102,19 +110,37 @@ class ObjectSchemaInherited extends InheritedWidget {
 
             // si tiene uno del valor seleccionado en el select, mostramos
             if (valuesForCondition.contains(optionalValue)) {
+              schemaProperty.isDependentsActive = true;
+
               // Add new propperties
+              print('antes');
+              print(schemaObject.dependencies);
 
-              final tempSchema = SchemaObject.fromJson(kNoIdKey, oneOf);
+              final tempSchema = SchemaObject.fromJson(
+                kNoIdKey,
+                oneOf,
+                parent: schemaObject,
+              );
 
+              print('despues');
+              print(schemaObject.dependencies);
               final newProperties = tempSchema.properties!
                   // Quitamos el key del mismo para que no se agregue al arbol de widgets
                   .where((e) => e.id != schemaProperty.id)
                   // Agregamos que fue dependiente de este, para que luego pueda ser eliminado.
-                  .map((e) => e..dependentsAddedBy = schemaProperty.id)
-                  .toList();
+                  .map((e) {
+                e.dependentsAddedBy.addAll([
+                  ...schemaProperty.dependentsAddedBy,
+                  schemaProperty.id,
+                ]);
+                if (e is SchemaProperty) {
+                  e.setDependents(schemaObject);
+                }
+                return e;
+              }).toList();
 
               // schemaObject.properties!.insertAll(indexProperty, newProperties);
-              schemaObject.properties!.addAll( newProperties);
+              schemaObject.properties!.addAll(newProperties);
             }
           }
         }

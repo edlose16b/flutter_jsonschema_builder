@@ -1,5 +1,3 @@
-import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
-
 import '../models/models.dart';
 
 enum PropertyFormat { general, password, date, datetime, email, dataurl, uri }
@@ -21,6 +19,12 @@ PropertyFormat propertyFormatFromString(String? value) {
     default:
       return PropertyFormat.general;
   }
+}
+
+dynamic safeDefaultValue(Map<String, dynamic> json) {
+  return schemaTypeFromString(json['type']) == SchemaType.boolean
+      ? json['default'] == 'true'
+      : json['default'];
 }
 
 class SchemaProperty extends Schema {
@@ -56,7 +60,7 @@ class SchemaProperty extends Schema {
       title: json['title'],
       type: schemaTypeFromString(json['type']),
       format: propertyFormatFromString(json['format']),
-      defaultValue: json['default'],
+      defaultValue: safeDefaultValue(json),
       description: json['description'],
       // enums
       enumm: json['enum'],
@@ -68,7 +72,7 @@ class SchemaProperty extends Schema {
       readOnly: json['readOnly'] ?? false,
     );
     property.parentIdKey = parent?.idKey;
-    property.dependentsAddedBy = parent?.dependentsAddedBy;
+    property.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
 
     return property;
   }
@@ -77,36 +81,14 @@ class SchemaProperty extends Schema {
       SchemaProperty prop, Map<String, dynamic> uiSchema) {
     SchemaProperty property = prop;
 
-    uiSchema.forEach((key, data) {
-      switch (key) {
-        case "ui:disabled":
-          property.disabled = data as bool;
-          break;
-        case "ui:order":
-          property.order = List<String>.from(data);
-          break;
-        case "ui:autofocus":
-          property.autoFocus = data as bool;
-          break;
-        case "ui:emptyValue":
-          property.emptyValue = data as String;
-          break;
-        case "ui:title":
-          property.title = data as String;
-          break;
-        case "ui:description":
-          property.description = data as String;
-          break;
-        case "ui:help":
-          property.help = data as String;
-          break;
-        case "ui:widget":
-          property.widget = data as String;
-          break;
-        default:
-          break;
-      }
-    });
+    // set general ui schema
+    setUiToProperty(property, uiSchema);
+
+    // set custom ui schema for property
+    if (uiSchema.containsKey(property.id)) {
+      setUiToProperty(property, uiSchema[property.id]);
+    }
+
     return property;
   }
 
@@ -114,7 +96,7 @@ class SchemaProperty extends Schema {
   SchemaProperty copyWith({
     required String id,
     String? parentIdKey,
-    String? dependentsAddedBy,
+    List<String>? dependentsAddedBy,
   }) {
     var newSchema = SchemaProperty(
         id: id,
@@ -138,7 +120,8 @@ class SchemaProperty extends Schema {
       ..widget = widget
       ..parentIdKey = parentIdKey ?? this.parentIdKey
       ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
-      ..required = required;
+      ..required = required
+      ..dependents = dependents;
 
     return newSchema;
   }
@@ -169,4 +152,59 @@ class SchemaProperty extends Schema {
   // not suported yet
   String? widget, emptyValue, help = '';
   List<dynamic>? oneOf;
+
+  void setDependents(SchemaObject schema) {
+    print('Intentando anadir dependts de $id');
+    final dependents = schema.dependencies?[id];
+    // Asignamos las propiedades que dependen de este
+    if (schema.dependencies != null && dependents != null) {
+      if (dependents is Map) {
+        schema.isOneOf = dependents.containsKey("oneOf");
+      }
+      if (dependents is List || schema.isOneOf) {
+        this.dependents = dependents;
+      } else {
+        this.dependents = Schema.fromJson(
+          dependents,
+          // id: '',
+          parent: schema,
+        );
+      }
+    }
+  }
+}
+
+setUiToProperty(SchemaProperty property, Map<String, dynamic> uiSchema) {
+  uiSchema.forEach((key, data) {
+    switch (key) {
+      case "ui:disabled":
+        property.disabled = data as bool;
+        break;
+      case "ui:order":
+        property.order = List<String>.from(data);
+        break;
+      case "ui:autofocus":
+        property.autoFocus = data as bool;
+        break;
+      case "ui:emptyValue":
+        property.emptyValue = data as String;
+        break;
+      case "ui:title":
+        property.title = data as String;
+        break;
+      case "ui:description":
+        property.description = data as String;
+        break;
+      case "ui:help":
+        property.help = data as String;
+        break;
+      case "ui:widget":
+        property.widget = data as String;
+        break;
+      default:
+        break;
+    }
+  });
+
+  return property;
 }

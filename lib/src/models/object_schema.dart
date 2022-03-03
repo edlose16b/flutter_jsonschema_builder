@@ -32,11 +32,14 @@ class SchemaObject extends Schema {
       dependencies: json['dependencies'],
     );
     schema.parentIdKey = parent?.idKey;
-    schema.dependentsAddedBy = parent?.dependentsAddedBy;
+
+    schema.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
+    
     if (json['properties'] != null) {
       schema.setProperties(json['properties'], schema);
     }
     if (json['oneOf'] != null) {
+      print('ay ombeee $json');
       schema.setOneOf(json['oneOf'], schema);
     }
 
@@ -68,7 +71,7 @@ class SchemaObject extends Schema {
   Schema copyWith({
     required String id,
     String? parentIdKey,
-    String? dependentsAddedBy,
+    List<String>? dependentsAddedBy,
   }) {
     var newSchema = SchemaObject(
       id: id,
@@ -116,19 +119,24 @@ class SchemaObject extends Schema {
 
   void setUiSchema(Map<String, dynamic>? uiSchema) {
     var props = <Schema>[];
+
     uiSchema?.forEach((key, data) {
       //print(key);
 
       for (int i = 0; i < (properties?.length ?? 0); i++) {
         var propertiesTemp = properties?[i];
+
         if (propertiesTemp?.type == SchemaType.boolean) {
-          if (data is Map) {
-            data.forEach((ky, val) {
-              if (propertiesTemp is SchemaProperty) {
-                props.add(SchemaProperty.fromUi(propertiesTemp, val));
-              }
-            });
-          }
+          props.add(SchemaProperty.fromUi(
+              propertiesTemp as SchemaProperty, uiSchema));
+          // if (data is Map) {
+          //   data.forEach((ky, val) {
+          //     if (propertiesTemp is SchemaProperty) {
+          //       props.add(SchemaProperty.fromUi(propertiesTemp, val));
+          //     }
+          //   });
+          // }
+
         } else if (propertiesTemp is SchemaObject) {
           props.add(SchemaObject.fromUi(propertiesTemp, uiSchema));
         } else if (propertiesTemp is SchemaProperty) {
@@ -136,6 +144,7 @@ class SchemaObject extends Schema {
         }
       }
     });
+
     if (props is List) {
       if (props.isNotEmpty) {
         for (int j = 0;
@@ -165,7 +174,6 @@ class SchemaObject extends Schema {
 
     properties.forEach((key, _property) {
       final isRequired = schema.required.contains(key);
-      final dependents = schema.dependencies?[key];
       Schema? property;
 
       property = Schema.fromJson(
@@ -177,20 +185,7 @@ class SchemaObject extends Schema {
       if (property is SchemaProperty) {
         property.required = isRequired;
         // Asignamos las propiedades que dependen de este
-        if (dependencies != null && dependents != null) {
-          if (dependents is Map) {
-            isOneOf = dependents.containsKey("oneOf");
-          }
-          if (dependents is List || isOneOf) {
-            property.dependents = dependents;
-          } else {
-            property.dependents = Schema.fromJson(
-              dependents,
-              // id: '',
-              parent: schema,
-            );
-          }
-        }
+        property.setDependents(schema);
       }
       props.add(property);
     });
@@ -209,6 +204,4 @@ class SchemaObject extends Schema {
 
     this.oneOf = oneOfs;
   }
-
-  void add(SchemaProperty schemaProperty) {}
 }
