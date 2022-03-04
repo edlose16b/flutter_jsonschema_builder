@@ -50,6 +50,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
       groupValue = widget.property.defaultValue ?? 0;
     }
 
+    widget.triggetDefaultValue();
     super.initState();
   }
 

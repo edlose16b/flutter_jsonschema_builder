@@ -27,6 +27,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   void initState() {
+        widget.triggetDefaultValue();
     super.initState();
   }
 
@@ -38,6 +39,8 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return TextFormField(
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[

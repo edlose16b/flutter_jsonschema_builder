@@ -30,6 +30,8 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   void initState() {
+
+        widget.triggetDefaultValue();
     super.initState();
   }
 

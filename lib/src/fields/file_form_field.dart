@@ -33,6 +33,12 @@ class FileJFormField extends PropertyFieldWidget<List<File>?> {
 
 class _FileJFormFieldState extends State<FileJFormField> {
   @override
+  void initState() {
+    widget.triggetDefaultValue();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

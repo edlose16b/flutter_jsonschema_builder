@@ -33,8 +33,6 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
 
   @override
   void initState() {
-
-
     // fill enum property
     if (widget.property.enumm == null) {
       switch (widget.property.type) {
@@ -47,8 +45,6 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                   [];
       }
     }
-
-
 
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
@@ -70,6 +66,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
       }
     }
 
+    widget.triggetDefaultValue();
     super.initState();
   }
 

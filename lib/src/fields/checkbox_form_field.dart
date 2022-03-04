@@ -21,10 +21,16 @@ class CheckboxJFormField extends PropertyFieldWidget<bool> {
 
 class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
   @override
+  void initState() {
+    widget.triggetDefaultValue();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FormField<bool>(
       initialValue: widget.property.defaultValue ?? false,
-      autovalidateMode: AutovalidateMode.onUserInteraction, 
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       onSaved: (newValue) {
         widget.onSaved(newValue);
       },

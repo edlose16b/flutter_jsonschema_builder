@@ -54,18 +54,109 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
 {
-  "title": "Examples",
-  "description": "A text field with example values.",
-  "type": "object",
-  "properties": {
-    
-    "gender": {
-        "type": "boolean",
-        "enumNames": ["Masculino", "Femenino"], 
-        "default": false,
-        "title": "Género"
+    "title": "A registration form",
+    "description": "A simple form example.",
+    "type": "object",
+    "required": [
+        "firstName",
+        "lastName"
+    ],
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "title": "First name",
+            "default": "Chuck"
+        },
+        "lastName": {
+            "type": "string",
+            "title": "Last name"
+        },
+        "telephone": {
+            "title": "Country Form",
+            "type": "object",
+            "required": [
+                "country",
+                "state"
+            ],
+            "properties": {
+                "country": {
+                    "type": "string",
+                    "title": "Country",
+                    "default": 1,
+                    "enum": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "enumNames": [
+                        "Seleccione",
+                        "Perú",
+                        "Chile"
+                    ]
+                }
+            },
+            "dependencies": {
+                "country": {
+                    "oneOf": [
+                        {
+                            "required": [
+                                "state",
+                                "country"
+                            ],
+                            "properties": {
+                                "country": {
+                                    "enum": [
+                                        1
+                                    ]
+                                },
+                                "state": {
+                                    "type": "string",
+                                    "title": "Estado",
+                                    "default" : 1,
+                                    "enum": [
+                                        0,
+                                        1,
+                                        2
+                                    ],
+                                    "enumNames": [
+                                        "Seleccione",
+                                        "Lima",
+                                        "Arequipa"
+                                    ]
+
+                                },
+                                "cola" : {
+                                    "type": "string",
+                                    "title": "Cola"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "state": {
+                    "oneOf": [
+                        {
+                            "required": [
+                                "district",
+                                "state"
+                            ],
+                            "properties": {
+                                "state": {
+                                    "enum": [
+                                        1
+                                    ]
+                                },
+                                "district": {
+                                    "type": "string",
+                                    "title": "Address state name"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
     }
-  }
 }
 
   ''';

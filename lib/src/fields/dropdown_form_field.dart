@@ -35,6 +35,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       }
     }
 
+    widget.triggetDefaultValue();
     super.initState();
   }
 

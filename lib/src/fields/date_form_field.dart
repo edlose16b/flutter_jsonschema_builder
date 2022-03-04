@@ -32,6 +32,9 @@ class _DateJFormFieldState extends State<DateJFormField> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       txtDateCtrl.updateText(widget.property.defaultValue);
     });
+
+    widget.triggetDefaultValue();
+    
     super.initState();
   }
 
