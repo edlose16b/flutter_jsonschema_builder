@@ -33,6 +33,23 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
 
   @override
   void initState() {
+
+
+    // fill enum property
+    if (widget.property.enumm == null) {
+      switch (widget.property.type) {
+        case SchemaType.boolean:
+          widget.property.enumm = [true, false];
+          break;
+        default:
+          widget.property.enumm =
+              widget.property.enumNames?.map((e) => e.toString()).toList() ??
+                  [];
+      }
+    }
+
+
+
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
         if (widget.property.id == 'profession') {

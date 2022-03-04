@@ -21,6 +21,24 @@ class DropDownJFormField extends PropertyFieldWidget<dynamic> {
 
 class _DropDownJFormFieldState extends State<DropDownJFormField> {
   @override
+  void initState() {
+    // fill enum property
+    if (widget.property.enumm == null) {
+      switch (widget.property.type) {
+        case SchemaType.boolean:
+          widget.property.enumm = [true, false];
+          break;
+        default:
+          widget.property.enumm =
+              widget.property.enumNames?.map((e) => e.toString()).toList() ??
+                  [];
+      }
+    }
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     assert(widget.property.enumm != null, 'enum is required');
     assert(() {

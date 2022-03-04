@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
-class RadioButtonJFormField extends PropertyFieldWidget<int> {
+class RadioButtonJFormField extends PropertyFieldWidget<dynamic> {
   const RadioButtonJFormField({
     Key? key,
     required SchemaProperty property,
-    required final ValueSetter<int?> onSaved,
-    ValueChanged<int>? onChanged,
+    required final ValueSetter<dynamic> onSaved,
+    ValueChanged<dynamic>? onChanged,
   }) : super(
             key: key,
             property: property,
@@ -23,12 +23,33 @@ class RadioButtonJFormField extends PropertyFieldWidget<int> {
 class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
   bool booleanValue = false;
 
-  int? groupValue;
+  dynamic groupValue;
 
   @override
   void initState() {
     print(widget.property.defaultValue);
-    groupValue = (widget.property.defaultValue ?? false) ? 0 : 1;
+
+    // fill enum property
+
+    if (widget.property.enumm == null) {
+      switch (widget.property.type) {
+        case SchemaType.boolean:
+          widget.property.enumm = [true, false];
+          break;
+        default:
+          widget.property.enumm =
+              widget.property.enumNames?.map((e) => e.toString()).toList() ??
+                  [];
+      }
+    }
+
+    // fill groupValue
+    if (widget.property.type == SchemaType.boolean) {
+      groupValue = widget.property.defaultValue;
+    } else {
+      groupValue = widget.property.defaultValue ?? 0;
+    }
+
     super.initState();
   }
 
@@ -44,7 +65,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
     }(), '[enumNames] and [enum]  must be the same size ');
 
     inspect(widget.property);
-    return FormField<int>(
+    return FormField<dynamic>(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: groupValue,
       onSaved: (newValue) {
@@ -65,7 +86,9 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
               children: List<Widget>.generate(
                   widget.property.enumNames?.length ?? 0,
                   (int i) => RadioListTile(
-                        value: i,
+                        value: widget.property.enumm != null
+                            ? widget.property.enumm![i]
+                            : i,
                         title: Text(widget.property.enumNames?[i]),
                         groupValue: groupValue,
                         onChanged: widget.property.readOnly
