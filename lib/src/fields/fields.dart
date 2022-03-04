@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/models/object_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
+import 'package:intl/intl.dart';
 
 abstract class PropertyFieldWidget<T> extends StatefulWidget {
   const PropertyFieldWidget(
@@ -26,7 +27,15 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
   Future<void> triggetDefaultValue() async {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       if (property.defaultValue != null) {
-        if (onChanged != null) onChanged!(property.defaultValue);
+        var value = property.defaultValue;
+
+        if (property.format == PropertyFormat.date) {
+          value = DateFormat('dd-MM-yyyy').parse(value);
+        } else if (property.format == PropertyFormat.datetime) {
+          value = DateFormat('dd-MM-yyyy hh:mm:ss').parse(value);
+        }
+
+        if (onChanged != null) onChanged!(value);
       }
     });
   }
