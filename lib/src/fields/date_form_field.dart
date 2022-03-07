@@ -44,6 +44,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
     return Column(
       children: [
         TextFormField(
+          key: Key(widget.property.idKey),
           controller: txtDateCtrl,
           keyboardType: TextInputType.phone,
           validator: (value) {

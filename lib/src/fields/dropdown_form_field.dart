@@ -60,6 +60,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
           style: Theme.of(context).textTheme.caption,
         ),
         DropdownButtonFormField<dynamic>(
+          key: Key(widget.property.idKey),
           value: widget.property.defaultValue,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           hint: const Text('Seleccione'),

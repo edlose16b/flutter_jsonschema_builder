@@ -44,6 +44,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FormField<List<PlatformFile>>(
+          key: Key(widget.property.idKey),
           validator: (value) {
             if ((value == null || value.isEmpty) && widget.property.required) {
               return 'Required';

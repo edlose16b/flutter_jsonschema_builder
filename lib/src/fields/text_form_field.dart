@@ -46,6 +46,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
     return AbsorbPointer(
       absorbing: widget.property.disabled ?? false,
       child: TextFormField(
+        key: Key(widget.property.idKey),
         autofocus: (widget.property.autoFocus ?? false),
         keyboardType: getTextInputTypeFromFormat(widget.property.format),
         maxLines: widget.property.widget == "textarea" ? null : 1,

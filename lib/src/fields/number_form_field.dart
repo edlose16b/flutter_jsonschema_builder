@@ -42,6 +42,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
 
     return TextFormField(
+      key: Key(widget.property.idKey),
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))

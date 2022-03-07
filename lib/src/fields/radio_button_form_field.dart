@@ -67,6 +67,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
 
     inspect(widget.property);
     return FormField<dynamic>(
+      key: Key(widget.property.idKey),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       initialValue: groupValue,
       onSaved: (newValue) {

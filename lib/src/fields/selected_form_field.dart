@@ -89,6 +89,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
           style: Theme.of(context).textTheme.caption,
         ),
         DropdownButtonFormField<OneOfModel>(
+          key: Key(widget.property.idKey),
           value: valueSelected,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           hint: const Text('Seleccione'),
