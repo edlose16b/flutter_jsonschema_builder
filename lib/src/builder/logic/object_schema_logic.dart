@@ -139,8 +139,8 @@ class ObjectSchemaInherited extends InheritedWidget {
                 return e;
               }).toList();
 
-              schemaObject.properties!.insertAll(indexProperty, newProperties);
-              // schemaObject.properties!.addAll(newProperties);
+              // schemaObject.properties!.insertAll(indexProperty, newProperties);
+              schemaObject.properties!.addAll(newProperties);
             }
           }
         }
