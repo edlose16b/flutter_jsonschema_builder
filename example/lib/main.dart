@@ -53,6 +53,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
+
+
 {
     "type": "object",
     "title": "Create account",
@@ -16236,7 +16238,6 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 
-
   ''';
 
   final uiSchema = '''
@@ -16269,6 +16270,7 @@ class _MyHomePageState extends State<MyHomePage> {
         "address"
     ]
 }
+
         
         ''';
 
