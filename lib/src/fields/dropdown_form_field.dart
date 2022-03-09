@@ -60,7 +60,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
           style: Theme.of(context).textTheme.caption,
         ),
         DropdownButtonFormField<dynamic>(
-          // key: Key(widget.property.idKey),
+          key: Key(widget.property.idKey),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           hint: const Text('Seleccione'),
           isExpanded: false,
@@ -71,7 +71,6 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
           },
           items: _buildItems(),
           value: widget.property.defaultValue,
-
           onChanged: widget.property.readOnly
               ? null
               : (value) {

@@ -47,7 +47,6 @@ class ObjectSchemaInherited extends InheritedWidget {
     try {
       // Eliminamos los nuevos imputs agregados
       await _removeCreatedItemsSafeMode(schemaProperty);
-
       // Obtenemos el index del actual property para anadir a abajo de él
       final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
 
@@ -153,7 +152,7 @@ class ObjectSchemaInherited extends InheritedWidget {
 
     if (schemaObject.properties!.where(filter).isNotEmpty) {
       schemaObject.properties!.removeWhere(filter);
-
+      
       listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       await Future.delayed(const Duration(milliseconds: 100));
     }
