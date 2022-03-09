@@ -53,6 +53,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        
         Text(
           widget.property.required
               ? widget.property.title + ' *'

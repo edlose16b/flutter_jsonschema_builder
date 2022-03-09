@@ -169,7 +169,6 @@ class SchemaProperty extends Schema {
 
   void setUiToProperty(Map<String, dynamic> uiSchema) {
     uiSchema.forEach((key, data) {
-      print('key $key data $data');
       switch (key) {
         case "ui:disabled":
           print('aplicamos pues ctmr');

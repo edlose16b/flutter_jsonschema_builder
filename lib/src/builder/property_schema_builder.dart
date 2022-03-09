@@ -58,7 +58,10 @@ class PropertySchemaBuilder extends StatelessWidget {
           updateData(context, val);
         },
       );
-    } else if (schemaProperty.enumm != null) {
+    } else if (schemaProperty.enumm != null &&
+        (schemaProperty.enumm!.isNotEmpty ||
+            (schemaProperty.enumNames != null &&
+                schemaProperty.enumNames!.isNotEmpty))) {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
         onSaved: (val) {
@@ -66,6 +69,7 @@ class PropertySchemaBuilder extends StatelessWidget {
           updateData(context, val);
         },
         onChanged: (value) {
+          
           log('dispatch... $value');
 
           // dispatchBooleanEventToParent(context,false);

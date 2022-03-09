@@ -115,9 +115,10 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
           onChanged: widget.property.readOnly
               ? null
               : (OneOfModel? value) {
-                  if (widget.onChanged != null)
-                    widget.onChanged!(value?.oneOfModelEnum?.first);
                   valueSelected = value;
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(value?.oneOfModelEnum?.first);
+                  }
                 },
           onSaved: widget.onSaved,
         ),

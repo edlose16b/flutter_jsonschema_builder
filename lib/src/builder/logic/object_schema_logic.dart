@@ -55,13 +55,7 @@ class ObjectSchemaInherited extends InheritedWidget {
         (element) => (element).dependentsAddedBy.contains(schemaProperty.id),
       );
 
-      // TODO: Falta refrezcar los nuevos inputs en el formulario mmm porque mantiene el estado.
-
-      // distpach Event
-      // listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
-
-      // await Future.delayed(const Duration(milliseconds: 500));
-
+    
       // Obtenemos el index del actual property para anadir a abajo de él
       final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
       print('index $indexProperty');
