@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import '../models/models.dart';
 
@@ -118,6 +119,18 @@ class SchemaObject extends Schema {
     if (uiSchema == null) return;
     if (properties != null && properties!.isEmpty) return;
 
+    // set UI Schema to this ObjectSchema
+    setUi(uiSchema);
+
+    // assert(() {
+    //   if (order != null && properties != null) {
+    //     return order?.length == properties?.length;
+    //   }
+    //   return true;
+    // }(),
+    //     'Invalid root object field configuration:uiSchema order list does not contain some properties');
+
+    // set UI Schema to their properties
     properties?.forEach((_property) {
       if (_property is SchemaObject) {
         _property.setUi(uiSchema);
@@ -126,54 +139,11 @@ class SchemaObject extends Schema {
       }
     });
 
-    // var props = <Schema>[];
-
-    // // uiSchema?.forEach((key, data) {
-    // //print(key);
-
-    // for (int i = 0; i < (properties?.length ?? 0); i++) {
-    //   var _property = properties?[i];
-
-    //   if (_property?.type == SchemaType.boolean) {
-    //     props.add(SchemaProperty.fromUi(
-    //       _property as SchemaProperty,
-    //       uiSchema,
-    //     ));
-    //     // if (data is Map) {
-    //     //   data.forEach((ky, val) {
-    //     //     if (_property is SchemaProperty) {
-    //     //       props.add(SchemaProperty.fromUi(_property, val));
-    //     //     }
-    //     //   });
-    //     // }
-
-    //   } else if (_property is SchemaObject) {
-    //     props.add(SchemaObject.fromUi(_property, uiSchema));
-    //   } else if (_property is SchemaProperty) {
-    //     props.add(SchemaProperty.fromUi(_property, uiSchema));
-    //   }
-    // }
-    // });
-
-    var props = properties!;
     // order logic
-    if (props is List) {
-      if (props.isNotEmpty) {
-        for (int j = 0;
-            j < ((props.first as dynamic).order?.length ?? 0);
-            j++) {
-          for (int i = 0; i < props.length; i++) {
-            var propsTemp = props[i];
-            if (props[i].idKey == (props.first as dynamic).order?[j]) {
-              props.removeAt(i);
-              props.insert((props.length - 1), propsTemp);
-            }
-          }
-        }
-        this.properties = props;
-      } else {
-        this.properties = properties;
-      }
+    if (order != null) {
+      properties!.sort((a, b) {
+        return order!.indexOf(a.id) - order!.indexOf(b.id);
+      });
     }
   }
 

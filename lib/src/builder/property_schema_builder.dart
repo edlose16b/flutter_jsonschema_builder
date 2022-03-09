@@ -31,19 +31,20 @@ class PropertySchemaBuilder extends StatelessWidget {
     widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
     // sort
-    if ((schemaProperty.order?.length ?? 0) > 0) {
-      for (var i = 0; i < (schemaProperty.order?.length ?? 0); i++) {
-        // print(i);
+    schemaPropertySorted = schemaProperty;
+    // if ((schemaProperty.order?.length ?? 0) > 0) {
+    //   for (var i = 0; i < (schemaProperty.order?.length ?? 0); i++) {
+    //     // print(i);
 
-        if (schemaProperty.order?[i] == schemaProperty.id) {
-          schemaPropertySorted = schemaProperty;
-        } else {
-          schemaPropertySorted = schemaProperty;
-        }
-      }
-    } else {
-      schemaPropertySorted = schemaProperty;
-    }
+    //     if (schemaProperty.order?[i] == schemaProperty.id) {
+    //       schemaPropertySorted = schemaProperty;
+    //     } else {
+    //       schemaPropertySorted = schemaProperty;
+    //     }
+    //   }
+    // } else {
+    //   schemaPropertySorted = schemaProperty;
+    // }
 
     if (schemaProperty.widget == 'radio') {
       _field = RadioButtonJFormField(

@@ -21,6 +21,8 @@ class ObjectSchemaBuilder extends StatefulWidget {
 class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
   @override
   Widget build(BuildContext context) {
+
+    
     return ObjectSchemaInherited(
       schemaObject: widget.schemaObject,
       listen: (value) {
