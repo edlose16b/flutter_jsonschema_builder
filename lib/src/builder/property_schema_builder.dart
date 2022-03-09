@@ -69,13 +69,6 @@ class PropertySchemaBuilder extends StatelessWidget {
           updateData(context, val);
         },
         onChanged: (value) {
-          
-          log('dispatch... $value');
-
-          // dispatchBooleanEventToParent(context,false);
-
-          // final setValue =
-          //     !((value is String && value.isEmpty) || value == null);
           dispatchSelectedForDropDownEventToParent(context, value,
               id: schemaProperty.id);
         },
@@ -128,7 +121,6 @@ class PropertySchemaBuilder extends StatelessWidget {
                 updateData(context, val);
               },
               onChanged: (value) {
-                //TODO: Cuando es array no obitnee el depents
                 dispatchBooleanEventToParent(
                   context,
                   value != null && value.isNotEmpty,
@@ -145,7 +137,6 @@ class PropertySchemaBuilder extends StatelessWidget {
               updateData(context, val);
             },
             onChanged: (value) {
-              print('🦊🦊🦊🦊 value $value');
               dispatchStringEventToParent(context, value);
             },
           );
@@ -202,7 +193,6 @@ class PropertySchemaBuilder extends StatelessWidget {
               updateData(context, val);
             },
             onChanged: (value) {
-              print('🦊🦊🦊🦊 value $value');
               dispatchStringEventToParent(context, value);
             },
           );
@@ -247,9 +237,7 @@ class PropertySchemaBuilder extends StatelessWidget {
   void dispatchSelectedForDropDownEventToParent(
       BuildContext context, dynamic value,
       {String? id}) {
-    // if ((value != null && (value is String ? value.isNotEmpty : true))) {
-    //  ||
-    //   !schemaProperty.isDependentsActive
+    debugPrint('dispatchSelectedForDropDownEventToParent()  $value ID: $id');
     ObjectSchemaInherited.of(context).listenChangeProperty(
         (value != null && (value is String ? value.isNotEmpty : true)),
         schemaProperty,
@@ -261,7 +249,7 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   /// Cuando se valida si es true o false
   void dispatchBooleanEventToParent(BuildContext context, bool value) {
-    print('distpached $value');
+    debugPrint('dispatchBooleanEventToParent()  $value');
     if (value != schemaProperty.isDependentsActive) {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(value, schemaProperty);

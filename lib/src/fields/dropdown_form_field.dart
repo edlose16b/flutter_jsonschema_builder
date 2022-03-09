@@ -53,7 +53,6 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        
         Text(
           widget.property.required
               ? widget.property.title + ' *'
@@ -61,8 +60,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
           style: Theme.of(context).textTheme.caption,
         ),
         DropdownButtonFormField<dynamic>(
-          key: Key(widget.property.idKey),
-          value: widget.property.defaultValue,
+          // key: Key(widget.property.idKey),
           autovalidateMode: AutovalidateMode.onUserInteraction,
           hint: const Text('Seleccione'),
           isExpanded: false,
@@ -72,6 +70,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
             }
           },
           items: _buildItems(),
+          value: widget.property.defaultValue,
+
           onChanged: widget.property.readOnly
               ? null
               : (value) {

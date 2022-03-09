@@ -45,20 +45,11 @@ class ObjectSchemaInherited extends InheritedWidget {
   void listenChangeProperty(bool active, SchemaProperty schemaProperty,
       {dynamic optionalValue, Schema? mainSchema, String? idOptional}) async {
     try {
-      List? listProperty;
-      SchemaProperty? schemaProp;
-      Map<String, dynamic>? schemaTemp;
-      bool _isSelected = false;
-
       // Eliminamos los nuevos imputs agregados
-      schemaObject.properties!.removeWhere(
-        (element) => (element).dependentsAddedBy.contains(schemaProperty.id),
-      );
+      await _removeCreatedItemsSafeMode(schemaProperty);
 
-    
       // Obtenemos el index del actual property para anadir a abajo de él
       final indexProperty = schemaObject.properties!.indexOf(schemaProperty);
-      print('index $indexProperty');
 
       if (schemaProperty.dependents is List) {
         dev.log('case 1');
@@ -81,10 +72,8 @@ class ObjectSchemaInherited extends InheritedWidget {
         // Cuando es OneOf
 
         dev.log('case OneOf');
-        dev.inspect(schemaProperty);
 
         final oneOfs = schemaProperty.dependents['oneOf'];
-        dev.inspect(oneOfs);
 
         if (oneOfs is List) {
           for (Map<String, dynamic> oneOf in oneOfs) {
@@ -107,8 +96,6 @@ class ObjectSchemaInherited extends InheritedWidget {
               schemaProperty.isDependentsActive = true;
 
               // Add new propperties
-              print('antes');
-              print(schemaObject.dependencies);
 
               final tempSchema = SchemaObject.fromJson(
                 kNoIdKey,
@@ -116,8 +103,6 @@ class ObjectSchemaInherited extends InheritedWidget {
                 parent: schemaObject,
               );
 
-              print('despues');
-              print(schemaObject.dependencies);
               final newProperties = tempSchema.properties!
                   // Quitamos el key del mismo para que no se agregue al arbol de widgets
                   .where((e) => e.id != schemaProperty.id)
@@ -127,15 +112,13 @@ class ObjectSchemaInherited extends InheritedWidget {
                   ...schemaProperty.dependentsAddedBy,
                   schemaProperty.id,
                 ]);
-                if (e is SchemaProperty) {
-                  e.setDependents(schemaObject);
-                }
+                if (e is SchemaProperty) e.setDependents(schemaObject);
+
                 return e;
               }).toList();
 
               schemaObject.properties!
                   .insertAll(indexProperty + 1, newProperties);
-              // schemaObject.properties!.addAll(newProperties);
             }
           }
         }
@@ -160,6 +143,19 @@ class ObjectSchemaInherited extends InheritedWidget {
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<void> _removeCreatedItemsSafeMode(
+      SchemaProperty schemaProperty) async {
+    bool filter(Schema element) =>
+        (element).dependentsAddedBy.contains(schemaProperty.id);
+
+    if (schemaObject.properties!.where(filter).isNotEmpty) {
+      schemaObject.properties!.removeWhere(filter);
+
+      listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
+      await Future.delayed(const Duration(milliseconds: 100));
     }
   }
 }

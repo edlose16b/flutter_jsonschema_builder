@@ -5,3 +5,4 @@ include: package:flutter_lints/flutter.yaml
 linter:
   rules:
     avoid_print: false
+    curly_braces_in_flow_control_structures: false
