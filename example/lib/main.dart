@@ -115,10 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
               onFormDataSaved: (data) {
                 inspect(data);
               },
-              // fileSelector: () async{
-              //   await Future.delayed(const Duration(seconds: 3));
-              //   return File('https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-              // },
+              customFileHandler: () async{
+                await Future.delayed(const Duration(seconds: 3));
+                return File('https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+              },
             )
           ],
         ),

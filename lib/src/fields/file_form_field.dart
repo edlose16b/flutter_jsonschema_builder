@@ -20,7 +20,7 @@ class FileJFormField extends PropertyFieldWidget<List<File>?> {
     required SchemaProperty property,
     required final ValueSetter<List<File>?> onSaved,
     ValueChanged<List<File>?>? onChanged,
-    this.fileSelector,
+    this.customFileHandler,
   }) : super(
           key: key,
           property: property,
@@ -28,7 +28,7 @@ class FileJFormField extends PropertyFieldWidget<List<File>?> {
           onChanged: onChanged,
         );
 
-  final Future<File> Function()? fileSelector;
+  final Future<File?> Function()? customFileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -66,7 +66,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                   onPressed: widget.property.readOnly
                       ? null
                       : () async {
-                          if (widget.fileSelector == null) {
+                          if (widget.customFileHandler == null) {
                             final result = await FilePicker.platform.pickFiles(
                               allowMultiple: true,
                             );
@@ -77,10 +77,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
                             }
                           } else {
                             print('abrimos el defecto');
-                            final result = await widget.fileSelector!();
+                            final result = await widget.customFileHandler!();
 
-                            print('devolvemos $result');
-                            change(field, [result]);
+                            if (result != null) {
+                              change(field, [result]);
+                            }
                           }
                         },
                   child: const Text('Elegir archivos'),

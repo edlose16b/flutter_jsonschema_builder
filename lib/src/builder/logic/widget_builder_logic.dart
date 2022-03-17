@@ -9,12 +9,12 @@ class WidgetBuilderInherited extends InheritedWidget {
     Key? key,
     required this.mainSchema,
     required Widget child,
-    this.fileSelector,
+    this.customFileHandler,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
   final data = {};
-  final Future<File> Function()? fileSelector;
+  final Future<File?> Function()? customFileHandler;
 
   static WidgetBuilderInherited of(BuildContext context) {
     final WidgetBuilderInherited? result =

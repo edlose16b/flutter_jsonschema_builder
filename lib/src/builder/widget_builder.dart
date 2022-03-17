@@ -17,14 +17,14 @@ class JsonForm extends StatefulWidget {
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
-    this.fileSelector,
+    this.customFileHandler,
   }) : super(key: key);
 
   final String jsonSchema;
   final void Function(dynamic) onFormDataSaved;
 
   final String? uiSchema;
-  final Future<File> Function()? fileSelector;
+  final Future<File?> Function()? customFileHandler;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -51,7 +51,7 @@ class _JsonFormState extends State<JsonForm> {
   Widget build(BuildContext context) {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
-      fileSelector: widget.fileSelector,
+      customFileHandler: widget.customFileHandler,
       child: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Column(
