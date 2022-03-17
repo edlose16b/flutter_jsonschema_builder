@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/array_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
@@ -16,11 +17,14 @@ class JsonForm extends StatefulWidget {
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
+    this.fileSelector,
   }) : super(key: key);
 
   final String jsonSchema;
-  final String? uiSchema;
   final void Function(dynamic) onFormDataSaved;
+
+  final String? uiSchema;
+  final Future<File> Function()? fileSelector;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -35,8 +39,6 @@ class _JsonFormState extends State<JsonForm> {
 
   @override
   void initState() {
-    print('initState');
-
     mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
         id: kGenesisIdKey) as SchemaObject)
       ..setUiSchema(
@@ -49,6 +51,7 @@ class _JsonFormState extends State<JsonForm> {
   Widget build(BuildContext context) {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
+      fileSelector: widget.fileSelector,
       child: Builder(builder: (context) {
         return SingleChildScrollView(
           child: Column(
@@ -126,6 +129,7 @@ class FormFromSchemaBuilder extends StatelessWidget {
   final Schema mainSchema;
   final Schema schema;
   final SchemaObject? schemaObject;
+
   @override
   Widget build(BuildContext context) {
     if (schema is SchemaProperty) {

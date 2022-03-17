@@ -116,6 +116,7 @@ class PropertySchemaBuilder extends StatelessWidget {
           if (schemaProperty.format == PropertyFormat.dataurl) {
             _field = FileJFormField(
               property: schemaPropertySorted,
+              fileSelector: WidgetBuilderInherited.of(context).fileSelector,
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);

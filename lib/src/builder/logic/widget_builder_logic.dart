@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
@@ -8,10 +9,12 @@ class WidgetBuilderInherited extends InheritedWidget {
     Key? key,
     required this.mainSchema,
     required Widget child,
+    this.fileSelector,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
   final data = {};
+  final Future<File> Function()? fileSelector;
 
   static WidgetBuilderInherited of(BuildContext context) {
     final WidgetBuilderInherited? result =
