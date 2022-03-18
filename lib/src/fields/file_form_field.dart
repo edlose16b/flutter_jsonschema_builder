@@ -76,7 +76,6 @@ class _FileJFormFieldState extends State<FileJFormField> {
                                   result.files.map((e) => e.toFile).toList());
                             }
                           } else {
-                            print('abrimos el defecto');
                             final result = await widget.customFileHandler!();
 
                             if (result != null) {
