@@ -12,7 +12,7 @@ class DefaultTextInputJsonFormatter extends TextInputFormatter {
     }
 
     if (pattern == null) {
-      if (!RegExp(r'^[a-zA-Z0-9]*$').hasMatch(newValue.text)) {
+      if (!RegExp(r'.').hasMatch(newValue.text)) {
         return oldValue;
       }
     } else {
