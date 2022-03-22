@@ -33,19 +33,15 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
           final index = widget.schemaArray.items.indexOf(schemaLoop);
           return Column(
             children: [
-              if (index >= 1)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        widget.schemaArray.items.removeAt(index);
-                      });
-                    },
-                    icon: const Icon(Icons.remove),
-                    label: const Text('Eliminar item'),
-                  ),
+              // if (index >= 1)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () => _removeItem(index),
+                  icon: const Icon(Icons.remove),
+                  label: const Text('Eliminar item'),
                 ),
+              ),
               FormFromSchemaBuilder(
                 mainSchema: widget.mainSchema,
                 schema: schemaLoop,
@@ -65,21 +61,56 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton.icon(
-              onPressed: () {
-                // inspect(schema);
-                final newSchemaObject = widget.schemaArray.items.first
-                    .copyWith(id: widget.schemaArray.items.length.toString());
-
-                widget.schemaArray.items.add(newSchemaObject);
-
-                inspect(widget.schemaArray);
-                setState(() {});
-              },
+              onPressed: _addItem,
               icon: const Icon(Icons.add),
               label: const Text('Añadir Item'),
             ),
           ),
       ],
     );
+  }
+
+  void _addItem() {
+    if (widget.schemaArray.items.isEmpty) {
+      _addFirstItem();
+    } else {
+      _addItemFromFirstSchema();
+    }
+
+    setState(() {});
+  }
+
+  void _removeItem(int index) {
+    setState(() {
+      widget.schemaArray.items.removeAt(index);
+    });
+  }
+
+  void _addFirstItem() {
+    if (widget.schemaArray.itemsBaseSchema is Object) {
+      final newSchema = Schema.fromJson(
+        widget.schemaArray.itemsBaseSchema,
+        id: '0',
+        parent: widget.schemaArray,
+      );
+
+      widget.schemaArray.items = [newSchema];
+    } else {
+      widget.schemaArray.items =
+          (widget.schemaArray.itemsBaseSchema as List<Map<String, dynamic>>)
+              .map((e) => Schema.fromJson(
+                    e,
+                    id: '0',
+                    parent: widget.schemaArray,
+                  ))
+              .toList();
+    }
+  }
+
+  void _addItemFromFirstSchema() {
+    final newSchemaObject = widget.schemaArray.items.first
+        .copyWith(id: widget.schemaArray.items.length.toString());
+
+    widget.schemaArray.items.add(newSchemaObject);
   }
 }

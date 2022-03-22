@@ -2,7 +2,7 @@ import '../models/models.dart';
 
 extension SchemaArrayX on SchemaArray {
   bool get isMultipleFile {
-    return items.first is SchemaProperty &&
+    return items.isNotEmpty && items.first is SchemaProperty &&
         (items.first as SchemaProperty).format == PropertyFormat.dataurl;
   }
 }
@@ -10,6 +10,7 @@ extension SchemaArrayX on SchemaArray {
 class SchemaArray extends Schema {
   SchemaArray({
     required String id,
+    required this.itemsBaseSchema,
     String? title,
     this.minItems,
     this.maxItems,
@@ -32,27 +33,11 @@ class SchemaArray extends Schema {
       minItems: json['minItems'],
       maxItems: json['maxItems'],
       uniqueItems: json['uniqueItems'] ?? true,
+      itemsBaseSchema: json['items'],
     );
 
     schemaArray.parentIdKey = parent?.idKey;
     schemaArray.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
-    if (json['items'] is Object) {
-      final newSchema = Schema.fromJson(
-        json['items'],
-        id: '0',
-        parent: schemaArray,
-      );
-
-      schemaArray.items = [newSchema];
-    } else {
-      schemaArray.items = (json['items'] as List<Map<String, dynamic>>)
-          .map((e) => Schema.fromJson(
-                e,
-                id: '0',
-                parent: schemaArray,
-              ))
-          .toList();
-    }
 
     return schemaArray;
   }
@@ -68,6 +53,7 @@ class SchemaArray extends Schema {
       maxItems: maxItems,
       minItems: minItems,
       uniqueItems: uniqueItems,
+      itemsBaseSchema: itemsBaseSchema,
     )
       ..parentIdKey = parentIdKey ?? this.parentIdKey
       ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
@@ -86,6 +72,9 @@ class SchemaArray extends Schema {
 
   /// can be array of [Schema] or [Schema]
   List<Schema> items;
+
+  // it allow us
+  dynamic itemsBaseSchema;
 
   int? minItems;
   int? maxItems;

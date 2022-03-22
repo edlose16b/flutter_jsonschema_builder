@@ -55,18 +55,35 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
  {
-  "title": "Files",
+  "title": "A list of tasks",
   "type": "object",
+  "required": [
+    "title"
+  ],
   "properties": {
-    "file": {
+    "title": {
       "type": "string",
-     
-      "title": "Single file"
+      "title": "Task list title"
+    },
+    "tasks": {
+      "type": "array",
+      "title": "Tasks",
+      "items": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "A sample title"
+          }
+        }
+      }
     }
-    
   }
 }
-
   ''';
 
   final uiSchema = null;
