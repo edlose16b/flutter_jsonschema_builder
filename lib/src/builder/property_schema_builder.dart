@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/object_schema_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
@@ -116,7 +117,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           if (schemaProperty.format == PropertyFormat.dataurl) {
             _field = FileJFormField(
               property: schemaPropertySorted,
-              customFileHandler: WidgetBuilderInherited.of(context).customFileHandler,
+              customFileHandler:
+                  WidgetBuilderInherited.of(context).customFileHandler,
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
@@ -203,14 +205,15 @@ class PropertySchemaBuilder extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          schemaProperty.idKey,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
+        if (!kReleaseMode)
+          Text(
+            schemaProperty.idKey,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
         _field,
       ],
     );

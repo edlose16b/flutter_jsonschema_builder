@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/array_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
@@ -62,12 +63,13 @@ class _JsonFormState extends State<JsonForm> {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          inspect(mainSchema);
-                        },
-                        child: const Text('INSPECT'),
-                      ),
+                      if (!kReleaseMode)
+                        TextButton(
+                          onPressed: () {
+                            inspect(mainSchema);
+                          },
+                          child: const Text('INSPECT'),
+                        ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[

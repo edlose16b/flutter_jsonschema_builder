@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
+
 import '../models/models.dart';
 
 extension SchemaArrayX on SchemaArray {
   bool get isMultipleFile {
-    return items.isNotEmpty && items.first is SchemaProperty &&
+    return items.isNotEmpty &&
+        items.first is SchemaProperty &&
         (items.first as SchemaProperty).format == PropertyFormat.dataurl;
   }
 }
