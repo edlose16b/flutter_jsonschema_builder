@@ -19,6 +19,7 @@ class SchemaArray extends Schema {
     this.maxItems,
     this.uniqueItems = true,
     this.items = const [],
+    this.required = false,
   }) : super(
           id: id,
           title: title ?? 'no-title',
@@ -37,6 +38,7 @@ class SchemaArray extends Schema {
       maxItems: json['maxItems'],
       uniqueItems: json['uniqueItems'] ?? true,
       itemsBaseSchema: json['items'],
+      
     );
 
     schemaArray.parentIdKey = parent?.idKey;
@@ -57,6 +59,7 @@ class SchemaArray extends Schema {
       minItems: minItems,
       uniqueItems: uniqueItems,
       itemsBaseSchema: itemsBaseSchema,
+      required: required,
     )
       ..parentIdKey = parentIdKey ?? this.parentIdKey
       ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
@@ -82,4 +85,6 @@ class SchemaArray extends Schema {
   int? minItems;
   int? maxItems;
   bool uniqueItems;
+
+  bool required;
 }

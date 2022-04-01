@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
 import 'package:flutter_jsonschema_form/src/builder/general_subtitle_widget.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_form/src/fields/shared.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 
 class ArraySchemaBuilder extends StatefulWidget {
@@ -20,38 +22,57 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   @override
   Widget build(BuildContext context) {
     Widget widgetBuilder;
-    widgetBuilder = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GeneralSubtitle(
-          title: widget.schemaArray.title,
-          description: widget.schemaArray.description,
-          mainSchemaTitle: widget.mainSchema.title,
-          nainSchemaDescription: widget.mainSchema.description,
-        ),
-        ...widget.schemaArray.items.map((schemaLoop) {
-          final index = widget.schemaArray.items.indexOf(schemaLoop);
-          return Column(
-            children: [
-              // if (index >= 1)
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton.icon(
-                  onPressed: () => _removeItem(index),
-                  icon: const Icon(Icons.remove),
-                  label: const Text('Eliminar item'),
-                ),
-              ),
-              FormFromSchemaBuilder(
-                mainSchema: widget.mainSchema,
-                schema: schemaLoop,
-              ),
-              if (widget.schemaArray.items.length > 1) const Divider(),
-              const SizedBox(height: 10),
-            ],
-          );
-        }).toList(),
-      ],
+    widgetBuilder = FormField(
+      validator: (_) {
+        if (widget.schemaArray.required && widget.schemaArray.items.isEmpty)
+          return 'is required';
+        return null;
+      },
+      onSaved: (_) {
+        if (widget.schemaArray.items.isEmpty) {
+          WidgetBuilderInherited.of(context).updateObjectData(
+              WidgetBuilderInherited.of(context).data,
+              widget.schemaArray.idKey, []);
+        }
+      },
+      builder: (field) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(width: double.infinity),
+            GeneralSubtitle(
+              title: widget.schemaArray.title,
+              description: widget.schemaArray.description,
+              mainSchemaTitle: widget.mainSchema.title,
+              nainSchemaDescription: widget.mainSchema.description,
+            ),
+            ...widget.schemaArray.items.map((schemaLoop) {
+              final index = widget.schemaArray.items.indexOf(schemaLoop);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // if (index >= 1)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      onPressed: () => _removeItem(index),
+                      icon: const Icon(Icons.remove),
+                      label: const Text('Eliminar item'),
+                    ),
+                  ),
+                  FormFromSchemaBuilder(
+                    mainSchema: widget.mainSchema,
+                    schema: schemaLoop,
+                  ),
+                  if (widget.schemaArray.items.length > 1) const Divider(),
+                  const SizedBox(height: 10),
+                ],
+              );
+            }).toList(),
+            if (field.hasError) CustomErrorText(text: field.errorText!),
+          ],
+        );
+      },
     );
 
     return Column(

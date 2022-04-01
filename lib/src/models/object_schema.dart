@@ -168,7 +168,10 @@ class SchemaObject extends Schema {
         property.required = isRequired;
         // Asignamos las propiedades que dependen de este
         property.setDependents(schema);
+      } else if (property is SchemaArray) {
+        property.required = isRequired;
       }
+
       props.add(property);
     });
 
