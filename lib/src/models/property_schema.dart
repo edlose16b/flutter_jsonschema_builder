@@ -62,7 +62,6 @@ class SchemaProperty extends Schema {
       format: propertyFormatFromString(json['format']),
       defaultValue: safeDefaultValue(json),
       description: json['description'],
-      // enums
       enumm: json['enum'],
       enumNames: json['enumNames'],
       minLength: json['minLength'],
@@ -116,7 +115,8 @@ class SchemaProperty extends Schema {
       ..parentIdKey = parentIdKey ?? this.parentIdKey
       ..dependentsAddedBy = dependentsAddedBy ?? this.dependentsAddedBy
       ..required = required
-      ..dependents = dependents;
+      ..dependents = dependents
+      ..isMultipleFile = isMultipleFile;
 
     return newSchema;
   }
@@ -140,6 +140,7 @@ class SchemaProperty extends Schema {
   String? pattern;
   dynamic dependents;
   bool readOnly;
+  bool isMultipleFile = false;
 
   /// indica si sus dependentes han sido activados por XDependencies
   bool isDependentsActive = false;

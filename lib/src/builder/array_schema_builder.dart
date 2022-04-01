@@ -78,7 +78,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
     return Column(
       children: [
         widgetBuilder,
-        if (!widget.schemaArray.isMultipleFile)
+        if (!widget.schemaArray.isArrayMultipleFile())
           Align(
             alignment: Alignment.centerRight,
             child: TextButton.icon(

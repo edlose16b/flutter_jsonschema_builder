@@ -2,13 +2,13 @@ import 'package:flutter/foundation.dart';
 
 import '../models/models.dart';
 
-extension SchemaArrayX on SchemaArray {
-  bool get isMultipleFile {
-    return items.isNotEmpty &&
-        items.first is SchemaProperty &&
-        (items.first as SchemaProperty).format == PropertyFormat.dataurl;
-  }
-}
+// extension SchemaArrayX on SchemaArray {
+//   bool get isMultipleFile {
+//     return items.isNotEmpty &&
+//         items.first is SchemaProperty &&
+//         (items.first as SchemaProperty).format == PropertyFormat.dataurl;
+//   }
+// }
 
 class SchemaArray extends Schema {
   SchemaArray({
@@ -38,7 +38,6 @@ class SchemaArray extends Schema {
       maxItems: json['maxItems'],
       uniqueItems: json['uniqueItems'] ?? true,
       itemsBaseSchema: json['items'],
-      
     );
 
     schemaArray.parentIdKey = parent?.idKey;
@@ -87,4 +86,24 @@ class SchemaArray extends Schema {
   bool uniqueItems;
 
   bool required;
+
+  bool isArrayMultipleFile() {
+    return (itemsBaseSchema is Map &&
+        itemsBaseSchema.containsKey('format') &&
+        itemsBaseSchema['format'] == 'data-url');
+  }
+
+  SchemaProperty toSchemaPropertyMultipleFiles() {
+    return SchemaProperty(
+      id: id,
+      title: title,
+      type: SchemaType.string,
+      format: PropertyFormat.dataurl,
+      required: required,
+      description: description,
+    )
+      ..parentIdKey = parentIdKey
+      ..dependentsAddedBy = dependentsAddedBy
+      ..isMultipleFile = true;
+  }
 }

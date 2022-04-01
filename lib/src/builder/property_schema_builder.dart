@@ -124,10 +124,13 @@ class PropertySchemaBuilder extends StatelessWidget {
                 updateData(context, val);
               },
               onChanged: (value) {
+                print(value);
+
                 dispatchBooleanEventToParent(
-                  context,
-                  value != null && value.isNotEmpty,
-                );
+                    context,
+                    schemaProperty.isMultipleFile
+                        ? value is List && value.isNotEmpty
+                        : value != null);
               },
             );
             break;

@@ -43,6 +43,10 @@ class Schema {
       case SchemaType.array:
         schema = SchemaArray.fromJson(id, json, parent: parent);
 
+        // validate if is a file array, it means multiplefile
+        if (schema is SchemaArray && schema.isArrayMultipleFile())
+          schema = schema.toSchemaPropertyMultipleFiles();
+
         break;
 
       default:

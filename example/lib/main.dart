@@ -60,18 +60,20 @@ class _MyHomePageState extends State<MyHomePage> {
   "description": "A simple form example.",
   "type": "object",
   "required": [
-    "firstName",
-    "lastName",
-    "listOfStrings"
   ],
   "properties": {
-   "listOfStrings": {
+     "files": {
       "type": "array",
-      "title": "A list of strings",
+      "title": "Multiple files",
       "items": {
         "type": "string",
-        "default": "bazinga"
+        "format": "data-url"
       }
+    },
+     "file": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
     },
     "lastName": {
       "type": "string",
@@ -82,7 +84,15 @@ class _MyHomePageState extends State<MyHomePage> {
       "title": "Telephone",
       "minLength": 10
     }
-  }
+  },
+   "dependencies": {
+      "files": [
+        "lastName"
+      ],
+      "file": [
+        "telephone"
+      ]
+    }
 }
 
   ''';
@@ -121,13 +131,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onFormDataSaved: (data) {
                 inspect(data);
               },
-              customFileHandler: () async {
-                await Future.delayed(const Duration(seconds: 3));
-                return [
-                  File(
-                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
-                ];
-              },
+              // customFileHandler: () async {
+              //   await Future.delayed(const Duration(seconds: 3));
+              //   return [
+              //     File(
+              //         'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+              //   ];
+              // },
             )
           ],
         ),

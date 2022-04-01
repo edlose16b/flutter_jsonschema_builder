@@ -40,7 +40,6 @@ class SchemaObject extends Schema {
       schema.setProperties(json['properties'], schema);
     }
     if (json['oneOf'] != null) {
-      print('ay ombeee $json');
       schema.setOneOf(json['oneOf'], schema);
     }
 
@@ -122,14 +121,7 @@ class SchemaObject extends Schema {
     // set UI Schema to this ObjectSchema
     setUi(uiSchema);
 
-    // assert(() {
-    //   if (order != null && properties != null) {
-    //     return order?.length == properties?.length;
-    //   }
-    //   return true;
-    // }(),
-    //     'Invalid root object field configuration:uiSchema order list does not contain some properties');
-
+   
     // set UI Schema to their properties
     properties?.forEach((_property) {
       if (_property is SchemaObject) {

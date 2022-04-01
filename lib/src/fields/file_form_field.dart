@@ -14,12 +14,12 @@ extension on PlatformFile {
   }
 }
 
-class FileJFormField extends PropertyFieldWidget<List<File>?> {
+class FileJFormField extends PropertyFieldWidget<dynamic> {
   const FileJFormField({
     Key? key,
     required SchemaProperty property,
-    required final ValueSetter<List<File>?> onSaved,
-    ValueChanged<List<File>?>? onChanged,
+    required final ValueSetter<dynamic> onSaved,
+    ValueChanged<dynamic>? onChanged,
     this.customFileHandler,
   }) : super(
           key: key,
@@ -52,10 +52,14 @@ class _FileJFormFieldState extends State<FileJFormField> {
             if ((value == null || value.isEmpty) && widget.property.required) {
               return 'Required';
             }
+            return null;
           },
           onSaved: (newValue) {
             if (newValue != null) {
-              widget.onSaved(newValue);
+              final response =
+                  widget.property.isMultipleFile ? newValue : (newValue.first);
+
+              widget.onSaved(response);
             }
           },
           builder: (field) {
@@ -68,7 +72,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                       : () async {
                           if (widget.customFileHandler == null) {
                             final result = await FilePicker.platform.pickFiles(
-                              allowMultiple: true,
+                              allowMultiple: widget.property.isMultipleFile,
                             );
 
                             if (result != null) {
@@ -133,8 +137,12 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
   void change(FormFieldState<List<File>> field, List<File>? values) {
     field.didChange(values);
+
     if (widget.onChanged != null) {
-      widget.onChanged!(values);
+      final response = widget.property.isMultipleFile
+          ? values
+          : (values != null && values.isNotEmpty ? values.first : null);
+      widget.onChanged!(response);
     }
   }
 }
