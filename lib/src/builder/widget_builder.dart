@@ -25,7 +25,7 @@ class JsonForm extends StatefulWidget {
   final void Function(dynamic) onFormDataSaved;
 
   final String? uiSchema;
-  final Future<File?> Function()? customFileHandler;
+  final Future<List<File>?> Function()? customFileHandler;
 
   @override
   _JsonFormState createState() => _JsonFormState();
