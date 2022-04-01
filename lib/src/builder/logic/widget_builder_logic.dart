@@ -14,7 +14,7 @@ class WidgetBuilderInherited extends InheritedWidget {
 
   final Schema mainSchema;
   final data = {};
-  final Future<File?> Function()? customFileHandler;
+  final Future<List<File>?> Function()? customFileHandler;
 
   static WidgetBuilderInherited of(BuildContext context) {
     final WidgetBuilderInherited? result =

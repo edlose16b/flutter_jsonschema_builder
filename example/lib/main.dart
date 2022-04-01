@@ -54,40 +54,41 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
+ 
  {
-  "title": "A list of tasks",
+  "title": "A registration form",
+  "description": "A simple form example.",
   "type": "object",
   "required": [
-    "title"
+    "firstName",
+    "lastName",
+    "listOfStrings"
   ],
   "properties": {
-    "title": {
-      "type": "string",
-      "title": "Task list title"
-    },
-    "tasks": {
+   "listOfStrings": {
       "type": "array",
-      "title": "Tasks",
+      "title": "A list of strings",
       "items": {
-        "type": "object",
-        "required": [
-          "title"
-        ],
-        "properties": {
-          "title": {
-            "type": "string",
-            "title": "Title",
-            "description": "A sample title"
-          }
-        }
+        "type": "string",
+        "default": "bazinga"
       }
+    },
+    "lastName": {
+      "type": "string",
+      "title": "Last name"
+    },
+    "telephone": {
+      "type": "string",
+      "title": "Telephone",
+      "minLength": 10
     }
   }
 }
+
   ''';
 
   final uiSchema = null;
-  
+
 //   '''
 // {
 //   "ui:order": [
@@ -120,10 +121,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onFormDataSaved: (data) {
                 inspect(data);
               },
-              // customFileHandler: () async{
-              //   await Future.delayed(const Duration(seconds: 3));
-              //   return File('https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-              // },
+              customFileHandler: () async {
+                await Future.delayed(const Duration(seconds: 3));
+                return [
+                  File(
+                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+                ];
+              },
             )
           ],
         ),

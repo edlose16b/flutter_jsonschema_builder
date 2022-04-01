@@ -28,7 +28,7 @@ class FileJFormField extends PropertyFieldWidget<List<File>?> {
           onChanged: onChanged,
         );
 
-  final Future<File?> Function()? customFileHandler;
+  final Future<List<File>?> Function()? customFileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -79,7 +79,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                             final result = await widget.customFileHandler!();
 
                             if (result != null) {
-                              change(field, [result]);
+                              change(field, result);
                             }
                           }
                         },
