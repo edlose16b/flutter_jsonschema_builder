@@ -65,6 +65,18 @@ class _JsonFormState extends State<JsonForm> {
                     children: <Widget>[
                       if (!kReleaseMode)
                         TextButton(
+                            onPressed: () {
+                              print(widget.jsonSchema.toString());
+                            },
+                            child: Text('print  Schema')),
+                      if (!kReleaseMode)
+                        TextButton(
+                            onPressed: () {
+                              print(widget.uiSchema.toString());
+                            },
+                            child: Text('print UI Schema')),
+                      if (!kReleaseMode)
+                        TextButton(
                           onPressed: () {
                             inspect(mainSchema);
                           },

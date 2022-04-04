@@ -125,19 +125,27 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+
+
+            
             JsonForm(
               jsonSchema: json,
               uiSchema: uiSchema,
               onFormDataSaved: (data) {
                 inspect(data);
               },
-              // customFileHandler: () async {
-              //   await Future.delayed(const Duration(seconds: 3));
-              //   return [
-              //     File(
-              //         'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
-              //   ];
-              // },
+              customFileHandler: () async {
+                await Future.delayed(const Duration(seconds: 3));
+                final file1 = File(
+                    'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+                final file2 = File(
+                    'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+                final file3 = File(
+                    'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+                
+                
+                return [file1, file2, file3];
+              },
             )
           ],
         ),
