@@ -70,11 +70,6 @@ class Schema {
   /// it lets us know the key in the formData Map {key}
   String get idKey {
     if (parentIdKey != null && parentIdKey != (kGenesisIdKey)) {
-      if (this is SchemaProperty &&
-          (this as SchemaProperty).format == PropertyFormat.dataurl) {
-        return parentIdKey!;
-      }
-
       return _appendId(parentIdKey!, id);
     }
 
