@@ -78,11 +78,8 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.property.required
-                  ? widget.property.title + ' *'
-                  : widget.property.title,
-              style: Theme.of(context).textTheme.caption,
-            ),
+                '${widget.property.title} ${widget.property.required ? "*" : ""}',
+                style: Theme.of(context).textTheme.bodyText1),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List<Widget>.generate(

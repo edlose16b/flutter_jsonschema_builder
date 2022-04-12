@@ -42,7 +42,10 @@ class _DateJFormFieldState extends State<DateJFormField> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style: Theme.of(context).textTheme.bodyText1),
         TextFormField(
           key: Key(widget.property.idKey),
           controller: txtDateCtrl,
@@ -59,10 +62,10 @@ class _DateJFormFieldState extends State<DateJFormField> {
               : null,
           decoration: InputDecoration(
             hintText: 'DD-MM-YYYY',
-            labelText: widget.property.required
-                ? widget.property.title + ' *'
-                : widget.property.title,
-            helperText: widget.property.help,
+            helperText:
+                widget.property.help != null && widget.property.help!.isNotEmpty
+                    ? widget.property.help
+                    : null,
             suffixIcon: IconButton(
               icon: const Icon(Icons.date_range_outlined),
               onPressed: widget.property.readOnly

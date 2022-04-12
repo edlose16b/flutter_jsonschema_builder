@@ -7,9 +7,10 @@ class CustomErrorText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 5, bottom: 5),
-      child: Text(text,
-          style:
-              TextStyle(color: Theme.of(context).errorColor, fontSize: 12.5)),
+      child: Text(
+        text,
+        style: TextStyle(color: Theme.of(context).errorColor, fontSize: Theme.of(context).textTheme.caption!.fontSize),
+      ),
     );
   }
 }

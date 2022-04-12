@@ -16,8 +16,10 @@ class GeneralSubtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (mainSchemaTitle != title && title != kNoTitle)
+        const SizedBox(height:25),
+        if (mainSchemaTitle != title && title != kNoTitle) ...[
           Text(
             title,
             style: Theme.of(context)
@@ -25,6 +27,8 @@ class GeneralSubtitle extends StatelessWidget {
                 .subtitle1!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
+          const Divider()
+        ],
         if (description != null && description != nainSchemaDescription)
           Text(
             description!,

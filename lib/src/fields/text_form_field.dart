@@ -30,8 +30,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   void initState() {
-
-        widget.triggetDefaultValue();
+    widget.triggetDefaultValue();
     super.initState();
   }
 
@@ -43,43 +42,54 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return AbsorbPointer(
-      absorbing: widget.property.disabled ?? false,
-      child: TextFormField(
-        key: Key(widget.property.idKey),
-        autofocus: (widget.property.autoFocus ?? false),
-        keyboardType: getTextInputTypeFromFormat(widget.property.format),
-        maxLines: widget.property.widget == "textarea" ? null : 1,
-        obscureText: widget.property.format == PropertyFormat.password,
-        initialValue: widget.property.defaultValue ?? '',
-        onSaved: widget.onSaved,
-        maxLength: widget.property.maxLength,
-        inputFormatters: [textInputCustomFormatter(widget.property.format)],
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        readOnly: widget.property.readOnly,
-        onChanged: (value) {
-          if (_timer != null && _timer!.isActive) _timer!.cancel();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+            '${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style: Theme.of(context).textTheme.bodyText1),
+        AbsorbPointer(
+          absorbing: widget.property.disabled ?? false,
+          child: TextFormField(
+            key: Key(widget.property.idKey),
+            autofocus: (widget.property.autoFocus ?? false),
+            keyboardType: getTextInputTypeFromFormat(widget.property.format),
+            maxLines: widget.property.widget == "textarea" ? null : 1,
+            obscureText: widget.property.format == PropertyFormat.password,
+            initialValue: widget.property.defaultValue ?? '',
+            onSaved: widget.onSaved,
+            maxLength: widget.property.maxLength,
+            inputFormatters: [
+              textInputCustomFormatter(widget.property.format)
+            ],
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            readOnly: widget.property.readOnly,
+            onChanged: (value) {
+              if (_timer != null && _timer!.isActive) _timer!.cancel();
 
-          _timer = Timer(const Duration(seconds: 1), () {
-            if (widget.onChanged != null) widget.onChanged!(value);
-          });
-        },
-        validator: (String? value) {
-          if (widget.property.required && value != null) {
-            return inputValidationJsonSchema(
-                newValue: value, property: widget.property);
-          }
-        },
-        style: widget.property.readOnly
-            ? const TextStyle(color: Colors.grey)
-            : null,
-        decoration: InputDecoration(
-          labelText: widget.property.required
-              ? widget.property.title + ' *'
-              : widget.property.title,
-          helperText: widget.property.help,
+              _timer = Timer(const Duration(seconds: 1), () {
+                if (widget.onChanged != null) widget.onChanged!(value);
+              });
+            },
+            validator: (String? value) {
+              if (widget.property.required && value != null) {
+                return inputValidationJsonSchema(
+                    newValue: value, property: widget.property);
+              }
+              return null;
+            },
+            style: widget.property.readOnly
+                ? const TextStyle(color: Colors.grey)
+                : null,
+            decoration: InputDecoration(
+              helperText: widget.property.help != null &&
+                      widget.property.help!.isNotEmpty
+                  ? widget.property.help
+                  : null,
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 

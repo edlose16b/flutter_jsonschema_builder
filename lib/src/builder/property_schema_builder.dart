@@ -208,6 +208,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 20),
         if (!kReleaseMode)
           Text(
             schemaProperty.idKey,

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -18,15 +17,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -56,44 +46,151 @@ class _MyHomePageState extends State<MyHomePage> {
   final json = '''
  
  {
-  "title": "A registration form",
-  "description": "A simple form example.",
-  "type": "object",
-  "required": [
-  ],
-  "properties": {
-     "files": {
-      "type": "array",
-      "title": "Multiple files",
-      "items": {
-        "type": "string",
-        "format": "data-url"
-      }
-    },
-     "file": {
-      "type": "string",
-      "format": "data-url",
-      "title": "Single file"
-    },
-    "lastName": {
-      "type": "string",
-      "title": "Last name"
-    },
-    "telephone": {
-      "type": "string",
-      "title": "Telephone",
-      "minLength": 10
-    }
-  },
-   "dependencies": {
-      "files": [
+    
+
+    "title": "A registration form",
+    "description": "A simple form example.",
+    "type": "object",
+    "required": [
+        "firstName",
         "lastName"
-      ],
-      "file": [
-        "telephone"
-      ]
+    ],
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "title": "First name",
+            "default": "Chuck"
+        },
+        "lastName": {
+            "type": "string",
+            "title": "Last name"
+        },
+        "country": {
+            "title": "Country Form",
+            "type": "object",
+            "required": [
+                "country",
+                "state"
+            ],
+            "properties": {
+                "country": {
+                    "type": "string",
+                    "title": "Country",
+                    "enum": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "enumNames": [
+                        "Seleccione",
+                        "Perú",
+                        "Chile"
+                    ],
+                    "default" : 2
+                }
+            },
+            "dependencies": {
+                "country": {
+                    "oneOf": [
+                        {
+                            "required": [
+                                "state",
+                                "country"
+                            ],
+                            "properties": {
+                                "country": {
+                                    "enum": [
+                                        1
+                                    ]
+                                },
+                                "state": {
+                                    "type": "string",
+                                    "title": "Estado",
+                                    "enum": [
+                                        0,
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        5
+                                    ],
+                                    "enumNames": [
+                                        "Seleccione",
+                                        "Lima",
+                                        "Arequipa",
+                                        "Cuzco",
+                                        "Piura",
+                                        "Madre de Dios"
+                                    ]
+
+                            },
+                            "cola" : {
+                                "type": "string",
+                                "title": "Cola"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "state",
+                            "country"
+                        ],
+                        "properties": {
+                            "country": {
+                                "enum": [
+                                    2
+                                ]
+                            },
+                            "state": {
+                                "type": "string",
+                                "title": "Estado",
+                                "enum": [
+                                    0,
+                                    10,
+                                    22
+                                ],
+                                "enumNames": [
+                                    "Seleccione",
+                                    "Arica",
+                                    "Atacama"
+                                ]
+
+                            },
+                            "cola" : {
+                                "type": "string",
+                                "title": "Cola"
+                            }
+                        }
+                    }
+                ]
+            },
+            "state": {
+                "oneOf": [
+                    {
+                        "required": [
+                            "district",
+                            "state"
+                        ],
+                        "properties": {
+                            "state": {
+                                "enum": [
+                                    1
+                                ]
+                            },
+                            "district": {
+                                "type": "string",
+                                "title": "Address state name"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
     }
 }
+}
+
+
 
   ''';
 
@@ -125,27 +222,32 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Material(
+              child: JsonForm(
+                jsonSchema: json,
+                uiSchema: uiSchema,
+                onFormDataSaved: (data) {
+                  inspect(data);
+                },
+                customFileHandler: () async {
+                  await Future.delayed(const Duration(seconds: 3));
+                  final file1 = File(
+                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+                  final file2 = File(
+                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+                  final file3 = File(
+                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
 
-
-            
-            JsonForm(
-              jsonSchema: json,
-              uiSchema: uiSchema,
-              onFormDataSaved: (data) {
-                inspect(data);
-              },
-              customFileHandler: () async {
-                await Future.delayed(const Duration(seconds: 3));
-                final file1 = File(
-                    'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-                final file2 = File(
-                    'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-                final file3 = File(
-                    'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-                
-                
-                return [file1, file2, file3];
-              },
+                  return [file1, file2, file3];
+                },
+                buildSubmitButton: (onSubmit) {
+                  return TextButton.icon(
+                    onPressed: onSubmit,
+                    icon: const Icon(Icons.heart_broken),
+                    label: const Text('Enviar'),
+                  );
+                },
+              ),
             )
           ],
         ),

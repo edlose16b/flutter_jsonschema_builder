@@ -82,12 +82,8 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.property.required
-              ? widget.property.title + ' *'
-              : widget.property.title,
-          style: Theme.of(context).textTheme.caption,
-        ),
+        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style: Theme.of(context).textTheme.bodyText1),
         DropdownButtonFormField<OneOfModel>(
           key: Key(widget.property.idKey),
           value: valueSelected,
@@ -122,7 +118,6 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                 },
           onSaved: widget.onSaved,
         ),
-        const SizedBox(height: 15),
       ],
     );
   }

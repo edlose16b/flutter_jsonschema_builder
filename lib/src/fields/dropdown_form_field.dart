@@ -53,12 +53,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.property.required
-              ? widget.property.title + ' *'
-              : widget.property.title,
-          style: Theme.of(context).textTheme.caption,
-        ),
+        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style: Theme.of(context).textTheme.bodyText1),
         DropdownButtonFormField<dynamic>(
           key: Key(widget.property.idKey),
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -68,6 +64,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
             if (widget.property.required && value == null) {
               return 'required';
             }
+            return null;
           },
           items: _buildItems(),
           value: widget.property.defaultValue,
@@ -78,7 +75,6 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
                 },
           onSaved: widget.onSaved,
         ),
-        const SizedBox(height: 15),
       ],
     );
   }

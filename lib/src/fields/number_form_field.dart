@@ -27,7 +27,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   void initState() {
-        widget.triggetDefaultValue();
+    widget.triggetDefaultValue();
     super.initState();
   }
 
@@ -39,40 +39,50 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style: Theme.of(context).textTheme.bodyText1),
+        TextFormField(
+          key: Key(widget.property.idKey),
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
+          ],
+          autofocus: false,
+          onSaved: widget.onSaved,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          readOnly: widget.property.readOnly,
+          onChanged: (value) {
+            if (_timer != null && _timer!.isActive) _timer!.cancel();
 
-
-    return TextFormField(
-      key: Key(widget.property.idKey),
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
+            _timer = Timer(const Duration(seconds: 1), () {
+              if (widget.onChanged != null) widget.onChanged!(value);
+            });
+          },
+          style: widget.property.readOnly
+              ? const TextStyle(color: Colors.grey)
+              : null,
+          validator: (String? value) {
+            if (widget.property.required && value != null && value.isEmpty) {
+              return 'Required';
+            }
+            if (widget.property.minLength != null &&
+                value != null &&
+                value.isNotEmpty &&
+                value.length <= widget.property.minLength!) {
+              return 'should NOT be shorter than ${widget.property.minLength} characters';
+            }
+            return null;
+          },
+          decoration: InputDecoration(
+              helperText:
+                 widget.property.help != null && widget.property.help!.isNotEmpty
+                    ? widget.property.help
+                    : null,),
+        ),
       ],
-      autofocus: false,
-      onSaved: widget.onSaved,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      readOnly: widget.property.readOnly,
-      onChanged: (value) {
-        if (_timer != null && _timer!.isActive) _timer!.cancel();
-
-        _timer = Timer(const Duration(seconds: 1), () {
-          if (widget.onChanged != null) widget.onChanged!(value);
-        });
-      },
-      style:
-          widget.property.readOnly ? const TextStyle(color: Colors.grey) : null,
-      validator: (String? value) {
-        if (widget.property.required && value != null && value.isEmpty) {
-          return 'Required';
-        }
-        if (widget.property.minLength != null &&
-            value != null &&
-            value.isNotEmpty &&
-            value.length <= widget.property.minLength!) {
-          return 'should NOT be shorter than ${widget.property.minLength} characters';
-        }
-        return null;
-      },
-      decoration: InputDecoration(labelText: decorationLabelText),
     );
   }
 

@@ -28,29 +28,35 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<bool>(
-      key: Key(widget.property.idKey),
-      initialValue: widget.property.defaultValue ?? false,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      onSaved: (newValue) {
-        widget.onSaved(newValue);
-      },
-      builder: (field) {
-        print(field.value);
-        return CheckboxListTile(
-          value: (field.value == null) ? false : field.value,
-          title: Text(widget.property.title),
-          controlAffinity: ListTileControlAffinity.leading,
-          onChanged: widget.property.readOnly
-              ? null
-              : (bool? value) {
-                  field.didChange(value);
-                  if (widget.onChanged != null && value != null) {
-                    widget.onChanged!(value);
-                  }
-                },
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style: Theme.of(context).textTheme.bodyText1),
+        FormField<bool>(
+          key: Key(widget.property.idKey),
+          initialValue: widget.property.defaultValue ?? false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onSaved: (newValue) {
+            widget.onSaved(newValue);
+          },
+          builder: (field) {
+            return CheckboxListTile(
+              value: (field.value == null) ? false : field.value,
+              title: Text(widget.property.title),
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: widget.property.readOnly
+                  ? null
+                  : (bool? value) {
+                      field.didChange(value);
+                      if (widget.onChanged != null && value != null) {
+                        widget.onChanged!(value);
+                      }
+                    },
+            );
+          },
+        ),
+      ],
     );
   }
 }

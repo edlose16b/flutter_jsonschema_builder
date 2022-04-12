@@ -19,6 +19,7 @@ class JsonForm extends StatefulWidget {
     this.uiSchema,
     required this.onFormDataSaved,
     this.customFileHandler,
+    this.buildSubmitButton,
   }) : super(key: key);
 
   final String jsonSchema;
@@ -26,6 +27,10 @@ class JsonForm extends StatefulWidget {
 
   final String? uiSchema;
   final Future<List<File>?> Function()? customFileHandler;
+
+  /// render a custom submit button
+  /// @param [VoidCallback] submit function
+  final ButtonStyleButton Function(VoidCallback)? buildSubmitButton;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -54,6 +59,8 @@ class _JsonFormState extends State<JsonForm> {
       mainSchema: mainSchema,
       customFileHandler: widget.customFileHandler,
       child: Builder(builder: (context) {
+        final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -63,18 +70,6 @@ class _JsonFormState extends State<JsonForm> {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: <Widget>[
-                      if (!kReleaseMode)
-                        TextButton(
-                            onPressed: () {
-                              print(widget.jsonSchema.toString());
-                            },
-                            child: Text('print  Schema')),
-                      if (!kReleaseMode)
-                        TextButton(
-                            onPressed: () {
-                              print(widget.uiSchema.toString());
-                            },
-                            child: Text('print UI Schema')),
                       if (!kReleaseMode)
                         TextButton(
                           onPressed: () {
@@ -90,6 +85,7 @@ class _JsonFormState extends State<JsonForm> {
                             mainSchema.title,
                             style: Theme.of(context).textTheme.headline6,
                           ),
+                          const Divider(),
                           if (mainSchema.description != null)
                             Text(
                               mainSchema.description!,
@@ -97,27 +93,18 @@ class _JsonFormState extends State<JsonForm> {
                             ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: FormFromSchemaBuilder(
-                          mainSchema: mainSchema,
-                          schema: mainSchema,
-                        ),
+                      FormFromSchemaBuilder(
+                        mainSchema: mainSchema,
+                        schema: mainSchema,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState != null &&
-                              _formKey.currentState!.validate()) {
-                            _formKey.currentState?.save();
-
-                            print(WidgetBuilderInherited.of(context).data);
-
-                            widget.onFormDataSaved(
-                                WidgetBuilderInherited.of(context).data);
-                          }
-                        },
-                        child: const Text('Enviar'),
-                      ),
+                      const SizedBox(height:20),
+                      widget.buildSubmitButton == null
+                          ? ElevatedButton(
+                              onPressed: () => onSubmit(widgetBuilderInherited),
+                              child: const Text('Enviar'),
+                            )
+                          : widget.buildSubmitButton!(
+                              () => onSubmit(widgetBuilderInherited)),
                     ],
                   ),
                 ),
@@ -130,7 +117,15 @@ class _JsonFormState extends State<JsonForm> {
   }
 
   //  Form methods
+  void onSubmit(WidgetBuilderInherited widgetBuilderInherited) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
 
+      print(widgetBuilderInherited.data);
+
+      widget.onFormDataSaved(widgetBuilderInherited.data);
+    }
+  }
 }
 
 class FormFromSchemaBuilder extends StatelessWidget {
