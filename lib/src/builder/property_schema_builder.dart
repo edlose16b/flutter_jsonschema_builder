@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/object_schema_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart';
 import 'package:flutter_jsonschema_form/src/fields/selected_form_field.dart';
@@ -33,19 +35,6 @@ class PropertySchemaBuilder extends StatelessWidget {
 
     // sort
     schemaPropertySorted = schemaProperty;
-    // if ((schemaProperty.order?.length ?? 0) > 0) {
-    //   for (var i = 0; i < (schemaProperty.order?.length ?? 0); i++) {
-    //     // print(i);
-
-    //     if (schemaProperty.order?[i] == schemaProperty.id) {
-    //       schemaPropertySorted = schemaProperty;
-    //     } else {
-    //       schemaPropertySorted = schemaProperty;
-    //     }
-    //   }
-    // } else {
-    //   schemaPropertySorted = schemaProperty;
-    // }
 
     if (schemaProperty.widget == 'radio') {
       _field = RadioButtonJFormField(
@@ -117,8 +106,9 @@ class PropertySchemaBuilder extends StatelessWidget {
           if (schemaProperty.format == PropertyFormat.dataurl) {
             _field = FileJFormField(
               property: schemaPropertySorted,
-              customFileHandler:
-                  WidgetBuilderInherited.of(context).customFileHandler,
+              customFileHandler: getCustomFileHanlder(
+                  WidgetBuilderInherited.of(context).customFileHandlers,
+                  schemaProperty.id),
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
@@ -262,5 +252,18 @@ class PropertySchemaBuilder extends StatelessWidget {
       ObjectSchemaInherited.of(context)
           .listenChangeProperty(value, schemaProperty);
     }
+  }
+
+  Future<List<File>?> Function()? getCustomFileHanlder(
+      CustomFileHandlers? customFileHandlers, String key) {
+    if (customFileHandlers == null) return null;
+
+    final handlers = customFileHandlers();
+
+    if (handlers.containsKey(key)) return handlers[key];
+
+    if (handlers.containsKey('*')) return handlers['*'];
+
+    return null;
   }
 }

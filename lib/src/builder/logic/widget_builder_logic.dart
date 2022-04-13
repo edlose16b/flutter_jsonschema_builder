@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_form/src/models/json_form_schema_style.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
 
@@ -10,12 +11,13 @@ class WidgetBuilderInherited extends InheritedWidget {
     Key? key,
     required this.mainSchema,
     required Widget child,
-    this.customFileHandler,
+    this.customFileHandlers,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
   final data = {};
-  final Future<List<File>?> Function()? customFileHandler;
+
+  final CustomFileHandlers? customFileHandlers;
   late final JsonFormSchemaStyle jsonFormSchemaStyle;
 
   void setJsonFormSchemaStyle(

@@ -13,13 +13,16 @@ import 'dart:convert';
 
 import '../models/models.dart';
 
+// ignore: prefer_generic_function_type_aliases
+typedef Map<String, Future<List<File>?> Function()?> CustomFileHandlers();
+
 class JsonForm extends StatefulWidget {
   const JsonForm({
     Key? key,
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
-    this.customFileHandler,
+    this.customFileHandlers,
     this.buildSubmitButton,
     this.jsonFormSchemaStyle,
   }) : super(key: key);
@@ -28,7 +31,7 @@ class JsonForm extends StatefulWidget {
   final void Function(dynamic) onFormDataSaved;
 
   final String? uiSchema;
-  final Future<List<File>?> Function()? customFileHandler;
+  final CustomFileHandlers? customFileHandlers;
 
   /// render a custom submit button
   /// @param [VoidCallback] submit function
@@ -62,7 +65,7 @@ class _JsonFormState extends State<JsonForm> {
   Widget build(BuildContext context) {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
-      customFileHandler: widget.customFileHandler,
+      customFileHandlers: widget.customFileHandlers,
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 

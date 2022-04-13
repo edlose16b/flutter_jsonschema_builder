@@ -45,152 +45,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
- 
  {
-    
-
-    "title": "A registration form",
-    "description": "A simple form example.",
-    "type": "object",
-    "required": [
-        "firstName",
-        "lastName"
-    ],
-    "properties": {
-        "firstName": {
-            "type": "string",
-            "title": "First name",
-            "default": "Chuck"
-        },
-        "lastName": {
-            "type": "string",
-            "title": "Last name"
-        },
-        "country": {
-            "title": "Country Form",
-            "type": "object",
-            "required": [
-                "country",
-                "state"
-            ],
-            "properties": {
-                "country": {
-                    "type": "string",
-                    "title": "Country",
-                    "enum": [
-                        0,
-                        1,
-                        2
-                    ],
-                    "enumNames": [
-                        "Seleccione",
-                        "Perú",
-                        "Chile"
-                    ],
-                    "default" : 2
-                }
-            },
-            "dependencies": {
-                "country": {
-                    "oneOf": [
-                        {
-                            "required": [
-                                "state",
-                                "country"
-                            ],
-                            "properties": {
-                                "country": {
-                                    "enum": [
-                                        1
-                                    ]
-                                },
-                                "state": {
-                                    "type": "string",
-                                    "title": "Estado",
-                                    "enum": [
-                                        0,
-                                        1,
-                                        2,
-                                        3,
-                                        4,
-                                        5
-                                    ],
-                                    "enumNames": [
-                                        "Seleccione",
-                                        "Lima",
-                                        "Arequipa",
-                                        "Cuzco",
-                                        "Piura",
-                                        "Madre de Dios"
-                                    ]
-
-                            },
-                            "cola" : {
-                                "type": "string",
-                                "title": "Cola"
-                            }
-                        }
-                    },
-                    {
-                        "required": [
-                            "state",
-                            "country"
-                        ],
-                        "properties": {
-                            "country": {
-                                "enum": [
-                                    2
-                                ]
-                            },
-                            "state": {
-                                "type": "string",
-                                "title": "Estado",
-                                "enum": [
-                                    0,
-                                    10,
-                                    22
-                                ],
-                                "enumNames": [
-                                    "Seleccione",
-                                    "Arica",
-                                    "Atacama"
-                                ]
-
-                            },
-                            "cola" : {
-                                "type": "string",
-                                "title": "Cola"
-                            }
-                        }
-                    }
-                ]
-            },
-            "state": {
-                "oneOf": [
-                    {
-                        "required": [
-                            "district",
-                            "state"
-                        ],
-                        "properties": {
-                            "state": {
-                                "enum": [
-                                    1
-                                ]
-                            },
-                            "district": {
-                                "type": "string",
-                                "title": "Address state name"
-                            }
-                        }
-                    }
-                ]
-            }
-        }
+  "title": "Files",
+  "type": "object",
+  "properties": {
+    "file": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
+    },
+    "files": {
+      "type": "array",
+      "title": "Multiple files",
+      "items": {
+        "type": "string",
+        "format": "data-url"
+      }
+    },
+    "filesAccept": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single File with Accept attribute"
     }
+  }
 }
-}
-
 
 
   ''';
@@ -215,6 +93,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //         ''';
 
+  Future<List<File>?> defaultCustomFileHandler() async {
+    await Future.delayed(const Duration(seconds: 3));
+    final file1 = File(
+        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+    final file2 = File(
+        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+    final file3 = File(
+        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+
+    return [file1, file2, file3];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -230,16 +120,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 onFormDataSaved: (data) {
                   inspect(data);
                 },
-                customFileHandler: () async {
-                  await Future.delayed(const Duration(seconds: 3));
-                  final file1 = File(
-                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-                  final file2 = File(
-                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-                  final file3 = File(
-                      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-
-                  return [file1, file2, file3];
+                customFileHandlers: () => {
+                  'files': defaultCustomFileHandler,
+                  'file': () async {
+                    return [
+                      File(
+                          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+                    ];
+                  },
+                  '*': null
                 },
                 buildSubmitButton: (onSubmit) {
                   return TextButton.icon(
