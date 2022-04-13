@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/models/json_form_schema_style.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
 
 class WidgetBuilderInherited extends InheritedWidget {
@@ -15,14 +16,26 @@ class WidgetBuilderInherited extends InheritedWidget {
   final Schema mainSchema;
   final data = {};
   final Future<List<File>?> Function()? customFileHandler;
+  late final JsonFormSchemaStyle jsonFormSchemaStyle;
 
-  static WidgetBuilderInherited of(BuildContext context) {
-    final WidgetBuilderInherited? result =
-        context.dependOnInheritedWidgetOfExactType<WidgetBuilderInherited>();
-    assert(result != null, 'No WidgetBuilderInherited found in context');
-    return result!;
+  void setJsonFormSchemaStyle(
+      BuildContext context, JsonFormSchemaStyle? jsonFormSchemaStyle) {
+    final textTheme = Theme.of(context).textTheme;
+
+    this.jsonFormSchemaStyle = JsonFormSchemaStyle(
+      title: jsonFormSchemaStyle?.title ?? textTheme.headline6,
+      subtitle: jsonFormSchemaStyle?.subtitle ??
+          textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+      description: jsonFormSchemaStyle?.description ?? textTheme.bodyText2,
+      error: jsonFormSchemaStyle?.error ??
+          TextStyle(
+              color: Theme.of(context).errorColor,
+              fontSize: textTheme.caption!.fontSize),
+      label: jsonFormSchemaStyle?.label ?? textTheme.bodyText2,
+    );
   }
 
+  /// update [data] with key,values from jsonSchema
   void updateObjectData(object, String path, dynamic value) {
     print('updateObjectData $object path $path value $value');
 
@@ -57,6 +70,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     stack.removeAt(0);
   }
 
+  /// add a new value into a schema,
   void _addNewContent(object, int? _keyNumeric, dynamic value) {
     if (object is List && _keyNumeric != null) {
       if (object.length - 1 < _keyNumeric) {
@@ -68,4 +82,12 @@ class WidgetBuilderInherited extends InheritedWidget {
   @override
   bool updateShouldNotify(covariant WidgetBuilderInherited oldWidget) =>
       mainSchema != oldWidget.mainSchema;
+
+  static WidgetBuilderInherited of(BuildContext context) {
+    final result =
+        context.dependOnInheritedWidgetOfExactType<WidgetBuilderInherited>();
+
+    assert(result != null, 'No WidgetBuilderInherited found in context');
+    return result!;
+  }
 }

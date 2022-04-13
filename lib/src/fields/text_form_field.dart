@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/utils/input_validation_json_schema.dart';
 
@@ -45,9 +46,9 @@ class _TextJFormFieldState extends State<TextJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-            '${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: Theme.of(context).textTheme.bodyText1),
+        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
+            style:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
         AbsorbPointer(
           absorbing: widget.property.disabled ?? false,
           child: TextFormField(
@@ -59,9 +60,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
             initialValue: widget.property.defaultValue ?? '',
             onSaved: widget.onSaved,
             maxLength: widget.property.maxLength,
-            inputFormatters: [
-              textInputCustomFormatter(widget.property.format)
-            ],
+            inputFormatters: [textInputCustomFormatter(widget.property.format)],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             readOnly: widget.property.readOnly,
             onChanged: (value) {
@@ -86,6 +85,8 @@ class _TextJFormFieldState extends State<TextJFormField> {
                       widget.property.help!.isNotEmpty
                   ? widget.property.help
                   : null,
+              errorStyle:
+                  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
             ),
           ),
         ),

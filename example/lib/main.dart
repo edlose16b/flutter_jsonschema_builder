@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
@@ -247,6 +248,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     label: const Text('Enviar'),
                   );
                 },
+                jsonFormSchemaStyle: JsonFormSchemaStyle(
+                  title: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
               ),
             )
           ],

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
@@ -43,7 +44,8 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: Theme.of(context).textTheme.bodyText1),
+            style:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
@@ -77,10 +79,13 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
             return null;
           },
           decoration: InputDecoration(
-              helperText:
-                 widget.property.help != null && widget.property.help!.isNotEmpty
+            helperText:
+                widget.property.help != null && widget.property.help!.isNotEmpty
                     ? widget.property.help
-                    : null,),
+                    : null,
+            errorStyle:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
+          ),
         ),
       ],
     );

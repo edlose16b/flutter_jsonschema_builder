@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 
 class CustomErrorText extends StatelessWidget {
   const CustomErrorText({Key? key, required this.text}) : super(key: key);
@@ -9,7 +10,7 @@ class CustomErrorText extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, bottom: 5),
       child: Text(
         text,
-        style: TextStyle(color: Theme.of(context).errorColor, fontSize: Theme.of(context).textTheme.caption!.fontSize),
+        style: WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
       ),
     );
   }

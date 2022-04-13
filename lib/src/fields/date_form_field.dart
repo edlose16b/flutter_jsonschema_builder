@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:intl/intl.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
@@ -45,7 +46,8 @@ class _DateJFormFieldState extends State<DateJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: Theme.of(context).textTheme.bodyText1),
+            style:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
         TextFormField(
           key: Key(widget.property.idKey),
           controller: txtDateCtrl,
@@ -60,6 +62,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
               : null,
+              
           decoration: InputDecoration(
             hintText: 'DD-MM-YYYY',
             helperText:
@@ -87,6 +90,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
                       widget.onSaved(date);
                     },
             ),
+            errorStyle: WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error
           ),
           onSaved: (value) {
             if (widget.onSaved != null && value != null)

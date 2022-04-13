@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 
 class GeneralSubtitle extends StatelessWidget {
@@ -22,17 +23,14 @@ class GeneralSubtitle extends StatelessWidget {
         if (mainSchemaTitle != title && title != kNoTitle) ...[
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(fontWeight: FontWeight.bold),
+            style:  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.subtitle,
           ),
           const Divider()
         ],
         if (description != null && description != nainSchemaDescription)
           Text(
             description!,
-            style: Theme.of(context).textTheme.bodyText2,
+            style:  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.description,
           ),
       ],
     );

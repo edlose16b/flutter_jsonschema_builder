@@ -8,6 +8,7 @@ import 'package:flutter_jsonschema_form/src/builder/array_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/object_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/property_schema_builder.dart';
+import 'package:flutter_jsonschema_form/src/models/json_form_schema_style.dart';
 import 'dart:convert';
 
 import '../models/models.dart';
@@ -20,6 +21,7 @@ class JsonForm extends StatefulWidget {
     required this.onFormDataSaved,
     this.customFileHandler,
     this.buildSubmitButton,
+    this.jsonFormSchemaStyle,
   }) : super(key: key);
 
   final String jsonSchema;
@@ -31,6 +33,7 @@ class JsonForm extends StatefulWidget {
   /// render a custom submit button
   /// @param [VoidCallback] submit function
   final ButtonStyleButton Function(VoidCallback)? buildSubmitButton;
+  final JsonFormSchemaStyle? jsonFormSchemaStyle;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -49,6 +52,8 @@ class _JsonFormState extends State<JsonForm> {
         id: kGenesisIdKey) as SchemaObject)
       ..setUiSchema(
           widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {});
 
     super.initState();
   }
@@ -83,13 +88,17 @@ class _JsonFormState extends State<JsonForm> {
                           const SizedBox(width: double.infinity),
                           Text(
                             mainSchema.title,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: WidgetBuilderInherited.of(context)
+                                .jsonFormSchemaStyle
+                                .title,
                           ),
                           const Divider(),
                           if (mainSchema.description != null)
                             Text(
                               mainSchema.description!,
-                              style: Theme.of(context).textTheme.bodyText2,
+                              style: WidgetBuilderInherited.of(context)
+                                  .jsonFormSchemaStyle
+                                  .description,
                             ),
                         ],
                       ),
@@ -97,7 +106,7 @@ class _JsonFormState extends State<JsonForm> {
                         mainSchema: mainSchema,
                         schema: mainSchema,
                       ),
-                      const SizedBox(height:20),
+                      const SizedBox(height: 20),
                       widget.buildSubmitButton == null
                           ? ElevatedButton(
                               onPressed: () => onSubmit(widgetBuilderInherited),
@@ -113,7 +122,7 @@ class _JsonFormState extends State<JsonForm> {
           ),
         );
       }),
-    );
+    )..setJsonFormSchemaStyle(context, widget.jsonFormSchemaStyle);
   }
 
   //  Form methods

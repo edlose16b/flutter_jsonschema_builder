@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 
 import '../models/models.dart';
@@ -65,7 +66,9 @@ class _FileJFormFieldState extends State<FileJFormField> {
           children: [
             Text(
                 '${widget.property.title} ${widget.property.required ? "*" : ""}',
-                style: Theme.of(context).textTheme.bodyText1),
+                style: WidgetBuilderInherited.of(context)
+                    .jsonFormSchemaStyle
+                    .label),
             TextButton(
               onPressed: widget.property.readOnly
                   ? null

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
@@ -79,7 +80,9 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
           children: [
             Text(
                 '${widget.property.title} ${widget.property.required ? "*" : ""}',
-                style: Theme.of(context).textTheme.bodyText1),
+                style: WidgetBuilderInherited.of(context)
+                    .jsonFormSchemaStyle
+                    .label),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List<Widget>.generate(

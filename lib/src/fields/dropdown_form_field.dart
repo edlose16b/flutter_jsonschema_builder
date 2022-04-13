@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import '../models/models.dart';
 
@@ -54,7 +55,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: Theme.of(context).textTheme.bodyText1),
+            style:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
         DropdownButtonFormField<dynamic>(
           key: Key(widget.property.idKey),
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -74,6 +76,10 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
                   if (widget.onChanged != null) widget.onChanged!(value);
                 },
           onSaved: widget.onSaved,
+          decoration: InputDecoration(
+            errorStyle:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
+          ),
         ),
       ],
     );

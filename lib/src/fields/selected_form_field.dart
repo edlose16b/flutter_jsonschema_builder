@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/models/object_schema.dart';
@@ -83,7 +84,8 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: Theme.of(context).textTheme.bodyText1),
+            style:
+                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
         DropdownButtonFormField<OneOfModel>(
           key: Key(widget.property.idKey),
           value: valueSelected,
@@ -117,6 +119,9 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                   }
                 },
           onSaved: widget.onSaved,
+          decoration: InputDecoration(
+              errorStyle:
+                  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error),
         ),
       ],
     );
