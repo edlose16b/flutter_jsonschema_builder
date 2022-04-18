@@ -35,7 +35,7 @@ class JsonForm extends StatefulWidget {
 
   /// render a custom submit button
   /// @param [VoidCallback] submit function
-  final ButtonStyleButton Function(VoidCallback)? buildSubmitButton;
+  final Widget Function(VoidCallback)? buildSubmitButton;
   final JsonFormSchemaStyle? jsonFormSchemaStyle;
 
   @override
