@@ -47,7 +47,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
         TextFormField(
           key: Key(widget.property.idKey),
           controller: txtDateCtrl,
@@ -61,7 +61,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
           readOnly: widget.property.readOnly,
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
-              : null,
+              :  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
               
           decoration: InputDecoration(
             hintText: 'DD-MM-YYYY',
@@ -90,7 +90,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
                       widget.onSaved(date);
                     },
             ),
-            errorStyle: WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error
+            errorStyle: WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error
           ),
           onSaved: (value) {
             if (widget.onSaved != null && value != null)

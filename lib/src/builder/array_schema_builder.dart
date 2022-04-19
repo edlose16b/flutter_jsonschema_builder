@@ -54,11 +54,18 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                   // if (index >= 1)
                   Align(
                     alignment: Alignment.centerRight,
-                    child: TextButton.icon(
-                      onPressed: () => _removeItem(index),
-                      icon: const Icon(Icons.remove),
-                      label: const Text('Eliminar item'),
-                    ),
+                    child: WidgetBuilderInherited.of(context)
+                                .jsonFormSchemaUiConfig
+                                .removeItemBuilder !=
+                            null
+                        ? WidgetBuilderInherited.of(context)
+                            .jsonFormSchemaUiConfig
+                            .removeItemBuilder!(() => _removeItem(index))
+                        : TextButton.icon(
+                            onPressed: () => _removeItem(index),
+                            icon: const Icon(Icons.remove),
+                            label: const Text('Eliminar item'),
+                          ),
                   ),
                   FormFromSchemaBuilder(
                     mainSchema: widget.mainSchema,
@@ -81,11 +88,18 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
         if (!widget.schemaArray.isArrayMultipleFile())
           Align(
             alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: _addItem,
-              icon: const Icon(Icons.add),
-              label: const Text('Añadir Item'),
-            ),
+            child: WidgetBuilderInherited.of(context)
+                        .jsonFormSchemaUiConfig
+                        .addItemBuilder !=
+                    null
+                ? WidgetBuilderInherited.of(context)
+                    .jsonFormSchemaUiConfig
+                    .addItemBuilder!(_addItem)
+                : TextButton.icon(
+                    onPressed: _addItem,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Añadir Item'),
+                  ),
           ),
       ],
     );

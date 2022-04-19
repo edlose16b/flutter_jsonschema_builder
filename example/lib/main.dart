@@ -49,23 +49,30 @@ class _MyHomePageState extends State<MyHomePage> {
   "title": "Files",
   "type": "object",
   "properties": {
-    "file": {
-      "type": "string",
-      "format": "data-url",
-      "title": "Single file"
+    "name" : {
+      "type" : "string",
+      "title" : "No Title?"
     },
-    "files": {
+    "multipleChoicesList": {
       "type": "array",
-      "title": "Multiple files",
+      "title": "A multiple choices list",
       "items": {
         "type": "string",
-        "format": "data-url"
-      }
+        "enum": [
+          "foo",
+          "bar",
+          "fuzz",
+          "qux"
+        ]
+      },
+      "uniqueItems": true
     },
-    "filesAccept": {
+    "select": {
+      "title" : "Select your Cola",
       "type": "string",
-      "format": "data-url",
-      "title": "Single File with Accept attribute"
+      "description": "This is the select-description",
+      "enum" : [0,1,2,3,4],
+      "enumNames" : ["Vale 0","Vale 1","Vale 2","Vale 3","Vale 4"]
     }
   }
 }
@@ -130,18 +137,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   '*': null
                 },
-                buildSubmitButton: (onSubmit) {
-                  return TextButton.icon(
-                    onPressed: onSubmit,
-                    icon: const Icon(Icons.heart_broken),
-                    label: const Text('Enviar'),
-                  );
-                },
-                jsonFormSchemaStyle: JsonFormSchemaStyle(
+                jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
                   title: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
+                  ),
+                  fieldTitle: const TextStyle(color: Colors.pink, fontSize: 12),
+                  submitButtonBuilder: (onSubmit) => TextButton.icon(
+                    onPressed: onSubmit,
+                    icon: const Icon(Icons.heart_broken),
+                    label: const Text('Enviar'),
+                  ),
+                  addItemBuilder: (onPressed) => TextButton.icon(
+                    onPressed: onPressed,
+                    icon: const Icon(Icons.plus_one),
+                    label: const Text('Add Item'),
                   ),
                 ),
               ),

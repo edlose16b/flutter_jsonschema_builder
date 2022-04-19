@@ -201,7 +201,7 @@ class PropertySchemaBuilder extends StatelessWidget {
         const SizedBox(height: 20),
         if (!kReleaseMode)
           Text(
-            schemaProperty.idKey,
+            'key: ${schemaProperty.idKey}',
             style: const TextStyle(
               fontSize: 12,
               color: Colors.green,

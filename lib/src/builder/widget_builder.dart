@@ -24,7 +24,7 @@ class JsonForm extends StatefulWidget {
     required this.onFormDataSaved,
     this.customFileHandlers,
     this.buildSubmitButton,
-    this.jsonFormSchemaStyle,
+    this.jsonFormSchemaUiConfig,
   }) : super(key: key);
 
   final String jsonSchema;
@@ -36,7 +36,7 @@ class JsonForm extends StatefulWidget {
   /// render a custom submit button
   /// @param [VoidCallback] submit function
   final Widget Function(VoidCallback)? buildSubmitButton;
-  final JsonFormSchemaStyle? jsonFormSchemaStyle;
+  final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -92,7 +92,7 @@ class _JsonFormState extends State<JsonForm> {
                           Text(
                             mainSchema.title,
                             style: WidgetBuilderInherited.of(context)
-                                .jsonFormSchemaStyle
+                                .jsonFormSchemaUiConfig
                                 .title,
                           ),
                           const Divider(),
@@ -100,7 +100,7 @@ class _JsonFormState extends State<JsonForm> {
                             Text(
                               mainSchema.description!,
                               style: WidgetBuilderInherited.of(context)
-                                  .jsonFormSchemaStyle
+                                  .jsonFormSchemaUiConfig
                                   .description,
                             ),
                         ],
@@ -110,12 +110,15 @@ class _JsonFormState extends State<JsonForm> {
                         schema: mainSchema,
                       ),
                       const SizedBox(height: 20),
-                      widget.buildSubmitButton == null
+                      widgetBuilderInherited
+                                  .jsonFormSchemaUiConfig.submitButtonBuilder ==
+                              null
                           ? ElevatedButton(
                               onPressed: () => onSubmit(widgetBuilderInherited),
                               child: const Text('Enviar'),
                             )
-                          : widget.buildSubmitButton!(
+                          : widgetBuilderInherited
+                                  .jsonFormSchemaUiConfig.submitButtonBuilder!(
                               () => onSubmit(widgetBuilderInherited)),
                     ],
                   ),
@@ -125,7 +128,7 @@ class _JsonFormState extends State<JsonForm> {
           ),
         );
       }),
-    )..setJsonFormSchemaStyle(context, widget.jsonFormSchemaStyle);
+    )..setJsonFormSchemaStyle(context, widget.jsonFormSchemaUiConfig);
   }
 
   //  Form methods

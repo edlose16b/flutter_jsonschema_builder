@@ -45,7 +45,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
@@ -65,7 +65,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
           },
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
-              : null,
+              :  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
           validator: (String? value) {
             if (widget.property.required && value != null && value.isEmpty) {
               return 'Required';
@@ -84,7 +84,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                     ? widget.property.help
                     : null,
             errorStyle:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error,
           ),
         ),
       ],

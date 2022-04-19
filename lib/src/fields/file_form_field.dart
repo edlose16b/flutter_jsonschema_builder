@@ -67,8 +67,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
             Text(
                 '${widget.property.title} ${widget.property.required ? "*" : ""}',
                 style: WidgetBuilderInherited.of(context)
-                    .jsonFormSchemaStyle
-                    .label),
+                    .jsonFormSchemaUiConfig
+                    .fieldTitle),
             TextButton(
               onPressed: widget.property.readOnly
                   ? null
@@ -107,6 +107,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
                         .string,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    style: widget.property.readOnly
+                    ? const TextStyle(color: Colors.grey)
+                    : WidgetBuilderInherited.of(context)
+                        .jsonFormSchemaUiConfig
+                        .label
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.close, size: 14),

@@ -10,7 +10,7 @@ class CustomErrorText extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, bottom: 5),
       child: Text(
         text,
-        style: WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
+        style: WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error,
       ),
     );
   }

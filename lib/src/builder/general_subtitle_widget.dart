@@ -23,14 +23,14 @@ class GeneralSubtitle extends StatelessWidget {
         if (mainSchemaTitle != title && title != kNoTitle) ...[
           Text(
             title,
-            style:  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.subtitle,
+            style:  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.subtitle,
           ),
           const Divider()
         ],
         if (description != null && description != nainSchemaDescription)
           Text(
             description!,
-            style:  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.description,
+            style:  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.description,
           ),
       ],
     );

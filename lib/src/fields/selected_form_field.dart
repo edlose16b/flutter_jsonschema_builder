@@ -85,7 +85,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
         DropdownButtonFormField<OneOfModel>(
           key: Key(widget.property.idKey),
           value: valueSelected,
@@ -104,6 +104,11 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                       value: item,
                       child: Text(
                         item.title ?? '',
+                        style: widget.property.readOnly
+                            ? const TextStyle(color: Colors.grey)
+                            : WidgetBuilderInherited.of(context)
+                                .jsonFormSchemaUiConfig
+                                .label,
                       ),
                     );
                   })
@@ -121,7 +126,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
           onSaved: widget.onSaved,
           decoration: InputDecoration(
               errorStyle:
-                  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error),
+                  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error),
         ),
       ],
     );

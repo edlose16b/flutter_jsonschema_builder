@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -18,22 +19,27 @@ class WidgetBuilderInherited extends InheritedWidget {
   final data = {};
 
   final CustomFileHandlers? customFileHandlers;
-  late final JsonFormSchemaStyle jsonFormSchemaStyle;
+  late final JsonFormSchemaUiConfig jsonFormSchemaUiConfig;
 
   void setJsonFormSchemaStyle(
-      BuildContext context, JsonFormSchemaStyle? jsonFormSchemaStyle) {
+      BuildContext context, JsonFormSchemaUiConfig? jsonFormSchemaUiConfig) {
     final textTheme = Theme.of(context).textTheme;
 
-    this.jsonFormSchemaStyle = JsonFormSchemaStyle(
-      title: jsonFormSchemaStyle?.title ?? textTheme.headline6,
-      subtitle: jsonFormSchemaStyle?.subtitle ??
+    this.jsonFormSchemaUiConfig = JsonFormSchemaUiConfig(
+      title: jsonFormSchemaUiConfig?.title ?? textTheme.headline6,
+      subtitle: jsonFormSchemaUiConfig?.subtitle ??
           textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-      description: jsonFormSchemaStyle?.description ?? textTheme.bodyText2,
-      error: jsonFormSchemaStyle?.error ??
+      description: jsonFormSchemaUiConfig?.description ?? textTheme.bodyText2,
+      error: jsonFormSchemaUiConfig?.error ??
           TextStyle(
               color: Theme.of(context).errorColor,
               fontSize: textTheme.caption!.fontSize),
-      label: jsonFormSchemaStyle?.label ?? textTheme.bodyText2,
+      fieldTitle: jsonFormSchemaUiConfig?.fieldTitle ?? textTheme.bodyText2,
+      label: jsonFormSchemaUiConfig?.label,
+      //builders
+      addItemBuilder: jsonFormSchemaUiConfig?.addItemBuilder,
+      removeItemBuilder: jsonFormSchemaUiConfig?.removeItemBuilder,
+      submitButtonBuilder: jsonFormSchemaUiConfig?.submitButtonBuilder,
     );
   }
 

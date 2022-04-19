@@ -48,7 +48,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
         AbsorbPointer(
           absorbing: widget.property.disabled ?? false,
           child: TextFormField(
@@ -79,14 +79,15 @@ class _TextJFormFieldState extends State<TextJFormField> {
             },
             style: widget.property.readOnly
                 ? const TextStyle(color: Colors.grey)
-                : null,
+                : WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
             decoration: InputDecoration(
               helperText: widget.property.help != null &&
                       widget.property.help!.isNotEmpty
                   ? widget.property.help
                   : null,
+              labelStyle: const TextStyle(color: Colors.blue),
               errorStyle:
-                  WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
+                  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error,
             ),
           ),
         ),

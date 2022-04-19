@@ -56,7 +56,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.label),
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
         DropdownButtonFormField<dynamic>(
           key: Key(widget.property.idKey),
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -76,9 +76,14 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
                   if (widget.onChanged != null) widget.onChanged!(value);
                 },
           onSaved: widget.onSaved,
+          style: widget.property.readOnly
+              ? const TextStyle(color: Colors.grey)
+              : WidgetBuilderInherited.of(context)
+                  .jsonFormSchemaUiConfig
+                  .label,
           decoration: InputDecoration(
             errorStyle:
-                WidgetBuilderInherited.of(context).jsonFormSchemaStyle.error,
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error,
           ),
         ),
       ],
