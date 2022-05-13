@@ -25,8 +25,8 @@ class DateJFormField extends PropertyFieldWidget<DateTime> {
 }
 
 class _DateJFormFieldState extends State<DateJFormField> {
-  final txtDateCtrl = MaskedTextController(mask: '00-00-0000');
-  final formatter = DateFormat('dd-MM-yyyy');
+  final txtDateCtrl = MaskedTextController(mask: '0000-00-00');
+  final formatter = DateFormat('yyyy-MM-dd');
 
   @override
   void initState() {
@@ -45,9 +45,12 @@ class _DateJFormFieldState extends State<DateJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: WidgetBuilderInherited.of(context)
+              .jsonFormSchemaUiConfig
+              .fieldTitle,
+        ),
         TextFormField(
           key: Key(widget.property.idKey),
           controller: txtDateCtrl,
@@ -56,52 +59,55 @@ class _DateJFormFieldState extends State<DateJFormField> {
             if (widget.property.required && (value == null || value.isEmpty)) {
               return 'Required';
             }
+            return null;
           },
-          inputFormatters: [DateTextInputJsonFormatter()],
+          // inputFormatters: [DateTextInputJsonFormatter()],
           readOnly: widget.property.readOnly,
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
-              :  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
-              
+              : WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
           decoration: InputDecoration(
-            hintText: 'DD-MM-YYYY',
-            helperText:
-                widget.property.help != null && widget.property.help!.isNotEmpty
-                    ? widget.property.help
-                    : null,
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.date_range_outlined),
-              onPressed: widget.property.readOnly
-                  ? null
-                  : () async {
-                      final tempDate = widget.property.defaultValue != null
-                          ? formatter.parse(txtDateCtrl.text)
-                          : DateTime.now();
-
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: tempDate,
-                        firstDate: DateTime(1960),
-                        lastDate: DateTime.now(),
-                      );
-                      if (date != null)
-                        txtDateCtrl.text = formatter.format(date);
-
-                      widget.onSaved(date);
-                    },
-            ),
-            errorStyle: WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error
-          ),
+              hintText: 'YYYY-MM-DD',
+              helperText: widget.property.help != null &&
+                      widget.property.help!.isNotEmpty
+                  ? widget.property.help
+                  : null,
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.date_range_outlined),
+                onPressed: widget.property.readOnly ? null : _onPressed,
+              ),
+              errorStyle: WidgetBuilderInherited.of(context)
+                  .jsonFormSchemaUiConfig
+                  .error),
           onSaved: (value) {
-            if (widget.onSaved != null && value != null)
-              widget.onSaved(formatter.parse(value));
+            if (value != null) widget.onSaved(formatter.parse(value));
           },
           onChanged: (value) {
-            if (widget.onChanged != null)
-              widget.onChanged!(formatter.parse(value));
+            try {
+              if (widget.onChanged != null && DateTime.tryParse(value) != null)
+                widget.onChanged!(formatter.parse(value));
+            } catch (e) {
+              return;
+            }
           },
         ),
       ],
     );
+  }
+
+  void _onPressed() async {
+    final tempDate = widget.property.defaultValue != null
+        ? formatter.parse(txtDateCtrl.text)
+        : DateTime.now();
+
+    final date = await showDatePicker(
+      context: context,
+      initialDate: tempDate,
+      firstDate: DateTime(1960),
+      lastDate: DateTime.now(),
+    );
+    if (date != null) txtDateCtrl.text = formatter.format(date);
+
+    widget.onSaved(date);
   }
 }

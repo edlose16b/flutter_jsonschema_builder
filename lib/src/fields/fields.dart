@@ -30,9 +30,9 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
         var value = property.defaultValue;
 
         if (property.format == PropertyFormat.date) {
-          value = DateFormat('dd-MM-yyyy').parse(value);
+          value = DateFormat('yyyy-MM-dd').parse(value);
         } else if (property.format == PropertyFormat.datetime) {
-          value = DateFormat('dd-MM-yyyy hh:mm:ss').parse(value);
+          value = DateFormat('yyyy-MM-dd hh:mm:ss').parse(value);
         }
 
         if (onChanged != null) onChanged!(value);

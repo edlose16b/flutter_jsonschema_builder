@@ -88,9 +88,9 @@ class PropertySchemaBuilder extends StatelessWidget {
                 if (val == null) return;
                 String date;
                 if (schemaProperty.format == PropertyFormat.date) {
-                  date = DateFormat('dd-MM-yyyy').format(val);
+                  date = DateFormat('yyyy-MM-dd').format(val);
                 } else {
-                  date = DateFormat('dd-MM-yyyy hh:mm:ss').format(val);
+                  date = DateFormat('yyyy-MM-dd hh:mm:ss').format(val);
                 }
 
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $date');
