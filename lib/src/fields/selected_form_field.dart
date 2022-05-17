@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
-import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
-import 'package:flutter_jsonschema_form/src/models/object_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
 import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
@@ -49,23 +47,35 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
 
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
-        if (widget.property.id == 'profession') {
-          final titleList = [];
-          final enumString = widget.property.oneOf![i]['enum'].first;
-          titleList.add(widget.property.oneOf![i]['title']);
-          customObject = OneOfModel(
-              oneOfModelEnum: titleList,
-              title: enumString,
-              type: widget.property.oneOf![i]['type']);
-        } else {
-          customObject = OneOfModel(
-              oneOfModelEnum: widget.property.oneOf![i]['enum'],
-              title: widget.property.oneOf![i]['title'],
-              type: widget.property.oneOf![i]['type']);
-        }
+        // if (widget.property.id == 'profession') {
+        //   final titleList = [];
+        //   final enumString = widget.property.oneOf![i]['enum'].first;
+        //   titleList.add(widget.property.oneOf![i]['title']);
+        //   customObject = OneOfModel(
+        //       oneOfModelEnum: titleList,
+        //       title: enumString,
+        //       type: widget.property.oneOf![i]['type']);
+        // } else {
+        customObject = OneOfModel(
+            oneOfModelEnum: widget.property.oneOf![i]['enum'],
+            title: widget.property.oneOf![i]['title'],
+            type: widget.property.oneOf![i]['type']);
+        // }
         listOfModel.add(customObject);
       }
     }
+
+    // fill selected value
+
+    final exists = listOfModel.firstWhere(
+      (e) =>
+          e.oneOfModelEnum is List &&
+          e.oneOfModelEnum!
+              .map((e) => e.toLowerCase())
+              .contains(widget.property.defaultValue.toLowerCase()),
+    );
+
+    valueSelected = exists;
 
     widget.triggetDefaultValue();
     super.initState();
@@ -74,18 +84,14 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
   @override
   Widget build(BuildContext context) {
     assert(widget.property.oneOf != null, 'oneOf is required');
-    assert(
-      () {
-        return true;
-      }(),
-    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
+            style: WidgetBuilderInherited.of(context)
+                .jsonFormSchemaUiConfig
+                .fieldTitle),
         DropdownButtonFormField<OneOfModel>(
           key: Key(widget.property.idKey),
           value: valueSelected,
@@ -125,8 +131,9 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                 },
           onSaved: widget.onSaved,
           decoration: InputDecoration(
-              errorStyle:
-                  WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error),
+              errorStyle: WidgetBuilderInherited.of(context)
+                  .jsonFormSchemaUiConfig
+                  .error),
         ),
       ],
     );
