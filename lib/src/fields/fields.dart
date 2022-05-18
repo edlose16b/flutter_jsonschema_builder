@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/models/object_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
+import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
 import 'package:intl/intl.dart';
 
 abstract class PropertyFieldWidget<T> extends StatefulWidget {
@@ -30,9 +31,9 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
         var value = property.defaultValue;
 
         if (property.format == PropertyFormat.date) {
-          value = DateFormat('yyyy-MM-dd').parse(value);
+          value = DateFormat(dateFormatString).parse(value);
         } else if (property.format == PropertyFormat.datetime) {
-          value = DateFormat('yyyy-MM-dd hh:mm:ss').parse(value);
+          value = DateFormat(dateTimeFormatString).parse(value);
         }
 
         if (onChanged != null) onChanged!(value);

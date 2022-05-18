@@ -26,7 +26,7 @@ class DateJFormField extends PropertyFieldWidget<DateTime> {
 
 class _DateJFormFieldState extends State<DateJFormField> {
   final txtDateCtrl = MaskedTextController(mask: '0000-00-00');
-  final formatter = DateFormat('yyyy-MM-dd');
+  final formatter = DateFormat(dateFormatString);
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
               ? const TextStyle(color: Colors.grey)
               : WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
           decoration: InputDecoration(
-              hintText: 'YYYY-MM-DD',
+              hintText: dateFormatString.toUpperCase(),
               helperText: widget.property.help != null &&
                       widget.property.help!.isNotEmpty
                   ? widget.property.help

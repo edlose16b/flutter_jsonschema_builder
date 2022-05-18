@@ -47,35 +47,29 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
 
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
-        // if (widget.property.id == 'profession') {
-        //   final titleList = [];
-        //   final enumString = widget.property.oneOf![i]['enum'].first;
-        //   titleList.add(widget.property.oneOf![i]['title']);
-        //   customObject = OneOfModel(
-        //       oneOfModelEnum: titleList,
-        //       title: enumString,
-        //       type: widget.property.oneOf![i]['type']);
-        // } else {
         customObject = OneOfModel(
-            oneOfModelEnum: widget.property.oneOf![i]['enum'],
-            title: widget.property.oneOf![i]['title'],
-            type: widget.property.oneOf![i]['type']);
-        // }
+          oneOfModelEnum: widget.property.oneOf![i]['enum'],
+          title: widget.property.oneOf![i]['title'],
+          type: widget.property.oneOf![i]['type'],
+        );
+
         listOfModel.add(customObject);
       }
     }
 
     // fill selected value
 
-    final exists = listOfModel.firstWhere(
-      (e) =>
+    try {
+      final exists = listOfModel.firstWhere((e) =>
           e.oneOfModelEnum is List &&
-          e.oneOfModelEnum!
-              .map((e) => e.toLowerCase())
-              .contains(widget.property.defaultValue.toLowerCase()),
-    );
+          e.oneOfModelEnum!.map((e) => e.toLowerCase()).contains(
+                widget.property.defaultValue.toLowerCase(),
+              ));
 
-    valueSelected = exists;
+      valueSelected = exists;
+    } catch (e) {
+      valueSelected = null;
+    }
 
     widget.triggetDefaultValue();
     super.initState();
@@ -88,6 +82,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(widget.property.defaultValue),
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style: WidgetBuilderInherited.of(context)
                 .jsonFormSchemaUiConfig

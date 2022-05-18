@@ -1,5 +1,8 @@
 import 'package:flutter/services.dart';
 
+const String dateFormatString = 'yyyy-MM-dd';
+const String dateTimeFormatString = 'yyyy-MM-dd hh:mm:ss';
+
 class DateTextInputJsonFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

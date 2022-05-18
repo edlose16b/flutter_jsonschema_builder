@@ -12,6 +12,7 @@ import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart'
 import 'package:flutter_jsonschema_form/src/fields/selected_form_field.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
+import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
 import 'package:intl/intl.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
@@ -73,8 +74,11 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
         },
         onChanged: (value) {
-          dispatchSelectedForDropDownEventToParent(context, value,
-              id: schemaProperty.id);
+          dispatchSelectedForDropDownEventToParent(
+            context,
+            value,
+            id: schemaProperty.id,
+          );
         },
       );
     } else {
@@ -88,9 +92,9 @@ class PropertySchemaBuilder extends StatelessWidget {
                 if (val == null) return;
                 String date;
                 if (schemaProperty.format == PropertyFormat.date) {
-                  date = DateFormat('yyyy-MM-dd').format(val);
+                  date = DateFormat(dateFormatString).format(val);
                 } else {
-                  date = DateFormat('yyyy-MM-dd hh:mm:ss').format(val);
+                  date = DateFormat(dateTimeFormatString).format(val);
                 }
 
                 log('onSaved: DateJFormField  ${schemaProperty.idKey}  : $date');
