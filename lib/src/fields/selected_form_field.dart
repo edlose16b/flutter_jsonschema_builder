@@ -82,7 +82,6 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.property.defaultValue),
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style: WidgetBuilderInherited.of(context)
                 .jsonFormSchemaUiConfig
