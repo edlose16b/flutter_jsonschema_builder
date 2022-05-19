@@ -22,7 +22,8 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 dynamic safeDefaultValue(Map<String, dynamic> json) {
-  return schemaTypeFromString(json['type']) == SchemaType.boolean
+  return schemaTypeFromString(json['type']) == SchemaType.boolean &&
+          json['default'] is String
       ? json['default'] == 'true'
       : json['default'];
 }
