@@ -14,7 +14,7 @@ class TextJFormField extends PropertyFieldWidget<String> {
     Key? key,
     required SchemaProperty property,
     required final ValueSetter<String?> onSaved,
-    required final ValueChanged<String> onChanged,
+    required final ValueChanged<String?> onChanged,
   }) : super(
           key: key,
           property: property,

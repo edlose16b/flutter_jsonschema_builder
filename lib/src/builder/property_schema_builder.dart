@@ -137,7 +137,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               updateData(context, val);
             },
             onChanged: (value) {
-              dispatchStringEventToParent(context, value);
+              dispatchStringEventToParent(context, value!);
             },
           );
           break;
@@ -174,7 +174,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             _field = CheckboxJFormField(
               property: schemaPropertySorted,
               onChanged: (value) {
-                dispatchBooleanEventToParent(context, value);
+                dispatchBooleanEventToParent(context, value!);
               },
               onSaved: (val) {
                 log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
@@ -193,7 +193,7 @@ class PropertySchemaBuilder extends StatelessWidget {
               updateData(context, val);
             },
             onChanged: (value) {
-              dispatchStringEventToParent(context, value);
+              dispatchStringEventToParent(context, value!);
             },
           );
       }

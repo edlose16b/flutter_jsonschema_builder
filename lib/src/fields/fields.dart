@@ -22,22 +22,26 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
 
   final SchemaProperty property;
   final ValueSetter<T?> onSaved;
-  final ValueChanged<T>? onChanged;
+  final ValueChanged<T?>? onChanged;
 
   /// It calls onChanged
   Future<void> triggetDefaultValue() async {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (property.defaultValue != null) {
-        var value = property.defaultValue;
+      if (property.defaultValue == null) return;
 
+      var value = property.defaultValue;
+
+      try {
         if (property.format == PropertyFormat.date) {
           value = DateFormat(dateFormatString).parse(value);
         } else if (property.format == PropertyFormat.datetime) {
           value = DateFormat(dateTimeFormatString).parse(value);
         }
-
-        if (onChanged != null) onChanged!(value);
+      } catch (e) {
+        value = null;
       }
+
+      if (onChanged != null) onChanged!(value);
     });
   }
 

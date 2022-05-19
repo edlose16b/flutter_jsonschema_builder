@@ -8,7 +8,7 @@ class CheckboxJFormField extends PropertyFieldWidget<bool> {
     Key? key,
     required SchemaProperty property,
     required final ValueSetter<bool?> onSaved,
-    ValueChanged<bool>? onChanged,
+    ValueChanged<bool?>? onChanged,
   }) : super(
           key: key,
           property: property,
