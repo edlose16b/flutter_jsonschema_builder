@@ -12,7 +12,7 @@ class DateJFormField extends PropertyFieldWidget<DateTime> {
     Key? key,
     required SchemaProperty property,
     required final ValueSetter<DateTime?> onSaved,
-    ValueChanged<DateTime>? onChanged,
+    ValueChanged<DateTime?>? onChanged,
   }) : super(
           key: key,
           property: property,
@@ -31,7 +31,8 @@ class _DateJFormFieldState extends State<DateJFormField> {
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (widget.property.defaultValue != null)
+      if (widget.property.defaultValue != null &&
+          DateTime.tryParse(widget.property.defaultValue) != null)
         txtDateCtrl.updateText(widget.property.defaultValue);
     });
 
@@ -66,19 +67,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
               : WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.label,
-          decoration: InputDecoration(
-              hintText: dateFormatString.toUpperCase(),
-              helperText: widget.property.help != null &&
-                      widget.property.help!.isNotEmpty
-                  ? widget.property.help
-                  : null,
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.date_range_outlined),
-                onPressed: widget.property.readOnly ? null : _onPressed,
-              ),
-              errorStyle: WidgetBuilderInherited.of(context)
-                  .jsonFormSchemaUiConfig
-                  .error),
+
           onSaved: (value) {
             if (value != null) widget.onSaved(formatter.parse(value));
           },
@@ -90,22 +79,39 @@ class _DateJFormFieldState extends State<DateJFormField> {
               return;
             }
           },
+          decoration: InputDecoration(
+            hintText: dateFormatString.toUpperCase(),
+            helperText:
+                widget.property.help != null && widget.property.help!.isNotEmpty
+                    ? widget.property.help
+                    : null,
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.date_range_outlined),
+              onPressed: widget.property.readOnly ? null : _openCalendar,
+            ),
+            errorStyle:
+                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.error,
+          ),
         ),
       ],
     );
   }
 
-  void _onPressed() async {
-    final tempDate = widget.property.defaultValue != null
-        ? formatter.parse(txtDateCtrl.text)
-        : DateTime.now();
+  void _openCalendar() async {
+    late DateTime tempDate;
+    try {
+      tempDate = formatter.parse(txtDateCtrl.text);
+    } catch (e) {
+      tempDate = DateTime.now();
+    }
 
     final date = await showDatePicker(
       context: context,
       initialDate: tempDate,
-      firstDate: DateTime(1960),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2099),
     );
+
     if (date != null) txtDateCtrl.text = formatter.format(date);
 
     widget.onSaved(date);
