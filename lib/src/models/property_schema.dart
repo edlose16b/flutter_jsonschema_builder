@@ -22,10 +22,13 @@ PropertyFormat propertyFormatFromString(String? value) {
 }
 
 dynamic safeDefaultValue(Map<String, dynamic> json) {
-  return schemaTypeFromString(json['type']) == SchemaType.boolean &&
-          json['default'] is String
-      ? json['default'] == 'true'
-      : json['default'];
+  if (schemaTypeFromString(json['type']) == SchemaType.boolean) {
+    if (json['default'] is String) return json['default'] == 'true';
+
+    if (json['default'] is int) return json['default'] == 1;
+  }
+
+  return json['default'];
 }
 
 class SchemaProperty extends Schema {
