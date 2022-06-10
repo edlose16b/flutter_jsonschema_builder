@@ -46,27 +46,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
  {
-  "title": "Files",
+  "title": "Texto",
   "type": "object",
   "properties": {
-    "name" : {
-      "type" : "string",
-      "title" : "No Title?"
-    },
-    "multipleChoicesList": {
-      "type": "array",
-      "title": "A multiple choices list",
-      "items": {
-        "type": "string",
-        "enum": [
-          "foo",
-          "bar",
-          "fuzz",
-          "qux"
-        ]
-      },
-      "uniqueItems": true
-    },
     "select": {
       "title" : "Select your Cola",
       "type": "string",
@@ -137,7 +119,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   '*': null
                 },
+                customPickerHandlers: () => {
+                  '*': (data) async {
+                    return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Scaffold(
+                            body: Container(
+                              margin: const EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  const Text('My Custom Picker'),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: data.keys.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text(data.values
+                                            .toList()[index]
+                                            .toString()),
+                                        onTap: () => Navigator.pop(
+                                            context, data.keys.toList()[index]),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  }
+                },
                 jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
+                  
                   title: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

@@ -1,16 +1,16 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
+import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
+import 'package:intl/intl.dart';
+
 export 'checkbox_form_field.dart';
 export 'date_form_field.dart';
 export 'dropdown_form_field.dart';
 export 'file_form_field.dart';
 export 'number_form_field.dart';
 export 'text_form_field.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/models/object_schema.dart';
-import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
-import 'package:flutter_jsonschema_form/src/models/schema.dart';
-import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
-import 'package:intl/intl.dart';
 
 abstract class PropertyFieldWidget<T> extends StatefulWidget {
   const PropertyFieldWidget(
@@ -25,9 +25,11 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
   final ValueChanged<T?>? onChanged;
 
   /// It calls onChanged
-  Future<void> triggetDefaultValue() async {
+  Future<dynamic> triggetDefaultValue() async {
+    var completer = Completer();
+
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (property.defaultValue == null) return;
+      if (property.defaultValue == null) return completer.complete();
 
       var value = property.defaultValue;
 
@@ -42,7 +44,11 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
       }
 
       if (onChanged != null) onChanged!(value);
+
+      completer.complete(value);
     });
+
+    return completer.future;
   }
 
   @override

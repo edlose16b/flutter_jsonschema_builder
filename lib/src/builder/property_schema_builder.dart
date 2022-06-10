@@ -55,6 +55,10 @@ class PropertySchemaBuilder extends StatelessWidget {
                 schemaProperty.enumNames!.isNotEmpty))) {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
+        customPickerHandler: getCustomPickerHanlder(
+          WidgetBuilderInherited.of(context).customPickerHandlers,
+          schemaProperty.id,
+        ),
         onSaved: (val) {
           log('onSaved: DropDownJFormField  ${schemaProperty.idKey}  : $val');
           updateData(context, val);
@@ -67,6 +71,10 @@ class PropertySchemaBuilder extends StatelessWidget {
     } else if (schemaProperty.oneOf != null) {
       _field = SelectedFormField(
         property: schemaPropertySorted,
+        customPickerHandler: getCustomPickerHanlder(
+          WidgetBuilderInherited.of(context).customPickerHandlers,
+          schemaProperty.id,
+        ),
         onSaved: (val) {
           if (val is OneOfModel) {
             log('onSaved: SelectedFormField  ${schemaProperty.idKey}  : ${val.oneOfModelEnum?.first}');
@@ -260,6 +268,19 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   Future<List<File>?> Function()? getCustomFileHanlder(
       CustomFileHandlers? customFileHandlers, String key) {
+    if (customFileHandlers == null) return null;
+
+    final handlers = customFileHandlers();
+
+    if (handlers.containsKey(key)) return handlers[key];
+
+    if (handlers.containsKey('*')) return handlers['*'];
+
+    return null;
+  }
+
+  Future<dynamic> Function(Map<dynamic, dynamic>)? getCustomPickerHanlder(
+      CustomPickerHandler? customFileHandlers, String key) {
     if (customFileHandlers == null) return null;
 
     final handlers = customFileHandlers();

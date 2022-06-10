@@ -6,16 +6,19 @@ import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
 
 class SelectedFormField extends PropertyFieldWidget<dynamic> {
-  const SelectedFormField(
-      {Key? key,
-      required SchemaProperty property,
-      required final ValueSetter<dynamic> onSaved,
-      ValueChanged<dynamic>? onChanged})
-      : super(
+  const SelectedFormField({
+    Key? key,
+    required SchemaProperty property,
+    required final ValueSetter<dynamic> onSaved,
+    ValueChanged<dynamic>? onChanged,
+    required this.customPickerHandler,
+  }) : super(
             key: key,
             property: property,
             onSaved: onSaved,
             onChanged: onChanged);
+
+  final Future<dynamic> Function(Map)? customPickerHandler;
 
   @override
   _SelectedFormFieldState createState() => _SelectedFormFieldState();
@@ -82,10 +85,9 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context)
-                .jsonFormSchemaUiConfig
-                .fieldTitle),
+            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         DropdownButtonFormField<OneOfModel>(
           key: Key(widget.property.idKey),
           value: valueSelected,
@@ -106,9 +108,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                         item.title ?? '',
                         style: widget.property.readOnly
                             ? const TextStyle(color: Colors.grey)
-                            : WidgetBuilderInherited.of(context)
-                                .jsonFormSchemaUiConfig
-                                .label,
+                            : WidgetBuilderInherited.of(context).uiConfig.label,
                       ),
                     );
                   })
@@ -125,9 +125,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
                 },
           onSaved: widget.onSaved,
           decoration: InputDecoration(
-              errorStyle: WidgetBuilderInherited.of(context)
-                  .jsonFormSchemaUiConfig
-                  .error),
+              errorStyle: WidgetBuilderInherited.of(context).uiConfig.error),
         ),
       ],
     );

@@ -55,11 +55,11 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: WidgetBuilderInherited.of(context)
-                                .jsonFormSchemaUiConfig
+                                .uiConfig
                                 .removeItemBuilder !=
                             null
                         ? WidgetBuilderInherited.of(context)
-                            .jsonFormSchemaUiConfig
+                            .uiConfig
                             .removeItemBuilder!(() => _removeItem(index))
                         : TextButton.icon(
                             onPressed: () => _removeItem(index),
@@ -89,11 +89,11 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
           Align(
             alignment: Alignment.centerRight,
             child: WidgetBuilderInherited.of(context)
-                        .jsonFormSchemaUiConfig
+                        .uiConfig
                         .addItemBuilder !=
                     null
                 ? WidgetBuilderInherited.of(context)
-                    .jsonFormSchemaUiConfig
+                    .uiConfig
                     .addItemBuilder!(_addItem)
                 : TextButton.icon(
                     onPressed: _addItem,

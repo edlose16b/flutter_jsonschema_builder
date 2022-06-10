@@ -16,6 +16,8 @@ import '../models/models.dart';
 // ignore: prefer_generic_function_type_aliases
 typedef Map<String, Future<List<File>?> Function()?> CustomFileHandlers();
 
+typedef Map<String, Future<dynamic> Function(Map data)> CustomPickerHandler();
+
 class JsonForm extends StatefulWidget {
   const JsonForm({
     Key? key,
@@ -23,8 +25,8 @@ class JsonForm extends StatefulWidget {
     this.uiSchema,
     required this.onFormDataSaved,
     this.customFileHandlers,
-    this.buildSubmitButton,
     this.jsonFormSchemaUiConfig,
+    this.customPickerHandlers,
   }) : super(key: key);
 
   final String jsonSchema;
@@ -33,11 +35,9 @@ class JsonForm extends StatefulWidget {
   final String? uiSchema;
   final CustomFileHandlers? customFileHandlers;
 
-  /// render a custom submit button
-  /// @param [VoidCallback] submit function
-  final Widget Function(VoidCallback)? buildSubmitButton;
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
 
+  final CustomPickerHandler? customPickerHandlers;
   @override
   _JsonFormState createState() => _JsonFormState();
 }
@@ -56,8 +56,6 @@ class _JsonFormState extends State<JsonForm> {
       ..setUiSchema(
           widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {});
-
     super.initState();
   }
 
@@ -66,69 +64,70 @@ class _JsonFormState extends State<JsonForm> {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
       customFileHandlers: widget.customFileHandlers,
+      customPickerHandlers: widget.customPickerHandlers,
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
         return SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Container(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      if (!kReleaseMode)
-                        TextButton(
-                          onPressed: () {
-                            inspect(mainSchema);
-                          },
-                          child: const Text('INSPECT'),
-                        ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const SizedBox(width: double.infinity),
-                          Text(
-                            mainSchema.title,
-                            style: WidgetBuilderInherited.of(context)
-                                .jsonFormSchemaUiConfig
-                                .title,
-                          ),
-                          const Divider(),
-                          if (mainSchema.description != null)
-                            Text(
-                              mainSchema.description!,
-                              style: WidgetBuilderInherited.of(context)
-                                  .jsonFormSchemaUiConfig
-                                  .description,
-                            ),
-                        ],
-                      ),
-                      FormFromSchemaBuilder(
-                        mainSchema: mainSchema,
-                        schema: mainSchema,
-                      ),
-                      const SizedBox(height: 20),
-                      widgetBuilderInherited
-                                  .jsonFormSchemaUiConfig.submitButtonBuilder ==
-                              null
-                          ? ElevatedButton(
-                              onPressed: () => onSubmit(widgetBuilderInherited),
-                              child: const Text('Enviar'),
-                            )
-                          : widgetBuilderInherited
-                                  .jsonFormSchemaUiConfig.submitButtonBuilder!(
-                              () => onSubmit(widgetBuilderInherited)),
-                    ],
+          child: Form(
+            key: _formKey,
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: <Widget>[
+                  if (!kReleaseMode)
+                    TextButton(
+                      onPressed: () {
+                        inspect(mainSchema);
+                      },
+                      child: const Text('INSPECT'),
+                    ),
+                  _buildHeaderTitle(context),
+                  FormFromSchemaBuilder(
+                    mainSchema: mainSchema,
+                    schema: mainSchema,
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  widgetBuilderInherited.uiConfig.submitButtonBuilder == null
+                      ? ElevatedButton(
+                          onPressed: () => onSubmit(widgetBuilderInherited),
+                          child: const Text('Enviar'),
+                        )
+                      : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
+                          () => onSubmit(widgetBuilderInherited)),
+                ],
               ),
-            ],
+            ),
           ),
         );
       }),
     )..setJsonFormSchemaStyle(context, widget.jsonFormSchemaUiConfig);
+  }
+
+  Widget _buildHeaderTitle(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          width: double.infinity,
+          child: Text(
+            mainSchema.title,
+            style: WidgetBuilderInherited.of(context).uiConfig.title,
+            textAlign: WidgetBuilderInherited.of(context).uiConfig.titleAlign,
+          ),
+        ),
+        const Divider(),
+        if (mainSchema.description != null)
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              mainSchema.description!,
+              style: WidgetBuilderInherited.of(context).uiConfig.description,
+              textAlign: WidgetBuilderInherited.of(context).uiConfig.titleAlign,
+            ),
+          ),
+      ],
+    );
   }
 
   //  Form methods

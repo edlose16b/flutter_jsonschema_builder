@@ -34,7 +34,7 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style:
-                WidgetBuilderInherited.of(context).jsonFormSchemaUiConfig.fieldTitle),
+                WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         FormField<bool>(
           key: Key(widget.property.idKey),
           initialValue: widget.property.defaultValue ?? false,
@@ -50,7 +50,7 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
                 style: widget.property.readOnly
                     ? const TextStyle(color: Colors.grey)
                     : WidgetBuilderInherited.of(context)
-                        .jsonFormSchemaUiConfig
+                        .uiConfig
                         .label,
               ),
               controlAffinity: ListTileControlAffinity.leading,

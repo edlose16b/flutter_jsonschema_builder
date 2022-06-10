@@ -81,7 +81,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
             Text(
                 '${widget.property.title} ${widget.property.required ? "*" : ""}',
                 style: WidgetBuilderInherited.of(context)
-                    .jsonFormSchemaUiConfig
+                    .uiConfig
                     .fieldTitle),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                             style: widget.property.readOnly
                                 ? const TextStyle(color: Colors.grey)
                                 : WidgetBuilderInherited.of(context)
-                                    .jsonFormSchemaUiConfig
+                                    .uiConfig
                                     .label),
                         groupValue: groupValue,
                         onChanged: widget.property.readOnly

@@ -13,33 +13,36 @@ class WidgetBuilderInherited extends InheritedWidget {
     required this.mainSchema,
     required Widget child,
     this.customFileHandlers,
+    this.customPickerHandlers,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
   final data = {};
 
   final CustomFileHandlers? customFileHandlers;
-  late final JsonFormSchemaUiConfig jsonFormSchemaUiConfig;
+  final CustomPickerHandler? customPickerHandlers;
+  late final JsonFormSchemaUiConfig uiConfig;
 
   void setJsonFormSchemaStyle(
-      BuildContext context, JsonFormSchemaUiConfig? jsonFormSchemaUiConfig) {
+      BuildContext context, JsonFormSchemaUiConfig? uiConfig) {
     final textTheme = Theme.of(context).textTheme;
 
-    this.jsonFormSchemaUiConfig = JsonFormSchemaUiConfig(
-      title: jsonFormSchemaUiConfig?.title ?? textTheme.headline6,
-      subtitle: jsonFormSchemaUiConfig?.subtitle ??
+    this.uiConfig = JsonFormSchemaUiConfig(
+      title: uiConfig?.title ?? textTheme.headline6,
+      titleAlign: uiConfig?.titleAlign ?? TextAlign.center,
+      subtitle: uiConfig?.subtitle ??
           textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-      description: jsonFormSchemaUiConfig?.description ?? textTheme.bodyText2,
-      error: jsonFormSchemaUiConfig?.error ??
+      description: uiConfig?.description ?? textTheme.bodyText2,
+      error: uiConfig?.error ??
           TextStyle(
               color: Theme.of(context).errorColor,
               fontSize: textTheme.caption!.fontSize),
-      fieldTitle: jsonFormSchemaUiConfig?.fieldTitle ?? textTheme.bodyText2,
-      label: jsonFormSchemaUiConfig?.label,
+      fieldTitle: uiConfig?.fieldTitle ?? textTheme.bodyText2,
+      label: uiConfig?.label,
       //builders
-      addItemBuilder: jsonFormSchemaUiConfig?.addItemBuilder,
-      removeItemBuilder: jsonFormSchemaUiConfig?.removeItemBuilder,
-      submitButtonBuilder: jsonFormSchemaUiConfig?.submitButtonBuilder,
+      addItemBuilder: uiConfig?.addItemBuilder,
+      removeItemBuilder: uiConfig?.removeItemBuilder,
+      submitButtonBuilder: uiConfig?.submitButtonBuilder,
     );
   }
 
