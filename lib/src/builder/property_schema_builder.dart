@@ -56,7 +56,7 @@ class PropertySchemaBuilder extends StatelessWidget {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
         customPickerHandler: getCustomPickerHanlder(
-          WidgetBuilderInherited.of(context).customPickerHandlers,
+          widgetBuilderInherited.customPickerHandlers,
           schemaProperty.id,
         ),
         onSaved: (val) {
@@ -72,7 +72,7 @@ class PropertySchemaBuilder extends StatelessWidget {
       _field = SelectedFormField(
         property: schemaPropertySorted,
         customPickerHandler: getCustomPickerHanlder(
-          WidgetBuilderInherited.of(context).customPickerHandlers,
+          widgetBuilderInherited.customPickerHandlers,
           schemaProperty.id,
         ),
         onSaved: (val) {

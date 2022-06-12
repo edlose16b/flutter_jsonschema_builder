@@ -11,7 +11,7 @@ class SelectedFormField extends PropertyFieldWidget<dynamic> {
     required SchemaProperty property,
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
-    required this.customPickerHandler,
+    this.customPickerHandler,
   }) : super(
             key: key,
             property: property,
@@ -29,9 +29,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
   Map<String, dynamic> indexedData = {};
   OneOfModel? valueSelected;
   List<DropdownMenuItem<OneOfModel>> w = <DropdownMenuItem<OneOfModel>>[];
-  late OneOfModel customObject;
-
-  final pageController = PageController(initialPage: 1, viewportFraction: 0.77);
+  
 
   @override
   void initState() {
@@ -50,7 +48,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
 
     if (widget.property.oneOf is List) {
       for (int i = 0; i < (widget.property.oneOf?.length ?? 0); i++) {
-        customObject = OneOfModel(
+        final customObject = OneOfModel(
           oneOfModelEnum: widget.property.oneOf![i]['enum'],
           title: widget.property.oneOf![i]['title'],
           type: widget.property.oneOf![i]['type'],
@@ -65,7 +63,7 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     try {
       final exists = listOfModel.firstWhere((e) =>
           e.oneOfModelEnum is List &&
-          e.oneOfModelEnum!.map((e) => e.toLowerCase()).contains(
+          e.oneOfModelEnum!.map((i) => i.toLowerCase()).contains(
                 widget.property.defaultValue.toLowerCase(),
               ));
 
@@ -73,6 +71,8 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     } catch (e) {
       valueSelected = null;
     }
+
+  
 
     widget.triggetDefaultValue();
     super.initState();
@@ -85,49 +85,82 @@ class _SelectedFormFieldState extends State<SelectedFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        
+        Text('one of'),
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
-        DropdownButtonFormField<OneOfModel>(
-          key: Key(widget.property.idKey),
-          value: valueSelected,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          hint: const Text('Seleccione'),
-          isExpanded: true,
-          validator: (value) {
-            if (widget.property.required && value == null) {
-              return 'required';
-            }
-          },
-          items: (listOfModel != [] || listOfModel.isNotEmpty)
-              ? listOfModel
-                  .map((item) {
-                    return DropdownMenuItem<OneOfModel>(
-                      value: item,
-                      child: Text(
-                        item.title ?? '',
-                        style: widget.property.readOnly
-                            ? const TextStyle(color: Colors.grey)
-                            : WidgetBuilderInherited.of(context).uiConfig.label,
-                      ),
-                    );
-                  })
-                  .toSet()
-                  .toList()
-              : [],
-          onChanged: widget.property.readOnly
-              ? null
-              : (OneOfModel? value) {
-                  valueSelected = value;
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(value?.oneOfModelEnum?.first);
-                  }
-                },
-          onSaved: widget.onSaved,
-          decoration: InputDecoration(
-              errorStyle: WidgetBuilderInherited.of(context).uiConfig.error),
+        GestureDetector(
+          onTap: _onTap,
+          child: AbsorbPointer(
+            absorbing: widget.customPickerHandler != null,
+            child: DropdownButtonFormField<OneOfModel>(
+              key: Key(widget.property.idKey),
+              value: valueSelected,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              hint: const Text('Seleccione'),
+              isExpanded: false,
+              validator: (value) {
+                if (widget.property.required && value == null) {
+                  return 'required';
+                }
+              },
+              items: _buildItems(),
+              onChanged: _onChanged,
+              onSaved: widget.onSaved,
+              decoration: InputDecoration(
+                  errorStyle:
+                      WidgetBuilderInherited.of(context).uiConfig.error),
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  void _onTap() async {
+    print('ontap');
+    if (widget.customPickerHandler == null) return;
+    final response = await widget.customPickerHandler!(_getItems());
+
+    _onChanged(response);
+  }
+
+  Function(dynamic)? _onChanged(dynamic value) {
+    if (widget.property.readOnly) return null;
+
+    return (OneOfModel? value) {
+      setState(() {
+        valueSelected = value;
+      });
+      if (widget.onChanged != null) {
+        widget.onChanged!(value?.oneOfModelEnum?.first);
+      }
+    }(value);
+  }
+
+  List<DropdownMenuItem<OneOfModel>>? _buildItems() {
+    if (listOfModel.isEmpty) return [];
+
+    return listOfModel
+        .map((item) => DropdownMenuItem<OneOfModel>(
+              value: item,
+              child: Text(
+                item.title ?? '',
+                style: widget.property.readOnly
+                    ? const TextStyle(color: Colors.grey)
+                    : WidgetBuilderInherited.of(context).uiConfig.label,
+              ),
+            ))
+        .toList();
+  }
+
+  Map _getItems() {
+    if (listOfModel.isEmpty) return {};
+
+    var data = {};
+    for (final element in listOfModel) {
+      data[element] = element.title;
+    }
+
+    return data;
   }
 }

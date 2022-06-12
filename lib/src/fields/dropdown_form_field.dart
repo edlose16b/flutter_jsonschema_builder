@@ -27,6 +27,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   @override
   void initState() {
     // fill enum property
+
     if (widget.property.enumm == null) {
       switch (widget.property.type) {
         case SchemaType.boolean:
@@ -39,11 +40,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       }
     }
 
-    widget.triggetDefaultValue().then((value) {
-      setState(() {
-        this.value = value;
-      });
-    });
+    value = widget.property.defaultValue;
+    widget.triggetDefaultValue();
     super.initState();
   }
 
@@ -61,6 +59,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text('dropdown enum?'),
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         GestureDetector(
@@ -104,14 +103,13 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   }
 
   Function(dynamic)? _onChanged(dynamic value) {
-    return widget.property.readOnly
-        ? null
-        : (value) {
-            if (widget.onChanged != null) widget.onChanged!(value);
-            setState(() {
-              this.value = value;
-            });
-          }(value);
+    if (widget.property.readOnly) return null;
+    return (value) {
+      if (widget.onChanged != null) widget.onChanged!(value);
+      setState(() {
+        this.value = value;
+      });
+    }(value);
   }
 
   List<DropdownMenuItem>? _buildItems() {
