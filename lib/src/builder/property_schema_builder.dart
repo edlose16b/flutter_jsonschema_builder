@@ -9,7 +9,7 @@ import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.d
 import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart';
-import 'package:flutter_jsonschema_form/src/fields/selected_form_field.dart';
+import 'package:flutter_jsonschema_form/src/fields/dropdown_oneof_form_field.dart';
 import 'package:flutter_jsonschema_form/src/models/models.dart';
 import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
 import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
@@ -69,7 +69,7 @@ class PropertySchemaBuilder extends StatelessWidget {
         },
       );
     } else if (schemaProperty.oneOf != null) {
-      _field = SelectedFormField(
+      _field = DropdownOneOfJFormField(
         property: schemaPropertySorted,
         customPickerHandler: getCustomPickerHanlder(
           widgetBuilderInherited.customPickerHandlers,

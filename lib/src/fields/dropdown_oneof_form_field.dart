@@ -5,8 +5,8 @@ import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
 import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
 import 'package:flutter_jsonschema_form/src/models/schema.dart';
 
-class SelectedFormField extends PropertyFieldWidget<dynamic> {
-  const SelectedFormField({
+class DropdownOneOfJFormField extends PropertyFieldWidget<dynamic> {
+  const DropdownOneOfJFormField({
     Key? key,
     required SchemaProperty property,
     required final ValueSetter<dynamic> onSaved,
@@ -24,7 +24,7 @@ class SelectedFormField extends PropertyFieldWidget<dynamic> {
   _SelectedFormFieldState createState() => _SelectedFormFieldState();
 }
 
-class _SelectedFormFieldState extends State<SelectedFormField> {
+class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
   final listOfModel = <OneOfModel>[];
   Map<String, dynamic> indexedData = {};
   OneOfModel? valueSelected;
