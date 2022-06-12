@@ -59,7 +59,6 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('dropdown enum?'),
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
             style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         GestureDetector(
