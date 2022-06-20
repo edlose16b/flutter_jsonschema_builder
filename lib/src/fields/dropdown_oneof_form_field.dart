@@ -29,7 +29,6 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
   Map<String, dynamic> indexedData = {};
   OneOfModel? valueSelected;
   List<DropdownMenuItem<OneOfModel>> w = <DropdownMenuItem<OneOfModel>>[];
-  
 
   @override
   void initState() {
@@ -71,8 +70,6 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     } catch (e) {
       valueSelected = null;
     }
-
-  
 
     widget.triggetDefaultValue();
     super.initState();
@@ -120,7 +117,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     if (widget.customPickerHandler == null) return;
     final response = await widget.customPickerHandler!(_getItems());
 
-    _onChanged(response);
+    if (response != null) _onChanged(response);
   }
 
   Function(dynamic)? _onChanged(dynamic value) {
