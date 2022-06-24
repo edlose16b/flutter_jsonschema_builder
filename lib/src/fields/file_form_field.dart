@@ -87,7 +87,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
                 return ListTile(
                   title: Text(
-                      file.parent.path.characters
+                      file.path.characters
                           .takeLastWhile((p0) => p0 != '/')
                           .string,
                       maxLines: 1,
