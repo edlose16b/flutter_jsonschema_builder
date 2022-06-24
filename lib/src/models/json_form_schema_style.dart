@@ -12,6 +12,7 @@ class JsonFormSchemaUiConfig {
     this.addItemBuilder,
     this.removeItemBuilder,
     this.submitButtonBuilder,
+    this.addFileButtonBuilder,
   });
 
   TextStyle? fieldTitle;
@@ -29,6 +30,7 @@ class JsonFormSchemaUiConfig {
   /// @param [VoidCallback] submit function
   Widget Function(VoidCallback onSubmit)? submitButtonBuilder;
 
+  Widget Function(VoidCallback? onPressed)? addFileButtonBuilder;
 
-  /// 
+  ///
 }

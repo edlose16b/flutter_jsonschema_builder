@@ -44,6 +44,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+
     return FormField<List<File>>(
       key: Key(widget.property.idKey),
       validator: (value) {
@@ -65,33 +67,16 @@ class _FileJFormFieldState extends State<FileJFormField> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                '${widget.property.title} ${widget.property.required ? "*" : ""}',
-                style: WidgetBuilderInherited.of(context)
-                    .uiConfig
-                    .fieldTitle),
-            TextButton(
-              onPressed: widget.property.readOnly
-                  ? null
-                  : () async {
-                      if (widget.customFileHandler == null) {
-                        final result = await FilePicker.platform.pickFiles(
-                          allowMultiple: widget.property.isMultipleFile,
-                        );
-
-                        if (result != null) {
-                          change(field,
-                              result.files.map((e) => e.toFile).toList());
-                        }
-                      } else {
-                        final result = await widget.customFileHandler!();
-
-                        if (result != null) {
-                          change(field, result);
-                        }
-                      }
-                    },
-              child: const Text('Elegir archivos'),
+              '${widget.property.title} ${widget.property.required ? "*" : ""}',
+              style: widgetBuilderInherited.uiConfig.fieldTitle,
             ),
+            widgetBuilderInherited.uiConfig.addFileButtonBuilder != null
+                ? widgetBuilderInherited
+                    .uiConfig.addFileButtonBuilder!(_onTap(field))
+                : TextButton(
+                    onPressed: _onTap(field),
+                    child: const Text('Elegir archivos'),
+                  ),
             const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -102,17 +87,14 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
                 return ListTile(
                   title: Text(
-                    file.parent.path.characters
-                        .takeLastWhile((p0) => p0 != '/')
-                        .string,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: widget.property.readOnly
-                    ? const TextStyle(color: Colors.grey)
-                    : WidgetBuilderInherited.of(context)
-                        .uiConfig
-                        .label
-                  ),
+                      file.parent.path.characters
+                          .takeLastWhile((p0) => p0 != '/')
+                          .string,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: widget.property.readOnly
+                          ? const TextStyle(color: Colors.grey)
+                          : widgetBuilderInherited.uiConfig.label),
                   trailing: IconButton(
                     icon: const Icon(Icons.close, size: 14),
                     onPressed: () {
@@ -133,14 +115,6 @@ class _FileJFormFieldState extends State<FileJFormField> {
     );
   }
 
-  // void change(
-  //     FormFieldState<List<PlatformFile>> field, List<PlatformFile>? values) {
-  //   field.didChange(values);
-  //   if (widget.onChanged != null) {
-  //     widget.onChanged!(values?.map((e) => e.toFile).toList());
-  //   }
-  // }
-
   void change(FormFieldState<List<File>> field, List<File>? values) {
     field.didChange(values);
 
@@ -150,5 +124,27 @@ class _FileJFormFieldState extends State<FileJFormField> {
           : (values != null && values.isNotEmpty ? values.first : null);
       widget.onChanged!(response);
     }
+  }
+
+  VoidCallback? _onTap(FormFieldState<List<File>> field) {
+    if (widget.property.readOnly) return null;
+
+    return () async {
+      if (widget.customFileHandler == null) {
+        final result = await FilePicker.platform.pickFiles(
+          allowMultiple: widget.property.isMultipleFile,
+        );
+
+        if (result != null) {
+          change(field, result.files.map((e) => e.toFile).toList());
+        }
+      } else {
+        final result = await widget.customFileHandler!();
+
+        if (result != null) {
+          change(field, result);
+        }
+      }
+    };
   }
 }

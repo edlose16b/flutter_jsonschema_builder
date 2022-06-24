@@ -49,38 +49,63 @@ class _MyHomePageState extends State<MyHomePage> {
   "title": "Texto",
   "type": "object",
   "properties": {
+    "file": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
+    },
     "select": {
       "title" : "Select your Cola",
       "type": "string",
       "description": "This is the select-description",
       "enum" : [0,1,2,3,4],
-      "enumNames" : ["Vale 0","Vale 1","Vale 2","Vale 3","Vale 4"]
+      "enumNames" : ["Vale 0","Vale 1","Vale 2","Vale 3","Vale 4"],
+      "default" : 3
+    },
+    "profession" :  {
+      "type":"string",
+      "default" : "investor",
+      "oneOf":[
+          {
+            "enum":[
+                "trader"
+            ],
+            "type":"string",
+            "title":"Trader"
+          },
+          {
+            "enum":[
+                "investor"
+            ],
+            "type":"string",
+            "title":"Inversionista"
+          },      
+          {
+            "enum":[
+                "manager_officier"
+            ],
+            "type":"string",
+            "title":"Gerente / Director(a)"
+          }
+      ],
+      "title":"Ocupación o profesión"
     }
+
   }
 }
 
 
   ''';
 
-  final uiSchema = null;
+  final uiSchema = '''
 
-//   '''
-// {
-//   "ui:order": [
-//     "country",
-//     "province",
-//     "subject_comply",
-//     "state",
-//     "city",
-//     "district",
-//     "number",
-//     "commune",
-//     "street",
-//     "postal_code"
-//   ]
-// }
+{
+  "select" : {
+    
+  }
+}
 
-//         ''';
+        ''';
 
   Future<List<File>?> defaultCustomFileHandler() async {
     await Future.delayed(const Duration(seconds: 3));
@@ -151,7 +176,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 },
                 jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
-                  
                   title: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -167,6 +191,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: onPressed,
                     icon: const Icon(Icons.plus_one),
                     label: const Text('Add Item'),
+                  ),
+                  addFileButtonBuilder: (onPressed) => TextButton.icon(
+                    onPressed: () {
+                      onPressed!();
+                    },
+                    icon: const Icon(Icons.file_copy),
+                    label: const Text('Add File'),
                   ),
                 ),
               ),

@@ -22,6 +22,8 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
   @override
   Widget build(BuildContext context) {
     Widget widgetBuilder;
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
+
     widgetBuilder = FormField(
       validator: (_) {
         if (widget.schemaArray.required && widget.schemaArray.items.isEmpty)
@@ -30,9 +32,8 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
       },
       onSaved: (_) {
         if (widget.schemaArray.items.isEmpty) {
-          WidgetBuilderInherited.of(context).updateObjectData(
-              WidgetBuilderInherited.of(context).data,
-              widget.schemaArray.idKey, []);
+          widgetBuilderInherited.updateObjectData(
+              widgetBuilderInherited.data, widget.schemaArray.idKey, []);
         }
       },
       builder: (field) {
@@ -54,12 +55,9 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                   // if (index >= 1)
                   Align(
                     alignment: Alignment.centerRight,
-                    child: WidgetBuilderInherited.of(context)
-                                .uiConfig
-                                .removeItemBuilder !=
+                    child: widgetBuilderInherited.uiConfig.removeItemBuilder !=
                             null
-                        ? WidgetBuilderInherited.of(context)
-                            .uiConfig
+                        ? widgetBuilderInherited.uiConfig
                             .removeItemBuilder!(() => _removeItem(index))
                         : TextButton.icon(
                             onPressed: () => _removeItem(index),
@@ -88,13 +86,8 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
         if (!widget.schemaArray.isArrayMultipleFile())
           Align(
             alignment: Alignment.centerRight,
-            child: WidgetBuilderInherited.of(context)
-                        .uiConfig
-                        .addItemBuilder !=
-                    null
-                ? WidgetBuilderInherited.of(context)
-                    .uiConfig
-                    .addItemBuilder!(_addItem)
+            child: widgetBuilderInherited.uiConfig.addItemBuilder != null
+                ? widgetBuilderInherited.uiConfig.addItemBuilder!(_addItem)
                 : TextButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),

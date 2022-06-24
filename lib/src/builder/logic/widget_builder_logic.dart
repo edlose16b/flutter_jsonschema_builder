@@ -43,6 +43,7 @@ class WidgetBuilderInherited extends InheritedWidget {
       addItemBuilder: uiConfig?.addItemBuilder,
       removeItemBuilder: uiConfig?.removeItemBuilder,
       submitButtonBuilder: uiConfig?.submitButtonBuilder,
+      addFileButtonBuilder: uiConfig?.addFileButtonBuilder,
     );
   }
 
