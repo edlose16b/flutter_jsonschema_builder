@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class JsonFormSchemaUiConfig {
@@ -30,7 +32,8 @@ class JsonFormSchemaUiConfig {
   /// @param [VoidCallback] submit function
   Widget Function(VoidCallback onSubmit)? submitButtonBuilder;
 
-  Widget Function(VoidCallback? onPressed)? addFileButtonBuilder;
+  /// Render a custom button
+  /// if it returns null or it is null, it will build default buttom
+  Widget? Function(VoidCallback? onPressed, String key)? addFileButtonBuilder;
 
-  ///
 }

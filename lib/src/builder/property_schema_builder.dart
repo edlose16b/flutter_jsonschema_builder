@@ -56,7 +56,7 @@ class PropertySchemaBuilder extends StatelessWidget {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
         customPickerHandler: getCustomPickerHanlder(
-          widgetBuilderInherited.customPickerHandlers,
+          widgetBuilderInherited.customPickerHandler,
           schemaProperty.id,
         ),
         onSaved: (val) {
@@ -72,7 +72,7 @@ class PropertySchemaBuilder extends StatelessWidget {
       _field = DropdownOneOfJFormField(
         property: schemaPropertySorted,
         customPickerHandler: getCustomPickerHanlder(
-          widgetBuilderInherited.customPickerHandlers,
+          widgetBuilderInherited.customPickerHandler,
           schemaProperty.id,
         ),
         onSaved: (val) {
@@ -118,9 +118,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           if (schemaProperty.format == PropertyFormat.dataurl) {
             _field = FileJFormField(
               property: schemaPropertySorted,
-              customFileHandler: getCustomFileHanlder(
-                  WidgetBuilderInherited.of(context).customFileHandlers,
-                  schemaProperty.id),
+              customFileHandlerv2:
+                  WidgetBuilderInherited.of(context).customFileHandler,
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
                 updateData(context, val);
@@ -266,24 +265,13 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
   }
 
-  Future<List<File>?> Function()? getCustomFileHanlder(
-      CustomFileHandlers? customFileHandlers, String key) {
-    if (customFileHandlers == null) return null;
-
-    final handlers = customFileHandlers();
-
-    if (handlers.containsKey(key)) return handlers[key];
-
-    if (handlers.containsKey('*')) return handlers['*'];
-
-    return null;
-  }
-
   Future<dynamic> Function(Map<dynamic, dynamic>)? getCustomPickerHanlder(
-      CustomPickerHandler? customFileHandlers, String key) {
-    if (customFileHandlers == null) return null;
+    CustomPickerHandler? customPickerHandler,
+    String key,
+  ) {
+    if (customPickerHandler == null) return null;
 
-    final handlers = customFileHandlers();
+    final handlers = customPickerHandler();
 
     if (handlers.containsKey(key)) return handlers[key];
 

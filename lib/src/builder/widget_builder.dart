@@ -13,9 +13,6 @@ import 'dart:convert';
 
 import '../models/models.dart';
 
-// ignore: prefer_generic_function_type_aliases
-typedef Map<String, Future<List<File>?> Function()?> CustomFileHandlers();
-
 typedef Map<String, Future<dynamic> Function(Map data)> CustomPickerHandler();
 
 class JsonForm extends StatefulWidget {
@@ -24,20 +21,23 @@ class JsonForm extends StatefulWidget {
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
-    this.customFileHandlers,
     this.jsonFormSchemaUiConfig,
-    this.customPickerHandlers,
+    this.customFileHandler,
+    this.customPickerHandlerV2,
+    this.customPickerHandler,
   }) : super(key: key);
 
   final String jsonSchema;
   final void Function(dynamic) onFormDataSaved;
 
   final String? uiSchema;
-  final CustomFileHandlers? customFileHandlers;
 
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
+  final CustomPickerHandler? customPickerHandler;
 
-  final CustomPickerHandler? customPickerHandlers;
+  final Future<List<File>?>? Function(String key)? customFileHandler;
+  final Future<dynamic>? Function(Map data, String key)? customPickerHandlerV2;
+
   @override
   _JsonFormState createState() => _JsonFormState();
 }
@@ -63,8 +63,9 @@ class _JsonFormState extends State<JsonForm> {
   Widget build(BuildContext context) {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
-      customFileHandlers: widget.customFileHandlers,
-      customPickerHandlers: widget.customPickerHandlers,
+      customFileHandler: widget.customFileHandler,
+      customPickerHandler: widget.customPickerHandler,
+      // customPickerHandlerV2: widget.customPickerHandlerV2,
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 

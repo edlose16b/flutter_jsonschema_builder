@@ -1,13 +1,13 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 
-import '../models/models.dart';
 import './shared.dart';
+import '../models/models.dart';
 
 extension on PlatformFile {
   File get toFile {
@@ -21,7 +21,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
     required SchemaProperty property,
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
-    this.customFileHandler,
+    this.customFileHandlerv2,
   }) : super(
           key: key,
           property: property,
@@ -29,7 +29,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
           onChanged: onChanged,
         );
 
-  final Future<List<File>?> Function()? customFileHandler;
+  final Future<List<File>?>? Function(String key)? customFileHandlerv2;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -70,13 +70,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
               '${widget.property.title} ${widget.property.required ? "*" : ""}',
               style: widgetBuilderInherited.uiConfig.fieldTitle,
             ),
-            widgetBuilderInherited.uiConfig.addFileButtonBuilder != null
-                ? widgetBuilderInherited
-                    .uiConfig.addFileButtonBuilder!(_onTap(field))
-                : TextButton(
-                    onPressed: _onTap(field),
-                    child: const Text('Elegir archivos'),
-                  ),
+            _buildButton(widgetBuilderInherited, field),
             const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -126,25 +120,46 @@ class _FileJFormFieldState extends State<FileJFormField> {
     }
   }
 
+  Widget _buildButton(
+    WidgetBuilderInherited widgetBuilderInherited,
+    FormFieldState<List<File>> field,
+  ) {
+    final addFileButtonBuilder =
+        widgetBuilderInherited.uiConfig.addFileButtonBuilder;
+
+    if (addFileButtonBuilder != null &&
+        addFileButtonBuilder(_onTap(field), widget.property.idKey) != null) {
+      return addFileButtonBuilder(_onTap(field), widget.property.idKey)!;
+    }
+
+    return ElevatedButton(
+      onPressed: _onTap(field),
+      child: const Text('Add File'),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),
+      ),
+    );
+  }
+
   VoidCallback? _onTap(FormFieldState<List<File>> field) {
     if (widget.property.readOnly) return null;
 
     return () async {
-      if (widget.customFileHandler == null) {
-        final result = await FilePicker.platform.pickFiles(
-          allowMultiple: widget.property.isMultipleFile,
-        );
+      final customFileHandlerv2 = widget.customFileHandlerv2;
+      if (customFileHandlerv2 != null &&
+          (await customFileHandlerv2(widget.property.idKey)) != null) {
+        final result = await customFileHandlerv2(widget.property.idKey);
 
-        if (result != null) {
-          change(field, result.files.map((e) => e.toFile).toList());
-        }
-      } else {
-        final result = await widget.customFileHandler!();
+        if (result != null) change(field, result);
 
-        if (result != null) {
-          change(field, result);
-        }
+        return;
       }
+
+      final result = await FilePicker.platform
+          .pickFiles(allowMultiple: widget.property.isMultipleFile);
+
+      if (result != null)
+        change(field, result.files.map((e) => e.toFile).toList());
     };
   }
 }

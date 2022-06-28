@@ -54,6 +54,16 @@ class _MyHomePageState extends State<MyHomePage> {
       "format": "data-url",
       "title": "Single file"
     },
+    "file2": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
+    },
+    "file3": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
+    },
     "select": {
       "title" : "Select your Cola",
       "type": "string",
@@ -134,18 +144,49 @@ class _MyHomePageState extends State<MyHomePage> {
                 onFormDataSaved: (data) {
                   inspect(data);
                 },
-                customFileHandlers: () => {
-                  'files': defaultCustomFileHandler,
-                  'file': () async {
+                customFileHandler: (key) async {
+                  if (['file', 'file3'].contains(key)) {
                     return [
                       File(
                           'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
                     ];
-                  },
-                  '*': null
+                  }
+                  return null;
                 },
-                customPickerHandlers: () => {
-                  '*': (data) async {
+                customPickerHandlerV2: (data, key) async {
+                  if (key == 'select') {
+                    return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Scaffold(
+                            body: Container(
+                              margin: const EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  const Text('My Custom Picker'),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: data.keys.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text(data.values
+                                            .toList()[index]
+                                            .toString()),
+                                        onTap: () => Navigator.pop(
+                                            context, data.keys.toList()[index]),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  }
+                  return null;
+                },
+                customPickerHandler: () => {
+                  'profession': (data) async {
                     return showDialog(
                         context: context,
                         builder: (context) {
@@ -192,13 +233,26 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: const Icon(Icons.plus_one),
                     label: const Text('Add Item'),
                   ),
-                  addFileButtonBuilder: (onPressed) => TextButton.icon(
-                    onPressed: () {
-                      onPressed!();
-                    },
-                    icon: const Icon(Icons.file_copy),
-                    label: const Text('Add File'),
-                  ),
+                  addFileButtonBuilder: (onPressed, key) {
+                    if (['file', 'file3'].contains(key)) {
+                      return OutlinedButton(
+                        onPressed: onPressed,
+                        child: Text('+ Agregar archivo $key'),
+                        style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                                const Size(double.infinity, 40)),
+                            backgroundColor: MaterialStateProperty.all(
+                              const Color(0xffcee5ff),
+                            ),
+                            side: MaterialStateProperty.all(
+                                const BorderSide(color: Color(0xffafd5ff))),
+                            textStyle: MaterialStateProperty.all(
+                                const TextStyle(color: Color(0xff057afb)))),
+                      );
+                    }
+
+                    return null;
+                  },
                 ),
               ),
             )
