@@ -23,14 +23,15 @@ class JsonFormSchemaUiConfig {
   TextStyle? description;
   TextStyle? label;
 
-  Widget Function(VoidCallback onPressed)? addItemBuilder;
-  Widget Function(VoidCallback onPressed)? removeItemBuilder;
+  Widget Function(VoidCallback onPressed,String key)? addItemBuilder;
+  Widget Function(VoidCallback onPressed,String key)? removeItemBuilder;
 
   /// render a custom submit button
   /// @param [VoidCallback] submit function
   Widget Function(VoidCallback onSubmit)? submitButtonBuilder;
 
-  Widget Function(VoidCallback? onPressed)? addFileButtonBuilder;
+  /// render a custom button
+  /// if it returns null or it is null, it will build default buttom
+  Widget? Function(VoidCallback? onPressed, String key)? addFileButtonBuilder;
 
-  ///
 }

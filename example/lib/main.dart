@@ -54,6 +54,16 @@ class _MyHomePageState extends State<MyHomePage> {
       "format": "data-url",
       "title": "Single file"
     },
+    "file2": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
+    },
+    "file3": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Single file"
+    },
     "select": {
       "title" : "Select your Cola",
       "type": "string",
@@ -134,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onFormDataSaved: (data) {
                   inspect(data);
                 },
-                customFileHandlers: () => {
+                customFileHandler: () => {
                   'files': defaultCustomFileHandler,
                   'file': () async {
                     return [
@@ -144,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   '*': null
                 },
-                customPickerHandlers: () => {
+                customPickerHandler: () => {
                   '*': (data) async {
                     return showDialog(
                         context: context,
@@ -187,18 +197,31 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: const Icon(Icons.heart_broken),
                     label: const Text('Enviar'),
                   ),
-                  addItemBuilder: (onPressed) => TextButton.icon(
+                  addItemBuilder: (onPressed, key) => TextButton.icon(
                     onPressed: onPressed,
                     icon: const Icon(Icons.plus_one),
                     label: const Text('Add Item'),
                   ),
-                  addFileButtonBuilder: (onPressed) => TextButton.icon(
-                    onPressed: () {
-                      onPressed!();
-                    },
-                    icon: const Icon(Icons.file_copy),
-                    label: const Text('Add File'),
-                  ),
+                  addFileButtonBuilder: (onPressed, key) {
+                    if (['file', 'file3'].contains(key)) {
+                      return OutlinedButton(
+                        onPressed: onPressed,
+                        child: Text('+ Agregar archivo $key'),
+                        style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                                const Size(double.infinity, 40)),
+                            backgroundColor: MaterialStateProperty.all(
+                              const Color(0xffcee5ff),
+                            ),
+                            side: MaterialStateProperty.all(
+                                const BorderSide(color: Color(0xffafd5ff))),
+                            textStyle: MaterialStateProperty.all(
+                                const TextStyle(color: Color(0xff057afb)))),
+                      );
+                    }
+
+                    return null;
+                  },
                 ),
               ),
             )

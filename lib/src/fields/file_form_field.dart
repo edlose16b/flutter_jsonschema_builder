@@ -70,13 +70,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
               '${widget.property.title} ${widget.property.required ? "*" : ""}',
               style: widgetBuilderInherited.uiConfig.fieldTitle,
             ),
-            widgetBuilderInherited.uiConfig.addFileButtonBuilder != null
-                ? widgetBuilderInherited
-                    .uiConfig.addFileButtonBuilder!(_onTap(field))
-                : TextButton(
-                    onPressed: _onTap(field),
-                    child: const Text('Elegir archivos'),
-                  ),
+            _buildButton(widgetBuilderInherited, field),
             const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -146,5 +140,26 @@ class _FileJFormFieldState extends State<FileJFormField> {
         }
       }
     };
+  }
+
+  Widget _buildButton(
+    WidgetBuilderInherited widgetBuilderInherited,
+    FormFieldState<List<File>> field,
+  ) {
+    final addFileButtonBuilder =
+        widgetBuilderInherited.uiConfig.addFileButtonBuilder;
+
+    if (addFileButtonBuilder != null &&
+        addFileButtonBuilder(_onTap(field), widget.property.idKey) != null) {
+      return addFileButtonBuilder(_onTap(field), widget.property.idKey)!;
+    }
+
+    return ElevatedButton(
+      onPressed: _onTap(field),
+      child: const Text('Add File'),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),
+      ),
+    );
   }
 }

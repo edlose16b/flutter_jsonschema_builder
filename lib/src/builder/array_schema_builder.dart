@@ -57,8 +57,8 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                     alignment: Alignment.centerRight,
                     child: widgetBuilderInherited.uiConfig.removeItemBuilder !=
                             null
-                        ? widgetBuilderInherited.uiConfig
-                            .removeItemBuilder!(() => _removeItem(index))
+                        ? widgetBuilderInherited.uiConfig.removeItemBuilder!(
+                            () => _removeItem(index), widget.schemaArray.idKey)
                         : TextButton.icon(
                             onPressed: () => _removeItem(index),
                             icon: const Icon(Icons.remove),
@@ -87,7 +87,8 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
           Align(
             alignment: Alignment.centerRight,
             child: widgetBuilderInherited.uiConfig.addItemBuilder != null
-                ? widgetBuilderInherited.uiConfig.addItemBuilder!(_addItem)
+                ? widgetBuilderInherited.uiConfig.addItemBuilder!(
+                    _addItem, widget.schemaArray.idKey)
                 : TextButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),

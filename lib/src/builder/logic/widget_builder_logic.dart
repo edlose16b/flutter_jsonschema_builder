@@ -12,15 +12,15 @@ class WidgetBuilderInherited extends InheritedWidget {
     Key? key,
     required this.mainSchema,
     required Widget child,
-    this.customFileHandlers,
-    this.customPickerHandlers,
+    this.customFileHandler,
+    this.customPickerHandler,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
   final data = {};
 
-  final CustomFileHandlers? customFileHandlers;
-  final CustomPickerHandler? customPickerHandlers;
+  final CustomFileHandlers? customFileHandler;
+  final CustomPickerHandler? customPickerHandler;
   late final JsonFormSchemaUiConfig uiConfig;
 
   void setJsonFormSchemaStyle(

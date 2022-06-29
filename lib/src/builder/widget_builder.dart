@@ -24,20 +24,20 @@ class JsonForm extends StatefulWidget {
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
-    this.customFileHandlers,
+    this.customFileHandler,
     this.jsonFormSchemaUiConfig,
-    this.customPickerHandlers,
+    this.customPickerHandler,
   }) : super(key: key);
 
   final String jsonSchema;
   final void Function(dynamic) onFormDataSaved;
 
   final String? uiSchema;
-  final CustomFileHandlers? customFileHandlers;
+  final CustomFileHandlers? customFileHandler;
 
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
 
-  final CustomPickerHandler? customPickerHandlers;
+  final CustomPickerHandler? customPickerHandler;
   @override
   _JsonFormState createState() => _JsonFormState();
 }
@@ -63,8 +63,8 @@ class _JsonFormState extends State<JsonForm> {
   Widget build(BuildContext context) {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
-      customFileHandlers: widget.customFileHandlers,
-      customPickerHandlers: widget.customPickerHandlers,
+      customFileHandler: widget.customFileHandler,
+      customPickerHandler: widget.customPickerHandler,
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
