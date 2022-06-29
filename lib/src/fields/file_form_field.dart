@@ -70,6 +70,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
               '${widget.property.title} ${widget.property.required ? "*" : ""}',
               style: widgetBuilderInherited.uiConfig.fieldTitle,
             ),
+            const SizedBox(height: 10),
             _buildButton(widgetBuilderInherited, field),
             const SizedBox(height: 10),
             ListView.builder(
