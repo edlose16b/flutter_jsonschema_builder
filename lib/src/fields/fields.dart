@@ -13,16 +13,18 @@ export 'number_form_field.dart';
 export 'text_form_field.dart';
 
 abstract class PropertyFieldWidget<T> extends StatefulWidget {
-  const PropertyFieldWidget(
-      {Key? key,
-      required this.property,
-      required this.onSaved,
-      required this.onChanged})
-      : super(key: key);
+  const PropertyFieldWidget({
+    Key? key,
+    required this.property,
+    required this.onSaved,
+    required this.onChanged,
+    this.customValidator,
+  }) : super(key: key);
 
   final SchemaProperty property;
   final ValueSetter<T?> onSaved;
   final ValueChanged<T?>? onChanged;
+  final String? Function(dynamic)? customValidator;
 
   /// It calls onChanged
   Future<dynamic> triggetDefaultValue() async {

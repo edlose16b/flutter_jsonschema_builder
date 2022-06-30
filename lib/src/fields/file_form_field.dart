@@ -22,11 +22,13 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
     this.customFileHandler,
+    final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
           property: property,
           onSaved: onSaved,
           onChanged: onChanged,
+          customValidator: customValidator,
         );
 
   final Future<List<File>?> Function()? customFileHandler;
@@ -52,6 +54,9 @@ class _FileJFormFieldState extends State<FileJFormField> {
         if ((value == null || value.isEmpty) && widget.property.required) {
           return 'Required';
         }
+        
+        if (widget.customValidator != null)
+          return widget.customValidator!(value);
         return null;
       },
       onSaved: (newValue) {

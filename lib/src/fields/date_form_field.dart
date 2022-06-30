@@ -13,11 +13,13 @@ class DateJFormField extends PropertyFieldWidget<DateTime> {
     required SchemaProperty property,
     required final ValueSetter<DateTime?> onSaved,
     ValueChanged<DateTime?>? onChanged,
+    final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
           property: property,
           onSaved: onSaved,
           onChanged: onChanged,
+          customValidator: customValidator,
         );
 
   @override
@@ -48,9 +50,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
       children: [
         Text(
           '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context)
-              .uiConfig
-              .fieldTitle,
+          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
         ),
         TextFormField(
           key: Key(widget.property.idKey),
@@ -60,6 +60,8 @@ class _DateJFormFieldState extends State<DateJFormField> {
             if (widget.property.required && (value == null || value.isEmpty)) {
               return 'Required';
             }
+            if (widget.customValidator != null)
+              return widget.customValidator!(value);
             return null;
           },
           // inputFormatters: [DateTextInputJsonFormatter()],
@@ -89,8 +91,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
               icon: const Icon(Icons.date_range_outlined),
               onPressed: widget.property.readOnly ? null : _openCalendar,
             ),
-            errorStyle:
-                WidgetBuilderInherited.of(context).uiConfig.error,
+            errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
           ),
         ),
       ],

@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
@@ -14,13 +12,15 @@ class WidgetBuilderInherited extends InheritedWidget {
     required Widget child,
     this.customFileHandler,
     this.customPickerHandler,
+    this.customValidatorHandler,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
   final data = {};
 
-  final CustomFileHandlers? customFileHandler;
+  final CustomFileHandler? customFileHandler;
   final CustomPickerHandler? customPickerHandler;
+  final CustomValidatorHandler? customValidatorHandler;
   late final JsonFormSchemaUiConfig uiConfig;
 
   void setJsonFormSchemaStyle(

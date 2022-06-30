@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
+import 'package:flutter_jsonschema_form/src/fields/shared.dart';
 import '../models/models.dart';
 
 class CheckboxJFormField extends PropertyFieldWidget<bool> {
@@ -9,11 +10,13 @@ class CheckboxJFormField extends PropertyFieldWidget<bool> {
     required SchemaProperty property,
     required final ValueSetter<bool?> onSaved,
     ValueChanged<bool?>? onChanged,
+    final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
           property: property,
           onSaved: onSaved,
           onChanged: onChanged,
+          customValidator: customValidator,
         );
 
   @override
@@ -33,8 +36,7 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style:
-                WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         FormField<bool>(
           key: Key(widget.property.idKey),
           initialValue: widget.property.defaultValue ?? false,
@@ -42,26 +44,36 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
           onSaved: (newValue) {
             widget.onSaved(newValue);
           },
+          validator: (value) {
+            if (widget.customValidator != null)
+              return widget.customValidator!(value);
+
+            return null;
+          },
           builder: (field) {
-            return CheckboxListTile(
-              value: (field.value == null) ? false : field.value,
-              title: Text(
-                widget.property.title,
-                style: widget.property.readOnly
-                    ? const TextStyle(color: Colors.grey)
-                    : WidgetBuilderInherited.of(context)
-                        .uiConfig
-                        .label,
-              ),
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: widget.property.readOnly
-                  ? null
-                  : (bool? value) {
-                      field.didChange(value);
-                      if (widget.onChanged != null && value != null) {
-                        widget.onChanged!(value);
-                      }
-                    },
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CheckboxListTile(
+                  value: (field.value == null) ? false : field.value,
+                  title: Text(
+                    widget.property.title,
+                    style: widget.property.readOnly
+                        ? const TextStyle(color: Colors.grey)
+                        : WidgetBuilderInherited.of(context).uiConfig.label,
+                  ),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: widget.property.readOnly
+                      ? null
+                      : (bool? value) {
+                          field.didChange(value);
+                          if (widget.onChanged != null && value != null) {
+                            widget.onChanged!(value);
+                          }
+                        },
+                ),
+                if (field.hasError) CustomErrorText(text: field.errorText!),
+              ],
             );
           },
         ),

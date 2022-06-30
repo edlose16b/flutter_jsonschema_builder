@@ -10,11 +10,13 @@ class DropDownJFormField extends PropertyFieldWidget<dynamic> {
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
     this.customPickerHandler,
+    final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
           property: property,
           onSaved: onSaved,
           onChanged: onChanged,
+          customValidator: customValidator,
         );
 
   final Future<dynamic> Function(Map)? customPickerHandler;
@@ -74,6 +76,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
                 if (widget.property.required && value == null) {
                   return 'required';
                 }
+                if (widget.customValidator != null)
+                  return widget.customValidator!(value);
                 return null;
               },
               items: _buildItems(),

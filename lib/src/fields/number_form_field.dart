@@ -12,11 +12,13 @@ class NumberJFormField extends PropertyFieldWidget<String?> {
     required SchemaProperty property,
     required final ValueSetter<String?> onSaved,
     ValueChanged<String?>? onChanged,
+    final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
           property: property,
           onSaved: onSaved,
           onChanged: onChanged,
+          customValidator: customValidator,
         );
 
   @override
@@ -44,8 +46,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style:
-                WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
@@ -65,7 +66,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
           },
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
-              :  WidgetBuilderInherited.of(context).uiConfig.label,
+              : WidgetBuilderInherited.of(context).uiConfig.label,
           validator: (String? value) {
             if (widget.property.required && value != null && value.isEmpty) {
               return 'Required';
@@ -76,6 +77,9 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                 value.length <= widget.property.minLength!) {
               return 'should NOT be shorter than ${widget.property.minLength} characters';
             }
+
+            if (widget.customValidator != null)
+              return widget.customValidator!(value);
             return null;
           },
           decoration: InputDecoration(
@@ -83,8 +87,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                 widget.property.help != null && widget.property.help!.isNotEmpty
                     ? widget.property.help
                     : null,
-            errorStyle:
-                WidgetBuilderInherited.of(context).uiConfig.error,
+            errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
           ),
         ),
       ],

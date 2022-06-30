@@ -48,6 +48,7 @@ class PropertySchemaBuilder extends StatelessWidget {
 
           updateData(context, val);
         },
+        customValidator: _getCustomValidator(context, schemaProperty.idKey),
       );
     } else if (schemaProperty.enumm != null &&
         (schemaProperty.enumm!.isNotEmpty ||
@@ -55,8 +56,8 @@ class PropertySchemaBuilder extends StatelessWidget {
                 schemaProperty.enumNames!.isNotEmpty))) {
       _field = DropDownJFormField(
         property: schemaPropertySorted,
-        customPickerHandler: getCustomPickerHanlder(
-          widgetBuilderInherited.customPickerHandler,
+        customPickerHandler: _getCustomPickerHanlder(
+          context,
           schemaProperty.id,
         ),
         onSaved: (val) {
@@ -67,12 +68,13 @@ class PropertySchemaBuilder extends StatelessWidget {
           dispatchSelectedForDropDownEventToParent(context, value,
               id: schemaProperty.id);
         },
+        customValidator: _getCustomValidator(context, schemaProperty.idKey),
       );
     } else if (schemaProperty.oneOf != null) {
       _field = DropdownOneOfJFormField(
         property: schemaPropertySorted,
-        customPickerHandler: getCustomPickerHanlder(
-          widgetBuilderInherited.customPickerHandler,
+        customPickerHandler: _getCustomPickerHanlder(
+          context,
           schemaProperty.id,
         ),
         onSaved: (val) {
@@ -88,6 +90,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             id: schemaProperty.id,
           );
         },
+        customValidator: _getCustomValidator(context, schemaProperty.idKey),
       );
     } else {
       switch (schemaProperty.type) {
@@ -111,6 +114,8 @@ class PropertySchemaBuilder extends StatelessWidget {
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value != null);
               },
+              customValidator:
+                  _getCustomValidator(context, schemaProperty.idKey),
             );
             break;
           }
@@ -134,6 +139,8 @@ class PropertySchemaBuilder extends StatelessWidget {
                         ? value is List && value.isNotEmpty
                         : value != null);
               },
+              customValidator:
+                  _getCustomValidator(context, schemaProperty.idKey),
             );
             break;
           }
@@ -147,6 +154,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             onChanged: (value) {
               dispatchStringEventToParent(context, value!);
             },
+            customValidator: _getCustomValidator(context, schemaProperty.idKey),
           );
           break;
         case SchemaType.integer:
@@ -163,6 +171,7 @@ class PropertySchemaBuilder extends StatelessWidget {
                 value != null && value.isNotEmpty,
               );
             },
+            customValidator: _getCustomValidator(context, schemaProperty.idKey),
           );
           break;
         case SchemaType.boolean:
@@ -177,6 +186,8 @@ class PropertySchemaBuilder extends StatelessWidget {
 
                 updateData(context, val);
               },
+              customValidator:
+                  _getCustomValidator(context, schemaProperty.idKey),
             );
           } else {
             _field = CheckboxJFormField(
@@ -189,6 +200,8 @@ class PropertySchemaBuilder extends StatelessWidget {
 
                 updateData(context, val);
               },
+              customValidator:
+                  _getCustomValidator(context, schemaProperty.idKey),
             );
           }
 
@@ -203,6 +216,7 @@ class PropertySchemaBuilder extends StatelessWidget {
             onChanged: (value) {
               dispatchStringEventToParent(context, value!);
             },
+            customValidator: _getCustomValidator(context, schemaProperty.idKey),
           );
       }
     }
@@ -267,7 +281,7 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   Future<List<File>?> Function()? getCustomFileHanlder(
-      CustomFileHandlers? customFileHandler, String key) {
+      CustomFileHandler? customFileHandler, String key) {
     if (customFileHandler == null) return null;
 
     final handlers = customFileHandler();
@@ -279,11 +293,30 @@ class PropertySchemaBuilder extends StatelessWidget {
     return null;
   }
 
-  Future<dynamic> Function(Map<dynamic, dynamic>)? getCustomPickerHanlder(
-      CustomPickerHandler? customFileHandler, String key) {
+  Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(
+      BuildContext context, String key) {
+    final customFileHandler =
+        WidgetBuilderInherited.of(context).customPickerHandler;
+
     if (customFileHandler == null) return null;
 
     final handlers = customFileHandler();
+
+    if (handlers.containsKey(key)) return handlers[key];
+
+    if (handlers.containsKey('*')) return handlers['*'];
+
+    return null;
+  }
+
+  String? Function(dynamic)? _getCustomValidator(
+      BuildContext context, String key) {
+    final customValidatorHandler =
+        WidgetBuilderInherited.of(context).customValidatorHandler;
+
+    if (customValidatorHandler == null) return null;
+
+    final handlers = customValidatorHandler();
 
     if (handlers.containsKey(key)) return handlers[key];
 

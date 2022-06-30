@@ -49,20 +49,14 @@ class _MyHomePageState extends State<MyHomePage> {
   "title": "Texto",
   "type": "object",
   "properties": {
-    "file": {
-      "type": "string",
-      "format": "data-url",
-      "title": "Single file"
-    },
-    "file2": {
-      "type": "string",
-      "format": "data-url",
-      "title": "Single file"
-    },
-    "file3": {
-      "type": "string",
-      "format": "data-url",
-      "title": "Single file"
+    
+    "files": {
+      "type": "array",
+      "title": "Multiple files",
+      "items": {
+        "type": "string",
+        "format": "data-url"
+      }
     },
     "select": {
       "title" : "Select your Cola",
@@ -110,9 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final uiSchema = '''
 
 {
-  "select" : {
-    
-  }
+ "gender": {
+						"ui:widget": "radio"
+					}
 }
 
         ''';
@@ -223,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     return null;
                   },
                 ),
+                customValidatorHandler: () => {'files': (value) {}},
               ),
             )
           ],

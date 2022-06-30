@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
+import 'package:flutter_jsonschema_form/src/fields/shared.dart';
 import '../models/models.dart';
 
 class RadioButtonJFormField extends PropertyFieldWidget<dynamic> {
@@ -11,11 +12,14 @@ class RadioButtonJFormField extends PropertyFieldWidget<dynamic> {
     required SchemaProperty property,
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
+    final String? Function(dynamic)? customValidator,
   }) : super(
-            key: key,
-            property: property,
-            onSaved: onSaved,
-            onChanged: onChanged);
+          key: key,
+          property: property,
+          onSaved: onSaved,
+          onChanged: onChanged,
+          customValidator: customValidator,
+        );
 
   @override
   _RadioButtonJFormFieldState createState() => _RadioButtonJFormFieldState();
@@ -74,15 +78,19 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
       onSaved: (newValue) {
         widget.onSaved(newValue);
       },
+      validator: (value) {
+        if (widget.customValidator != null)
+          return widget.customValidator!(value);
+
+        return null;
+      },
       builder: (field) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
                 '${widget.property.title} ${widget.property.required ? "*" : ""}',
-                style: WidgetBuilderInherited.of(context)
-                    .uiConfig
-                    .fieldTitle),
+                style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List<Widget>.generate(
@@ -112,6 +120,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                               },
                       )),
             ),
+            if (field.hasError) CustomErrorText(text: field.errorText!),
           ],
         );
       },

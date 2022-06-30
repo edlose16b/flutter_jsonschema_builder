@@ -15,11 +15,13 @@ class TextJFormField extends PropertyFieldWidget<String> {
     required SchemaProperty property,
     required final ValueSetter<String?> onSaved,
     required final ValueChanged<String?> onChanged,
+    String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
           property: property,
           onSaved: onSaved,
           onChanged: onChanged,
+          customValidator: customValidator,
         );
 
   @override
@@ -47,8 +49,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style:
-                WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
         AbsorbPointer(
           absorbing: widget.property.disabled ?? false,
           child: TextFormField(
@@ -75,6 +76,10 @@ class _TextJFormFieldState extends State<TextJFormField> {
                 return inputValidationJsonSchema(
                     newValue: value, property: widget.property);
               }
+
+              if (widget.customValidator != null)
+                return widget.customValidator!(value);
+
               return null;
             },
             style: widget.property.readOnly
@@ -86,8 +91,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
                   ? widget.property.help
                   : null,
               labelStyle: const TextStyle(color: Colors.blue),
-              errorStyle:
-                  WidgetBuilderInherited.of(context).uiConfig.error,
+              errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
             ),
           ),
         ),
