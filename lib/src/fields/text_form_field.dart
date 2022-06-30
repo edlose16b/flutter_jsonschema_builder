@@ -73,8 +73,9 @@ class _TextJFormFieldState extends State<TextJFormField> {
             },
             validator: (String? value) {
               if (widget.property.required && value != null) {
-                return inputValidationJsonSchema(
+                final validated = inputValidationJsonSchema(
                     newValue: value, property: widget.property);
+                if (validated != null) return validated;
               }
 
               if (widget.customValidator != null)
