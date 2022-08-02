@@ -10,6 +10,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     Key? key,
     required this.mainSchema,
     required Widget child,
+    required this.onChanged,
     this.customFileHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
@@ -18,6 +19,7 @@ class WidgetBuilderInherited extends InheritedWidget {
   final Schema mainSchema;
   final data = {};
 
+  final void Function(dynamic data) onChanged;
   final CustomFileHandler? customFileHandler;
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
@@ -89,6 +91,10 @@ class WidgetBuilderInherited extends InheritedWidget {
         object.add(value);
       }
     }
+  }
+
+  void notifyChanges() {
+    onChanged(data);
   }
 
   @override

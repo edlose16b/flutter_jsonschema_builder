@@ -42,6 +42,8 @@ class PropertySchemaBuilder extends StatelessWidget {
         property: schemaPropertySorted,
         onChanged: (value) {
           dispatchBooleanEventToParent(context, value != null);
+          updateData(context, value);
+          widgetBuilderInherited.notifyChanges();
         },
         onSaved: (val) {
           log('onSaved: RadioButtonJFormField ${schemaProperty.idKey}  : $val');
@@ -67,6 +69,8 @@ class PropertySchemaBuilder extends StatelessWidget {
         onChanged: (value) {
           dispatchSelectedForDropDownEventToParent(context, value,
               id: schemaProperty.id);
+          updateData(context, value);
+          widgetBuilderInherited.notifyChanges();
         },
         customValidator: _getCustomValidator(context, schemaProperty.idKey),
       );
@@ -84,11 +88,13 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
         },
         onChanged: (value) {
-          dispatchSelectedForDropDownEventToParent(
-            context,
-            value,
-            id: schemaProperty.id,
-          );
+          dispatchSelectedForDropDownEventToParent(context, value,
+              id: schemaProperty.id);
+
+          if (value is OneOfModel) {
+            updateData(context, value.oneOfModelEnum?.first);
+            widgetBuilderInherited.notifyChanges();
+          }
         },
         customValidator: _getCustomValidator(context, schemaProperty.idKey),
       );
@@ -113,6 +119,16 @@ class PropertySchemaBuilder extends StatelessWidget {
               },
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value != null);
+                if (value == null) return;
+                String date;
+                if (schemaProperty.format == PropertyFormat.date) {
+                  date = DateFormat(dateFormatString).format(value);
+                } else {
+                  date = DateFormat(dateTimeFormatString).format(value);
+                }
+
+                updateData(context, date);
+                widgetBuilderInherited.notifyChanges();
               },
               customValidator:
                   _getCustomValidator(context, schemaProperty.idKey),
@@ -138,6 +154,9 @@ class PropertySchemaBuilder extends StatelessWidget {
                     schemaProperty.isMultipleFile
                         ? value is List && value.isNotEmpty
                         : value != null);
+
+                updateData(context, value);
+                widgetBuilderInherited.notifyChanges();
               },
               customValidator:
                   _getCustomValidator(context, schemaProperty.idKey),
@@ -153,6 +172,8 @@ class PropertySchemaBuilder extends StatelessWidget {
             },
             onChanged: (value) {
               dispatchStringEventToParent(context, value!);
+              updateData(context, value);
+              widgetBuilderInherited.notifyChanges();
             },
             customValidator: _getCustomValidator(context, schemaProperty.idKey),
           );
@@ -170,6 +191,8 @@ class PropertySchemaBuilder extends StatelessWidget {
                 context,
                 value != null && value.isNotEmpty,
               );
+              updateData(context, value);
+              widgetBuilderInherited.notifyChanges();
             },
             customValidator: _getCustomValidator(context, schemaProperty.idKey),
           );
@@ -180,6 +203,8 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaPropertySorted,
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value != null);
+                updateData(context, value);
+                widgetBuilderInherited.notifyChanges();
               },
               onSaved: (val) {
                 log('onSaved: RadioButtonJFormField ${schemaProperty.idKey}  : $val');
@@ -194,6 +219,8 @@ class PropertySchemaBuilder extends StatelessWidget {
               property: schemaPropertySorted,
               onChanged: (value) {
                 dispatchBooleanEventToParent(context, value!);
+                updateData(context, value);
+                widgetBuilderInherited.notifyChanges();
               },
               onSaved: (val) {
                 log('onSaved: CheckboxJFormField ${schemaProperty.idKey}  : $val');
@@ -215,6 +242,8 @@ class PropertySchemaBuilder extends StatelessWidget {
             },
             onChanged: (value) {
               dispatchStringEventToParent(context, value!);
+              updateData(context, value);
+              widgetBuilderInherited.notifyChanges();
             },
             customValidator: _getCustomValidator(context, schemaProperty.idKey),
           );
