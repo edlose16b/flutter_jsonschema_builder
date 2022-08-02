@@ -91,10 +91,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           dispatchSelectedForDropDownEventToParent(context, value,
               id: schemaProperty.id);
 
-          if (value is OneOfModel) {
-            updateData(context, value.oneOfModelEnum?.first);
-            widgetBuilderInherited.notifyChanges();
-          }
+          updateData(context, value);
+          widgetBuilderInherited.notifyChanges();
         },
         customValidator: _getCustomValidator(context, schemaProperty.idKey),
       );
