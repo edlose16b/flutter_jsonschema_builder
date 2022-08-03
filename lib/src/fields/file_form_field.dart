@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -127,6 +128,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
   }
 
   VoidCallback? _onTap(FormFieldState<List<File>> field) {
+    log('key: ${widget.property.idKey}');
     if (widget.property.readOnly) return null;
 
     return () async {
