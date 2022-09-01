@@ -78,6 +78,33 @@ Widget build(BuildContext context) {
 ```
 <img width="364" alt="image" src="https://user-images.githubusercontent.com/58694638/187986742-3b1aa96c-4a85-42a3-aec0-dac62a8515a4.png">
 
+### Using arrays & Files
+```dart
+  final json = '''
+{
+  "title": "Example 2",
+  "type": "object",
+  "properties": {
+   "listOfStrings": {
+      "type": "array",
+      "title": "A list of strings",
+      "items": {
+        "type": "string",
+        "title" : "Write your item",
+        "default": "bazinga"
+      }
+    },
+    "files": {
+      "type": "array",
+      "title": "Multiple files",
+      "items": {
+        "type": "string",
+        "format": "data-url"
+      }
+    }
+  }
+}
+  ''';
 
 ### Using UI Schema
 ```dart
@@ -91,6 +118,8 @@ final uiSchema = '''
 ''';
 
 ```
+<img width="348" alt="image" src="https://user-images.githubusercontent.com/58694638/187996261-ab3be73d-35e0-40c5-a0de-47900b64f1be.png">
+
 
 ### Custom File Handler 
 
