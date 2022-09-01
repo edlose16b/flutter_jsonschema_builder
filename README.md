@@ -80,8 +80,17 @@ Widget build(BuildContext context) {
 
 
 ### Using UI Schema
-<img width="807" alt="image" src="https://user-images.githubusercontent.com/58694638/187991229-ccbaef82-b02d-40d2-a0dc-712a033115ec.png">
+```dart
 
+final uiSchema = '''
+{
+  "selectYourCola": {
+    "ui:widget": "radio"
+  }
+ }
+''';
+
+```
 
 ### Custom File Handler 
 
@@ -117,4 +126,5 @@ customValidatorHandler: () => {
 - [ ] Add all examples
 - [ ] OnChanged
 - [ ] References
+- [ ] pub.dev
 
