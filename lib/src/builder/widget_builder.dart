@@ -25,7 +25,7 @@ class JsonForm extends StatefulWidget {
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
-    required this.onChanged,
+    this.onChanged,
     this.customFileHandler,
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
@@ -34,7 +34,7 @@ class JsonForm extends StatefulWidget {
 
   final String jsonSchema;
   final void Function(dynamic) onFormDataSaved;
-  final void Function(dynamic data) onChanged;
+  final void Function(dynamic data)? onChanged;
 
   final String? uiSchema;
   final CustomFileHandler? customFileHandler;
