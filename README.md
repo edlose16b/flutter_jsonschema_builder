@@ -63,6 +63,7 @@ final jsonSchema = {
 }
 
 
+
 @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -75,6 +76,45 @@ Widget build(BuildContext context) {
   );
 }
 ```
+<img width="364" alt="image" src="https://user-images.githubusercontent.com/58694638/187986742-3b1aa96c-4a85-42a3-aec0-dac62a8515a4.png">
 
-## Additional information
-WIP
+
+### Using UI Schema
+<img width="807" alt="image" src="https://user-images.githubusercontent.com/58694638/187991229-ccbaef82-b02d-40d2-a0dc-712a033115ec.png">
+
+
+### Custom File Handler 
+
+```dart
+customFileHandler: () => {
+  'profile_photo': () async {
+    
+    return [
+      File(
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+    ];
+  },
+  '*': null
+}
+```
+
+### Using Custom Validator
+
+```dart
+customValidatorHandler: () => {
+  'selectYourCola': (value) {
+    if (value == 0) {
+      return 'Cola 0 is not allowed';
+    }
+  }
+},
+```
+<img width="659" alt="image" src="https://user-images.githubusercontent.com/58694638/187993619-15adcfaf-2a0c-4ae0-ada4-4617d814f85e.png">
+
+
+### TODO
+
+- [ ] Add all examples
+- [ ] OnChanged
+- [ ] References
+
