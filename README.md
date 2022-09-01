@@ -3,7 +3,7 @@
   <h3 align="center">flutter-jsonschema-form</h3>
 
   <p align="center">
-    A simple <a href="https://flutter.dev/">Flutter</a> component capable of using <a href="http://json-schema.org/">JSON Schema</a> to declaratively build and customize web forms.
+    A simple <a href="https://flutter.dev/">Flutter</a> widget capable of using <a href="http://json-schema.org/">JSON Schema</a> to declaratively build and customize web forms.
     <br />
     Inspired by <a href="https://github.com/rjsf-team/react-jsonschema-form">react-jsonschema-form</a>
     <br />    
@@ -77,5 +77,4 @@ Widget build(BuildContext context) {
 ```
 
 ## Additional information
-
 WIP
