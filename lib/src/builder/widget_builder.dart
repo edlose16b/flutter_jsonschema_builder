@@ -99,7 +99,7 @@ class _JsonFormState extends State<JsonForm> {
                   widgetBuilderInherited.uiConfig.submitButtonBuilder == null
                       ? ElevatedButton(
                           onPressed: () => onSubmit(widgetBuilderInherited),
-                          child: const Text('Enviar'),
+                          child: const Text('Submit'),
                         )
                       : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
                           () => onSubmit(widgetBuilderInherited)),

@@ -62,7 +62,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                         : TextButton.icon(
                             onPressed: () => _removeItem(index),
                             icon: const Icon(Icons.remove),
-                            label: const Text('Eliminar item'),
+                            label: const Text('Remove item'),
                           ),
                   ),
                   FormFromSchemaBuilder(
@@ -92,7 +92,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                 : TextButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),
-                    label: const Text('Añadir Item'),
+                    label: const Text('Add Item'),
                   ),
           ),
       ],
