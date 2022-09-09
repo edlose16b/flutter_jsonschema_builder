@@ -63,6 +63,7 @@ final jsonSchema = {
 }
 
 
+
 @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -75,6 +76,84 @@ Widget build(BuildContext context) {
   );
 }
 ```
+<img width="364" alt="image" src="https://user-images.githubusercontent.com/58694638/187986742-3b1aa96c-4a85-42a3-aec0-dac62a8515a4.png">
 
-## Additional information
-WIP
+### Using arrays & Files
+```dart
+  final json = '''
+{
+  "title": "Example 2",
+  "type": "object",
+  "properties": {
+   "listOfStrings": {
+      "type": "array",
+      "title": "A list of strings",
+      "items": {
+        "type": "string",
+        "title" : "Write your item",
+        "default": "bazinga"
+      }
+    },
+    "files": {
+      "type": "array",
+      "title": "Multiple files",
+      "items": {
+        "type": "string",
+        "format": "data-url"
+      }
+    }
+  }
+}
+  ''';
+
+### Using UI Schema
+```dart
+
+final uiSchema = '''
+{
+  "selectYourCola": {
+    "ui:widget": "radio"
+  }
+ }
+''';
+
+```
+<img width="348" alt="image" src="https://user-images.githubusercontent.com/58694638/187996261-ab3be73d-35e0-40c5-a0de-47900b64f1be.png">
+
+
+### Custom File Handler 
+
+```dart
+customFileHandler: () => {
+  'profile_photo': () async {
+    
+    return [
+      File(
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+    ];
+  },
+  '*': null
+}
+```
+
+### Using Custom Validator
+
+```dart
+customValidatorHandler: () => {
+  'selectYourCola': (value) {
+    if (value == 0) {
+      return 'Cola 0 is not allowed';
+    }
+  }
+},
+```
+<img width="659" alt="image" src="https://user-images.githubusercontent.com/58694638/187993619-15adcfaf-2a0c-4ae0-ada4-4617d814f85e.png">
+
+
+### TODO
+
+- [ ] Add all examples
+- [ ] OnChanged
+- [ ] References
+- [ ] pub.dev
+
