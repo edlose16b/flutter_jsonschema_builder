@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 
 class CustomErrorText extends StatelessWidget {
   const CustomErrorText({Key? key, required this.text}) : super(key: key);

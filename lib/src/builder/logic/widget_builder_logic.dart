@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
-import 'package:flutter_jsonschema_form/src/models/json_form_schema_style.dart';
-import 'package:flutter_jsonschema_form/src/models/schema.dart';
+import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
+import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dart';
+import 'package:flutter_jsonschema_builder/src/models/schema.dart';
 
 class WidgetBuilderInherited extends InheritedWidget {
   WidgetBuilderInherited({

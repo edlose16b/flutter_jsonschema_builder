@@ -1,4 +1,4 @@
-import 'package:flutter_jsonschema_form/src/helpers/helpers.dart';
+import 'package:flutter_jsonschema_builder/src/helpers/helpers.dart';
 
 /// check if the string [input] is a URL
 ///

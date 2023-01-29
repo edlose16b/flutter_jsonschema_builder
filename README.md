@@ -16,9 +16,9 @@ Add dependency to pubspec.yaml
 ```
 dependencies:
   ...
-  flutter_jsonschema_form:
+  flutter_jsonschema_builder:
     git:
-      url: git://github.com/edlose16b/flutter_jsonschema_form.git
+      url: git://github.com/edlose16b/flutter_jsonschema_builder.git
       ref: main
 ```
 
@@ -33,7 +33,7 @@ See the [File Picker Installation](https://github.com/miguelpruivo/plugins_flutt
 ## Usage
 
 ```dart
-import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
+import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
 
 final jsonSchema = {

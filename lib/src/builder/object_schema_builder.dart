@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/builder/general_subtitle_widget.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/object_schema_logic.dart';
-import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
-import 'package:flutter_jsonschema_form/src/models/models.dart';
+import 'package:flutter_jsonschema_builder/src/builder/general_subtitle_widget.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/object_schema_logic.dart';
+import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
+import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaBuilder extends StatefulWidget {
   ObjectSchemaBuilder({

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
+import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
 void main() {
   runApp(const MyApp());

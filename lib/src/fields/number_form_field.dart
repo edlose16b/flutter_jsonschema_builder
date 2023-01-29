@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
-import 'package:flutter_jsonschema_form/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import '../models/models.dart';
 
 class NumberJFormField extends PropertyFieldWidget<String?> {

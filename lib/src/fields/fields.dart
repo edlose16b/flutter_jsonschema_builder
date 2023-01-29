@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
-import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
+import 'package:flutter_jsonschema_builder/src/models/property_schema.dart';
+import 'package:flutter_jsonschema_builder/src/utils/date_text_input_json_formatter.dart';
 import 'package:intl/intl.dart';
 
 export 'checkbox_form_field.dart';

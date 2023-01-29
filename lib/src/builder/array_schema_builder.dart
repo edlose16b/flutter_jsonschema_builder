@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
-import 'package:flutter_jsonschema_form/src/builder/general_subtitle_widget.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
-import 'package:flutter_jsonschema_form/src/fields/shared.dart';
-import 'package:flutter_jsonschema_form/src/models/models.dart';
+import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
+import 'package:flutter_jsonschema_builder/src/builder/general_subtitle_widget.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
+import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ArraySchemaBuilder extends StatefulWidget {
   const ArraySchemaBuilder(

@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flutter_jsonschema_form",
+            "name": "flutter_jsonschema_builder",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "flutter_jsonschema_form (profile mode)",
+            "name": "flutter_jsonschema_builder (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"

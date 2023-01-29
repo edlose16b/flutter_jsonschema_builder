@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_jsonschema_form:
+  flutter_jsonschema_builder:
       path: ../
 
   # The following adds the Cupertino Icons font to your application.

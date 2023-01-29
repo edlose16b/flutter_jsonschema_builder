@@ -4,8 +4,8 @@ import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/flutter_jsonschema_form.dart';
-import 'package:flutter_jsonschema_form/src/models/models.dart';
+import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
+import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaEvent {
   ObjectSchemaEvent({required this.schemaObject});

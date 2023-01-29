@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
-import 'package:flutter_jsonschema_form/src/fields/fields.dart';
-import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
-import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
-import 'package:flutter_jsonschema_form/src/models/schema.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/models/one_of_model.dart';
+import 'package:flutter_jsonschema_builder/src/models/property_schema.dart';
+import 'package:flutter_jsonschema_builder/src/models/schema.dart';
 
 class DropdownOneOfJFormField extends PropertyFieldWidget<dynamic> {
   const DropdownOneOfJFormField({

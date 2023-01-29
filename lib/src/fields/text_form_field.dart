@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
-import 'package:flutter_jsonschema_form/src/fields/fields.dart';
-import 'package:flutter_jsonschema_form/src/utils/input_validation_json_schema.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/utils/input_validation_json_schema.dart';
 
 import '../utils/utils.dart';
 import '../models/models.dart';

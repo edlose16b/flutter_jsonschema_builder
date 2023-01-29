@@ -1,5 +1,5 @@
-import 'package:flutter_jsonschema_form/src/helpers/is_url.dart';
-import 'package:flutter_jsonschema_form/src/models/property_schema.dart';
+import 'package:flutter_jsonschema_builder/src/helpers/is_url.dart';
+import 'package:flutter_jsonschema_builder/src/models/property_schema.dart';
 
 String? inputValidationJsonSchema(
     {required String newValue, required SchemaProperty property}) {

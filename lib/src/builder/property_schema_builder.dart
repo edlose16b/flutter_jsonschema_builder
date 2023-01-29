@@ -4,15 +4,15 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/object_schema_logic.dart';
-import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
-import 'package:flutter_jsonschema_form/src/builder/widget_builder.dart';
-import 'package:flutter_jsonschema_form/src/fields/fields.dart';
-import 'package:flutter_jsonschema_form/src/fields/radio_button_form_field.dart';
-import 'package:flutter_jsonschema_form/src/fields/dropdown_oneof_form_field.dart';
-import 'package:flutter_jsonschema_form/src/models/models.dart';
-import 'package:flutter_jsonschema_form/src/models/one_of_model.dart';
-import 'package:flutter_jsonschema_form/src/utils/date_text_input_json_formatter.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/object_schema_logic.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
+import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
+import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:flutter_jsonschema_builder/src/fields/radio_button_form_field.dart';
+import 'package:flutter_jsonschema_builder/src/fields/dropdown_oneof_form_field.dart';
+import 'package:flutter_jsonschema_builder/src/models/models.dart';
+import 'package:flutter_jsonschema_builder/src/models/one_of_model.dart';
+import 'package:flutter_jsonschema_builder/src/utils/date_text_input_json_formatter.dart';
 import 'package:intl/intl.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
