@@ -16,7 +16,7 @@ Add dependency to pubspec.yaml
 ```
 dependencies:
   ...
-  flutter_jsonschema_builder: ^0.0.1
+  flutter_jsonschema_builder: ^0.0.1+1
 ```
 
 Run in your terminal
