@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_form/src/builder/array_schema_builder.dart';
@@ -9,7 +11,6 @@ import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.d
 import 'package:flutter_jsonschema_form/src/builder/object_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/builder/property_schema_builder.dart';
 import 'package:flutter_jsonschema_form/src/models/json_form_schema_style.dart';
-import 'dart:convert';
 
 import '../models/models.dart';
 
@@ -25,7 +26,6 @@ class JsonForm extends StatefulWidget {
     required this.jsonSchema,
     this.uiSchema,
     required this.onFormDataSaved,
-    this.onChanged,
     this.fileHandler,
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
@@ -34,7 +34,6 @@ class JsonForm extends StatefulWidget {
 
   final String jsonSchema;
   final void Function(dynamic) onFormDataSaved;
-  final void Function(dynamic data)? onChanged;
 
   final String? uiSchema;
   final FileHandler? fileHandler;
@@ -69,7 +68,6 @@ class _JsonFormState extends State<JsonForm> {
   Widget build(BuildContext context) {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
-      onChanged: widget.onChanged,
       fileHandler: widget.fileHandler,
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
