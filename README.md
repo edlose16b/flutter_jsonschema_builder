@@ -1,6 +1,6 @@
 <p align="center">
 
-  <h3 align="center">flutter-jsonschema-form</h3>
+  <h3 align="center">flutter_jsonschema_builder</h3>
 
   <p align="center">
     A simple <a href="https://flutter.dev/">Flutter</a> widget capable of using <a href="http://json-schema.org/">JSON Schema</a> to declaratively build and customize web forms.
@@ -16,10 +16,7 @@ Add dependency to pubspec.yaml
 ```
 dependencies:
   ...
-  flutter_jsonschema_builder:
-    git:
-      url: git://github.com/edlose16b/flutter_jsonschema_builder.git
-      ref: main
+  flutter_jsonschema_builder: ^0.0.1
 ```
 
 Run in your terminal
