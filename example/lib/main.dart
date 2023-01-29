@@ -113,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<File>?> defaultCustomFileHandler() async {
     await Future.delayed(const Duration(seconds: 3));
+
     final file1 = File(
         'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
     final file2 = File(
@@ -138,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onFormDataSaved: (data) {
                   inspect(data);
                 },
-                customFileHandler: () => {
+                fileHandler: () => {
                   'files': defaultCustomFileHandler,
                   'file': () async {
                     return [
@@ -146,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
                     ];
                   },
-                  '*': null
+                  '*': defaultCustomFileHandler
                 },
                 customPickerHandler: () => {
                   '*': (data) async {

@@ -11,7 +11,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     required this.mainSchema,
     required Widget child,
     this.onChanged,
-    this.customFileHandler,
+    this.fileHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
   }) : super(key: key, child: child);
@@ -20,7 +20,7 @@ class WidgetBuilderInherited extends InheritedWidget {
   final data = {};
 
   final void Function(dynamic data)? onChanged;
-  final CustomFileHandler? customFileHandler;
+  final FileHandler? fileHandler;
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
   late final JsonFormSchemaUiConfig uiConfig;

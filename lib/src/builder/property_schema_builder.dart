@@ -137,10 +137,12 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
 
           if (schemaProperty.format == PropertyFormat.dataurl) {
+            assert(WidgetBuilderInherited.of(context).fileHandler != null,
+                'File handler can not be null when using file inputs');
             _field = FileJFormField(
               property: schemaPropertySorted,
-              customFileHandler: getCustomFileHanlder(
-                  WidgetBuilderInherited.of(context).customFileHandler,
+              fileHandler: getCustomFileHanlder(
+                  WidgetBuilderInherited.of(context).fileHandler!,
                   schemaProperty.id),
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
@@ -309,17 +311,20 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
   }
 
-  Future<List<File>?> Function()? getCustomFileHanlder(
-      CustomFileHandler? customFileHandler, String key) {
-    if (customFileHandler == null) return null;
-
+  Future<List<File>?> Function() getCustomFileHanlder(
+      FileHandler customFileHandler, String key) {
     final handlers = customFileHandler();
+    assert(handlers.isNotEmpty, 'CustomFileHandler must not be empty');
 
-    if (handlers.containsKey(key)) return handlers[key];
+    if (handlers.containsKey(key))
+      return handlers[key] as Future<List<File>?> Function();
 
-    if (handlers.containsKey('*')) return handlers['*'];
+    if (handlers.containsKey('*')) {
+      assert(handlers['*'] != null, 'Default file handler must not be null');
+      return handlers['*'] as Future<List<File>?> Function();
+    }
 
-    return null;
+    throw Exception('no file handler found');
   }
 
   Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(

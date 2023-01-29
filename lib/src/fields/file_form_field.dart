@@ -1,19 +1,12 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_jsonschema_form/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_form/src/fields/fields.dart';
 
-import '../models/models.dart';
 import './shared.dart';
-
-extension on PlatformFile {
-  File get toFile {
-    return File(path!);
-  }
-}
+import '../models/models.dart';
 
 class FileJFormField extends PropertyFieldWidget<dynamic> {
   const FileJFormField({
@@ -21,7 +14,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
     required SchemaProperty property,
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
-    this.customFileHandler,
+    required this.fileHandler,
     final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
@@ -31,7 +24,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
           customValidator: customValidator,
         );
 
-  final Future<List<File>?> Function()? customFileHandler;
+  final Future<List<File>?> Function() fileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -54,7 +47,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
         if ((value == null || value.isEmpty) && widget.property.required) {
           return 'Required';
         }
-        
+
         if (widget.customValidator != null)
           return widget.customValidator!(value);
         return null;
@@ -130,20 +123,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
     if (widget.property.readOnly) return null;
 
     return () async {
-      if (widget.customFileHandler == null) {
-        final result = await FilePicker.platform.pickFiles(
-          allowMultiple: widget.property.isMultipleFile,
-        );
+      final result = await widget.fileHandler!();
 
-        if (result != null) {
-          change(field, result.files.map((e) => e.toFile).toList());
-        }
-      } else {
-        final result = await widget.customFileHandler!();
-
-        if (result != null) {
-          change(field, result);
-        }
+      if (result != null) {
+        change(field, result);
       }
     };
   }

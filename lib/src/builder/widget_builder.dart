@@ -14,7 +14,7 @@ import 'dart:convert';
 import '../models/models.dart';
 
 // ignore: prefer_generic_function_type_aliases
-typedef Map<String, Future<List<File>?> Function()?> CustomFileHandler();
+typedef Map<String, Future<List<File>?> Function()?> FileHandler();
 typedef Map<String, Future<dynamic> Function(Map data)> CustomPickerHandler();
 
 typedef Map<String, String? Function(dynamic)?> CustomValidatorHandler();
@@ -26,7 +26,7 @@ class JsonForm extends StatefulWidget {
     this.uiSchema,
     required this.onFormDataSaved,
     this.onChanged,
-    this.customFileHandler,
+    this.fileHandler,
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
     this.customValidatorHandler,
@@ -37,7 +37,7 @@ class JsonForm extends StatefulWidget {
   final void Function(dynamic data)? onChanged;
 
   final String? uiSchema;
-  final CustomFileHandler? customFileHandler;
+  final FileHandler? fileHandler;
 
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
 
@@ -70,7 +70,7 @@ class _JsonFormState extends State<JsonForm> {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
       onChanged: widget.onChanged,
-      customFileHandler: widget.customFileHandler,
+      fileHandler: widget.fileHandler,
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
       child: Builder(builder: (context) {
