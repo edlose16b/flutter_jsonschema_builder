@@ -1,16 +1,15 @@
-shift(List l) {
-  if (l.length >= 1) {
-    var first = l.first;
-    l.removeAt(0);
-    return first;
-  }
-  return null;
+String? shift(List<String> elements) {
+  if (elements.isEmpty) return null;
+  return elements.removeAt(0);
 }
 
-Map merge(Map? obj, defaults) {
+Map<String, dynamic> merge(
+  Map<String, dynamic>? obj,
+  Map<String, dynamic> defaults,
+) {
   if (obj == null) {
-    obj = new Map();
+    return defaults;
   }
-  defaults.forEach((key, val) => obj!.putIfAbsent(key, () => val));
+  defaults.forEach((key, val) => obj.putIfAbsent(key, () => val));
   return obj;
 }

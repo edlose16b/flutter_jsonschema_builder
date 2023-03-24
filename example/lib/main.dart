@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
@@ -218,7 +217,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     return null;
                   },
                 ),
-                customValidatorHandler: () => {'files': (value) {}},
+                customValidatorHandler: () => {
+                  'files': (value) {
+                    return null;
+                  }
+                },
               ),
             )
           ],

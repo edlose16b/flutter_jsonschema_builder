@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import '../models/models.dart';
 // Esto transforma el JSON a Modelos
 
 enum SchemaType { string, number, boolean, integer, object, array, enumm }
+
 SchemaType schemaTypeFromString(String value) {
   return SchemaType.values.where((e) => describeEnum(e) == value).first;
 }

@@ -25,7 +25,7 @@ class DropDownJFormField extends PropertyFieldWidget<dynamic> {
 }
 
 class _DropDownJFormFieldState extends State<DropDownJFormField> {
-  var value;
+  dynamic value;
   @override
   void initState() {
     // fill enum property

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 
@@ -123,7 +122,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
     if (widget.property.readOnly) return null;
 
     return () async {
-      final result = await widget.fileHandler!();
+      final result = await widget.fileHandler();
 
       if (result != null) {
         change(field, result);

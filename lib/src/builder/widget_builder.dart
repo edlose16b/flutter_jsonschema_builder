@@ -14,11 +14,12 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-// ignore: prefer_generic_function_type_aliases
-typedef Map<String, Future<List<File>?> Function()?> FileHandler();
-typedef Map<String, Future<dynamic> Function(Map data)> CustomPickerHandler();
+typedef FileHandler = Map<String, Future<List<File>?> Function()?> Function();
+typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
+    Function();
 
-typedef Map<String, String? Function(dynamic)?> CustomValidatorHandler();
+typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
+    Function();
 
 class JsonForm extends StatefulWidget {
   const JsonForm({

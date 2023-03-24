@@ -16,7 +16,7 @@ import 'package:flutter_jsonschema_builder/src/utils/date_text_input_json_format
 import 'package:intl/intl.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
-  PropertySchemaBuilder({
+  const PropertySchemaBuilder({
     Key? key,
     required this.mainSchema,
     required this.schemaProperty,
@@ -26,16 +26,13 @@ class PropertySchemaBuilder extends StatelessWidget {
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
 
-  late WidgetBuilderInherited widgetBuilderInherited;
-  late SchemaProperty schemaPropertySorted;
-
   @override
   Widget build(BuildContext context) {
     Widget _field = const SizedBox.shrink();
-    widgetBuilderInherited = WidgetBuilderInherited.of(context);
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
     // sort
-    schemaPropertySorted = schemaProperty;
+    final schemaPropertySorted = schemaProperty;
 
     if (schemaProperty.widget == 'radio') {
       _field = RadioButtonJFormField(
@@ -271,6 +268,7 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   void updateData(BuildContext context, dynamic val) {
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
     widgetBuilderInherited.updateObjectData(
         WidgetBuilderInherited.of(context).data, schemaProperty.idKey, val);
   }

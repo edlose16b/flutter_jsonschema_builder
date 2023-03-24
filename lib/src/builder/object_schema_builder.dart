@@ -5,30 +5,35 @@ import 'package:flutter_jsonschema_builder/src/builder/widget_builder.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaBuilder extends StatefulWidget {
-  ObjectSchemaBuilder({
+  const ObjectSchemaBuilder({
     Key? key,
     required this.mainSchema,
     required this.schemaObject,
   }) : super(key: key);
 
   final Schema mainSchema;
-  SchemaObject schemaObject;
+  final SchemaObject schemaObject;
 
   @override
   State<ObjectSchemaBuilder> createState() => _ObjectSchemaBuilderState();
 }
 
 class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
+  late SchemaObject _schemaObject;
+
+  @override
+  void initState() {
+    super.initState();
+    _schemaObject = widget.schemaObject;
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    
     return ObjectSchemaInherited(
-      schemaObject: widget.schemaObject,
+      schemaObject: _schemaObject,
       listen: (value) {
         if (value is ObjectSchemaDependencyEvent) {
-          
-          setState(() => widget.schemaObject = value.schemaObject);
+          setState(() => _schemaObject = value.schemaObject);
         }
       },
       child: Column(
@@ -44,7 +49,8 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
             ...widget.schemaObject.properties!
                 .map((e) => FormFromSchemaBuilder(
                     schemaObject: widget.schemaObject,
-                    mainSchema: widget.mainSchema, schema: e))
+                    mainSchema: widget.mainSchema,
+                    schema: e))
                 .toList(),
         ],
       ),
