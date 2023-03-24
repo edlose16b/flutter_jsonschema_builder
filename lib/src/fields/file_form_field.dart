@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
@@ -23,7 +22,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
           customValidator: customValidator,
         );
 
-  final Future<List<File>?> Function() fileHandler;
+  final Future<List<XFile>?> Function() fileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -40,7 +39,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
   Widget build(BuildContext context) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-    return FormField<List<File>>(
+    return FormField<List<XFile>>(
       key: Key(widget.property.idKey),
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
@@ -107,7 +106,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
     );
   }
 
-  void change(FormFieldState<List<File>> field, List<File>? values) {
+  void change(FormFieldState<List<XFile>> field, List<XFile>? values) {
     field.didChange(values);
 
     if (widget.onChanged != null) {
@@ -118,7 +117,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
     }
   }
 
-  VoidCallback? _onTap(FormFieldState<List<File>> field) {
+  VoidCallback? _onTap(FormFieldState<List<XFile>> field) {
     if (widget.property.readOnly) return null;
 
     return () async {
@@ -132,7 +131,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
   Widget _buildButton(
     WidgetBuilderInherited widgetBuilderInherited,
-    FormFieldState<List<File>> field,
+    FormFieldState<List<XFile>> field,
   ) {
     final addFileButtonBuilder =
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;

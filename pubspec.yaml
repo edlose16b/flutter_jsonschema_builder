@@ -13,6 +13,7 @@ dependencies:
 
   intl: ^0.17.0
   extended_masked_text: ^2.3.1
+  cross_file: ^0.3.3+4
 
 dev_dependencies:
   flutter_test:
