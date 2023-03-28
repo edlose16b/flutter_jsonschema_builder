@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../models/models.dart';
 
 // extension SchemaArrayX on SchemaArray {

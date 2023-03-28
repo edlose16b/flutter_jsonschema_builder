@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/object_schema_logic.dart';
@@ -16,7 +16,7 @@ import 'package:flutter_jsonschema_builder/src/utils/date_text_input_json_format
 import 'package:intl/intl.dart';
 
 class PropertySchemaBuilder extends StatelessWidget {
-  PropertySchemaBuilder({
+  const PropertySchemaBuilder({
     Key? key,
     required this.mainSchema,
     required this.schemaProperty,
@@ -26,16 +26,13 @@ class PropertySchemaBuilder extends StatelessWidget {
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
 
-  late WidgetBuilderInherited widgetBuilderInherited;
-  late SchemaProperty schemaPropertySorted;
-
   @override
   Widget build(BuildContext context) {
     Widget _field = const SizedBox.shrink();
-    widgetBuilderInherited = WidgetBuilderInherited.of(context);
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
     // sort
-    schemaPropertySorted = schemaProperty;
+    final schemaPropertySorted = schemaProperty;
 
     if (schemaProperty.widget == 'radio') {
       _field = RadioButtonJFormField(
@@ -271,6 +268,7 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   void updateData(BuildContext context, dynamic val) {
+    final widgetBuilderInherited = WidgetBuilderInherited.of(context);
     widgetBuilderInherited.updateObjectData(
         WidgetBuilderInherited.of(context).data, schemaProperty.idKey, val);
   }
@@ -311,17 +309,17 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
   }
 
-  Future<List<File>?> Function() getCustomFileHanlder(
+  Future<List<XFile>?> Function() getCustomFileHanlder(
       FileHandler customFileHandler, String key) {
     final handlers = customFileHandler();
     assert(handlers.isNotEmpty, 'CustomFileHandler must not be empty');
 
     if (handlers.containsKey(key))
-      return handlers[key] as Future<List<File>?> Function();
+      return handlers[key] as Future<List<XFile>?> Function();
 
     if (handlers.containsKey('*')) {
       assert(handlers['*'] != null, 'Default file handler must not be null');
-      return handlers['*'] as Future<List<File>?> Function();
+      return handlers['*'] as Future<List<XFile>?> Function();
     }
 
     throw Exception('no file handler found');

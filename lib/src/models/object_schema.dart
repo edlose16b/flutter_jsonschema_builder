@@ -1,7 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-
 import '../models/models.dart';
 
 class SchemaObject extends Schema {
@@ -121,7 +117,6 @@ class SchemaObject extends Schema {
     // set UI Schema to this ObjectSchema
     setUi(uiSchema);
 
-   
     // set UI Schema to their properties
     properties?.forEach((_property) {
       if (_property is SchemaObject) {

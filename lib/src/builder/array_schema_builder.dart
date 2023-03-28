@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 import 'package:flutter_jsonschema_builder/src/builder/general_subtitle_widget.dart';

@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/array_schema_builder.dart';
@@ -14,11 +14,12 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-// ignore: prefer_generic_function_type_aliases
-typedef Map<String, Future<List<File>?> Function()?> FileHandler();
-typedef Map<String, Future<dynamic> Function(Map data)> CustomPickerHandler();
+typedef FileHandler = Map<String, Future<List<XFile>?> Function()?> Function();
+typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
+    Function();
 
-typedef Map<String, String? Function(dynamic)?> CustomValidatorHandler();
+typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
+    Function();
 
 class JsonForm extends StatefulWidget {
   const JsonForm({

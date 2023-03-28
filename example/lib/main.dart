@@ -1,7 +1,6 @@
 import 'dart:developer';
-import 'dart:io';
-import 'dart:ui';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
@@ -111,14 +110,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
         ''';
 
-  Future<List<File>?> defaultCustomFileHandler() async {
+  Future<List<XFile>?> defaultCustomFileHandler() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    final file1 = File(
+    final file1 = XFile(
         'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-    final file2 = File(
+    final file2 = XFile(
         'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-    final file3 = File(
+    final file3 = XFile(
         'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
 
     return [file1, file2, file3];
@@ -143,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   'files': defaultCustomFileHandler,
                   'file': () async {
                     return [
-                      File(
+                      XFile(
                           'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
                     ];
                   },
@@ -218,7 +217,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     return null;
                   },
                 ),
-                customValidatorHandler: () => {'files': (value) {}},
+                customValidatorHandler: () => {
+                  'files': (value) {
+                    return null;
+                  }
+                },
               ),
             )
           ],

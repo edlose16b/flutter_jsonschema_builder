@@ -32,7 +32,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.property.defaultValue != null &&
           DateTime.tryParse(widget.property.defaultValue) != null)
         txtDateCtrl.updateText(widget.property.defaultValue);

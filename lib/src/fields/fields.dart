@@ -30,7 +30,7 @@ abstract class PropertyFieldWidget<T> extends StatefulWidget {
   Future<dynamic> triggetDefaultValue() async {
     var completer = Completer();
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (property.defaultValue == null) return completer.complete();
 
       var value = property.defaultValue;

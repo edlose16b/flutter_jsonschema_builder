@@ -1,10 +1,6 @@
-import 'dart:convert';
 import 'dart:developer' as dev;
-import 'dart:ffi';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ObjectSchemaEvent {
@@ -152,7 +148,7 @@ class ObjectSchemaInherited extends InheritedWidget {
 
     if (schemaObject.properties!.where(filter).isNotEmpty) {
       schemaObject.properties!.removeWhere(filter);
-      
+
       listen(ObjectSchemaDependencyEvent(schemaObject: schemaObject));
       await Future.delayed(const Duration(milliseconds: 100));
     }

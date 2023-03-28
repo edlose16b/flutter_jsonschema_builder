@@ -103,6 +103,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
                 }
                 if (widget.customValidator != null)
                   return widget.customValidator!(value);
+                return null;
               },
               items: _buildItems(),
               onChanged: _onChanged,
