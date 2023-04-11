@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:mime/mime.dart';
 
 import './shared.dart';
 import '../models/models.dart';
@@ -39,7 +42,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
   Widget build(BuildContext context) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-    return FormField<List<XFile>>(
+    return FormField<List<String>>(
       key: Key(widget.property.idKey),
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
@@ -59,6 +62,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
         }
       },
       builder: (field) {
+        final images = _extractImages(field.value);
+        final shouldBuildImages =
+            widgetBuilderInherited.uiConfig.imagesBuilder != null &&
+                images != null &&
+                images.isNotEmpty;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,6 +75,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
               style: widgetBuilderInherited.uiConfig.fieldTitle,
             ),
             const SizedBox(height: 10),
+            if (shouldBuildImages)
+              widgetBuilderInherited.uiConfig.imagesBuilder!(images!),
             _buildButton(widgetBuilderInherited, field),
             const SizedBox(height: 10),
             ListView.builder(
@@ -74,13 +84,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: field.value?.length ?? 0,
               itemBuilder: (context, index) {
-                final file = field.value![index];
-
+                final currentData = field.value![index];
+                final urlData = UriData.parse(currentData);
+                final name = urlData.parameters['name'];
                 return ListTile(
-                  title: Text(
-                      file.path.characters
-                          .takeLastWhile((p0) => p0 != '/')
-                          .string,
+                  title: Text(name ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: widget.property.readOnly
@@ -92,8 +100,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                       change(
                           field,
                           field.value!
-                            ..removeWhere(
-                                (element) => element.path == file.path));
+                            ..removeWhere((element) => element == currentData));
                     },
                   ),
                 );
@@ -106,7 +113,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
     );
   }
 
-  void change(FormFieldState<List<XFile>> field, List<XFile>? values) {
+  void change(FormFieldState<List<String>> field, List<String>? values) {
     field.didChange(values);
 
     if (widget.onChanged != null) {
@@ -117,21 +124,45 @@ class _FileJFormFieldState extends State<FileJFormField> {
     }
   }
 
-  VoidCallback? _onTap(FormFieldState<List<XFile>> field) {
+  List<Uint8List>? _extractImages(List<String>? data) {
+    return data
+        // convert the data to UriData
+        ?.map((e) => UriData.parse(e))
+        // filter only images
+        .where((e) => e.mimeType.startsWith('image/'))
+        // convert the UriData to bytes
+        .map((e) => e.contentAsBytes())
+        .toList();
+  }
+
+  VoidCallback? _onTap(FormFieldState<List<String>> field) {
     if (widget.property.readOnly) return null;
 
     return () async {
       final result = await widget.fileHandler();
 
       if (result != null) {
-        change(field, result);
+        final urlData = await Future.wait(
+          result.map(
+            (file) async {
+              final bytes = await file.readAsBytes();
+              return UriData.fromBytes(
+                bytes,
+                mimeType: lookupMimeType(file.name, headerBytes: bytes) ?? '',
+                parameters: {'name': file.name},
+              );
+            },
+          ),
+        );
+        final data = urlData.map((e) => e.uri.toString()).toList();
+        change(field, data);
       }
     };
   }
 
   Widget _buildButton(
     WidgetBuilderInherited widgetBuilderInherited,
-    FormFieldState<List<XFile>> field,
+    FormFieldState<List<String>> field,
   ) {
     final addFileButtonBuilder =
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;
