@@ -145,6 +145,8 @@ class SchemaProperty extends Schema {
   dynamic dependents;
   bool readOnly;
   bool isMultipleFile = false;
+  bool filePreview = false;
+  List<String>? acceptedFiles;
 
   /// indica si sus dependentes han sido activados por XDependencies
   bool isDependentsActive = false;
@@ -199,6 +201,15 @@ class SchemaProperty extends Schema {
           break;
         case "ui:widget":
           widget = data as String;
+          break;
+        case "ui:options":
+          filePreview = data["filePreview"] ?? false;
+          acceptedFiles = data["accept"] != null
+              ? (data["accept"] as String)
+                  .split(',')
+                  .map((e) => e.trim())
+                  .toList()
+              : null;
           break;
         default:
           break;

@@ -14,7 +14,9 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-typedef FileHandler = Map<String, Future<List<XFile>?> Function()?> Function();
+typedef FileHandler
+    = Map<String, Future<List<XFile>?> Function(SchemaProperty property)?>
+        Function();
 typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
     Function();
 

@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         ''';
 
-  Future<List<XFile>?> defaultCustomFileHandler() async {
+  Future<List<XFile>?> defaultCustomFileHandler(SchemaProperty property) async {
     await Future.delayed(const Duration(seconds: 3));
 
     final file1 = XFile(
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 fileHandler: () => {
                   'files': defaultCustomFileHandler,
-                  'file': () async {
+                  'file': (property) async {
                     return [
                       XFile(
                           'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')

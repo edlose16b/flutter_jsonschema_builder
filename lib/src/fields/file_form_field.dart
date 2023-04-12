@@ -25,7 +25,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
           customValidator: customValidator,
         );
 
-  final Future<List<XFile>?> Function() fileHandler;
+  final Future<List<XFile>?> Function(SchemaProperty property) fileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -63,10 +63,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
       },
       builder: (field) {
         final images = _extractImages(field.value);
-        final shouldBuildImages =
+        final shouldBuildImages = widget.property.filePreview &&
             widgetBuilderInherited.uiConfig.imagesBuilder != null &&
-                images != null &&
-                images.isNotEmpty;
+            images != null &&
+            images.isNotEmpty;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -139,7 +139,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
     if (widget.property.readOnly) return null;
 
     return () async {
-      final result = await widget.fileHandler();
+      final result = await widget.fileHandler(widget.property);
 
       if (result != null) {
         final urlData = await Future.wait(

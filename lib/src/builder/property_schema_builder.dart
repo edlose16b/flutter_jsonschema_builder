@@ -309,17 +309,18 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
   }
 
-  Future<List<XFile>?> Function() getCustomFileHanlder(
+  Future<List<XFile>?> Function(SchemaProperty property) getCustomFileHanlder(
       FileHandler customFileHandler, String key) {
     final handlers = customFileHandler();
     assert(handlers.isNotEmpty, 'CustomFileHandler must not be empty');
 
-    if (handlers.containsKey(key))
-      return handlers[key] as Future<List<XFile>?> Function();
+    if (handlers.containsKey(key)) {
+      return handlers[key] as Future<List<XFile>?> Function(SchemaProperty);
+    }
 
     if (handlers.containsKey('*')) {
       assert(handlers['*'] != null, 'Default file handler must not be null');
-      return handlers['*'] as Future<List<XFile>?> Function();
+      return handlers['*'] as Future<List<XFile>?> Function(SchemaProperty);
     }
 
     throw Exception('no file handler found');
