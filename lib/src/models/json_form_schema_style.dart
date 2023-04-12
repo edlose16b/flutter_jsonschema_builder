@@ -15,6 +15,7 @@ class JsonFormSchemaUiConfig {
     this.removeItemBuilder,
     this.submitButtonBuilder,
     this.addFileButtonBuilder,
+    this.imagesBuilder,
   });
 
   TextStyle? fieldTitle;
