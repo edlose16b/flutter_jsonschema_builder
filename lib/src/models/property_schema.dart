@@ -146,6 +146,7 @@ class SchemaProperty extends Schema {
   bool readOnly;
   bool isMultipleFile = false;
   bool filePreview = false;
+  String? fileType;
   List<String>? acceptedFiles;
 
   /// indica si sus dependentes han sido activados por XDependencies
@@ -204,6 +205,7 @@ class SchemaProperty extends Schema {
           break;
         case "ui:options":
           filePreview = data["filePreview"] ?? false;
+          fileType = data["fileType"];
           acceptedFiles = data["accept"] != null
               ? (data["accept"] as String)
                   .split(',')
