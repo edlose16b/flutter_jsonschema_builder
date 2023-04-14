@@ -16,6 +16,7 @@ class JsonFormSchemaUiConfig {
     this.submitButtonBuilder,
     this.addFileButtonBuilder,
     this.imagesBuilder,
+    this.selectionTitle,
   });
 
   TextStyle? fieldTitle;
@@ -25,6 +26,10 @@ class JsonFormSchemaUiConfig {
   TextStyle? subtitle;
   TextStyle? description;
   TextStyle? label;
+
+  /// title of the selection widget
+  /// if it is null, it will default to "Select"
+  String? selectionTitle;
 
   Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
   Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
