@@ -45,12 +45,13 @@ class _DateJFormFieldState extends State<DateJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+          style: uiConfig.fieldTitle,
         ),
         TextFormField(
           key: Key(widget.property.idKey),
@@ -58,7 +59,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
           keyboardType: TextInputType.phone,
           validator: (value) {
             if (widget.property.required && (value == null || value.isEmpty)) {
-              return 'Required';
+              return uiConfig.requiredText ?? 'Required';
             }
             if (widget.customValidator != null)
               return widget.customValidator!(value);

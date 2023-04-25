@@ -31,6 +31,10 @@ class JsonFormSchemaUiConfig {
   /// if it is null, it will default to "Select"
   String? selectionTitle;
 
+  /// text of the required fields
+  /// if it is null, it will default to "Required"
+  String? requiredText;
+
   Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
   Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
 
