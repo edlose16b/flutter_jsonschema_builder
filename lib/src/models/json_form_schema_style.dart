@@ -17,6 +17,7 @@ class JsonFormSchemaUiConfig {
     this.addFileButtonBuilder,
     this.imagesBuilder,
     this.selectionTitle,
+    this.requiredText,
   });
 
   TextStyle? fieldTitle;
