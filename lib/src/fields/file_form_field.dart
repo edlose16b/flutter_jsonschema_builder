@@ -168,8 +168,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;
 
     if (addFileButtonBuilder != null &&
-        addFileButtonBuilder(_onTap(field), widget.property.idKey) != null) {
-      return addFileButtonBuilder(_onTap(field), widget.property.idKey)!;
+        addFileButtonBuilder(_onTap(field), widget.property) != null) {
+      return addFileButtonBuilder(_onTap(field), widget.property)!;
     }
 
     return ElevatedButton(

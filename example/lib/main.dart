@@ -196,7 +196,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: const Icon(Icons.plus_one),
                     label: const Text('Add Item'),
                   ),
-                  addFileButtonBuilder: (onPressed, key) {
+                  addFileButtonBuilder: (onPressed, property) {
+                    final key = property.idKey;
                     if (['file', 'file3'].contains(key)) {
                       return OutlinedButton(
                         onPressed: onPressed,

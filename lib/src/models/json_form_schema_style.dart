@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
 class JsonFormSchemaUiConfig {
   JsonFormSchemaUiConfig({
@@ -45,7 +46,8 @@ class JsonFormSchemaUiConfig {
 
   /// render a custom button
   /// if it returns null or it is null, it will build default buttom
-  Widget? Function(VoidCallback? onPressed, String key)? addFileButtonBuilder;
+  Widget? Function(VoidCallback? onPressed, SchemaProperty property)?
+      addFileButtonBuilder;
 
   /// render a custom image preview, it takes a list of Uint8List (image bytes) as a parameter
   /// this widget is typically shown above the [addFileButtonBuilder] or default button in file field
