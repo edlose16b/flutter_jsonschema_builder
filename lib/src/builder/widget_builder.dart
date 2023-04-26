@@ -34,6 +34,7 @@ class JsonForm extends StatefulWidget {
     this.customPickerHandler,
     this.customValidatorHandler,
     this.onChanged,
+    this.initialData,
   }) : super(key: key);
 
   final String jsonSchema;
@@ -49,6 +50,8 @@ class JsonForm extends StatefulWidget {
   final CustomValidatorHandler? customValidatorHandler;
 
   final ValueChanged<dynamic>? onChanged;
+
+  final Map<String, dynamic>? initialData;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -79,6 +82,7 @@ class _JsonFormState extends State<JsonForm> {
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
       onChanged: widget.onChanged,
+      initialData: widget.initialData,
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 

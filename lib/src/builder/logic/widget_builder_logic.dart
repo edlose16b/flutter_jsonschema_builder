@@ -14,10 +14,12 @@ class WidgetBuilderInherited extends InheritedWidget {
     this.customPickerHandler,
     this.customValidatorHandler,
     this.onChanged,
-  }) : super(key: key, child: child);
+    Map<String, dynamic>? initialData,
+  })  : data = initialData ?? {},
+        super(key: key, child: child);
 
   final Schema mainSchema;
-  final data = {};
+  final Map<String, dynamic> data;
 
   final FileHandler? fileHandler;
   final CustomPickerHandler? customPickerHandler;
