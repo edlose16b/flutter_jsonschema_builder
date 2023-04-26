@@ -46,7 +46,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
       key: Key(widget.property.idKey),
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
-          return 'Required';
+          return widgetBuilderInherited.uiConfig.requiredText ?? 'Required';
         }
 
         if (widget.customValidator != null)

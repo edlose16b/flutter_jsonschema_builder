@@ -45,11 +45,12 @@ class _TextJFormFieldState extends State<TextJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+            style: uiConfig.fieldTitle),
         AbsorbPointer(
           absorbing: widget.property.disabled ?? false,
           child: TextFormField(
@@ -75,7 +76,11 @@ class _TextJFormFieldState extends State<TextJFormField> {
               if (widget.property.required && value != null) {
                 final validated = inputValidationJsonSchema(
                     newValue: value, property: widget.property);
-                if (validated != null) return validated;
+                if (validated == 'Required') {
+                  return uiConfig.requiredText ?? validated;
+                } else {
+                  return validated;
+                }
               }
 
               if (widget.customValidator != null)

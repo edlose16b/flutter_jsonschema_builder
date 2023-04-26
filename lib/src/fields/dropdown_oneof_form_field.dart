@@ -102,7 +102,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               isExpanded: false,
               validator: (value) {
                 if (widget.property.required && value == null) {
-                  return 'required';
+                  return uiConfig.requiredText ?? 'Required';
                 }
                 if (widget.customValidator != null)
                   return widget.customValidator!(value);
