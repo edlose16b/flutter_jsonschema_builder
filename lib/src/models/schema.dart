@@ -22,6 +22,7 @@ class Schema {
     Map<String, dynamic> json, {
     String id = kNoIdKey,
     Schema? parent,
+    Map<String, dynamic>? initialData,
   }) {
     Schema schema;
 
@@ -33,10 +34,16 @@ class Schema {
     }
 
     json['type'] ??= 'object';
+    print('in Schema initialData: $initialData');
 
     switch (schemaTypeFromString(json['type'])) {
       case SchemaType.object:
-        schema = SchemaObject.fromJson(id, json, parent: parent);
+        schema = SchemaObject.fromJson(
+          id,
+          json,
+          parent: parent,
+          initialData: initialData,
+        );
         break;
 
       case SchemaType.array:
@@ -47,9 +54,13 @@ class Schema {
           schema = schema.toSchemaPropertyMultipleFiles();
 
         break;
-
       default:
-        schema = SchemaProperty.fromJson(id, json, parent: parent);
+        schema = SchemaProperty.fromJson(
+          id,
+          json,
+          parent: parent,
+          initialData: initialData,
+        );
         break;
     }
 

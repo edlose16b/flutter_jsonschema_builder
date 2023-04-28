@@ -115,20 +115,24 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
 
   void _addFirstItem() {
     if (widget.schemaArray.itemsBaseSchema is Object) {
+      final initialData = WidgetBuilderInherited.of(context).data;
       final newSchema = Schema.fromJson(
         widget.schemaArray.itemsBaseSchema,
         id: '0',
         parent: widget.schemaArray,
+        initialData: initialData,
       );
 
       widget.schemaArray.items = [newSchema];
     } else {
+      final initialData = WidgetBuilderInherited.of(context).data;
       widget.schemaArray.items =
           (widget.schemaArray.itemsBaseSchema as List<Map<String, dynamic>>)
               .map((e) => Schema.fromJson(
                     e,
                     id: '0',
                     parent: widget.schemaArray,
+                    initialData: initialData,
                   ))
               .toList();
     }

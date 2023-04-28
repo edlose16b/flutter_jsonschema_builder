@@ -58,13 +58,14 @@ class SchemaProperty extends Schema {
     String id,
     Map<String, dynamic> json, {
     Schema? parent,
+    Map<String, dynamic>? initialData,
   }) {
     final property = SchemaProperty(
       id: id,
       title: json['title'],
       type: schemaTypeFromString(json['type']),
       format: propertyFormatFromString(json['format']),
-      defaultValue: safeDefaultValue(json),
+      defaultValue: initialData?[id] ?? safeDefaultValue(json),
       description: json['description'],
       enumm: json['enum'],
       enumNames: json['enumNames'],

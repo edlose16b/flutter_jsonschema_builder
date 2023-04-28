@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/array_schema_builder.dart';
@@ -14,9 +13,9 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-typedef FileHandler
-    = Map<String, Future<List<XFile>?> Function(SchemaProperty property)?>
-        Function();
+typedef FileHandler = Map<String,
+        Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
+    Function();
 typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
     Function();
 
@@ -67,7 +66,7 @@ class _JsonFormState extends State<JsonForm> {
   @override
   void initState() {
     mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
-        id: kGenesisIdKey) as SchemaObject)
+        id: kGenesisIdKey, initialData: widget.initialData) as SchemaObject)
       ..setUiSchema(
           widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
 

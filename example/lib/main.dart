@@ -1,6 +1,6 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
@@ -110,15 +110,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
         ''';
 
-  Future<List<XFile>?> defaultCustomFileHandler(SchemaProperty property) async {
+  Future<List<SchemaFormFile>?> defaultCustomFileHandler(
+      SchemaProperty property) async {
     await Future.delayed(const Duration(seconds: 3));
 
-    final file1 = XFile(
-        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-    final file2 = XFile(
-        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
-    final file3 = XFile(
-        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+    final file1 = SchemaFormFile(
+      name:
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+      value:
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+      bytes: Uint8List.fromList([]),
+    );
+    final file2 = SchemaFormFile(
+      name:
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+      value:
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+      bytes: Uint8List.fromList([]),
+    );
+    final file3 = SchemaFormFile(
+      name:
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+      value:
+          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+      bytes: Uint8List.fromList([]),
+    );
 
     return [file1, file2, file3];
   }
@@ -142,8 +158,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   'files': defaultCustomFileHandler,
                   'file': (property) async {
                     return [
-                      XFile(
-                          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
+                      SchemaFormFile(
+                        name:
+                            'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+                        value:
+                            'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+                        bytes: Uint8List.fromList([]),
+                      )
                     ];
                   },
                   '*': defaultCustomFileHandler

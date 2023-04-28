@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
@@ -25,7 +24,8 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
           customValidator: customValidator,
         );
 
-  final Future<List<XFile>?> Function(SchemaProperty property) fileHandler;
+  final Future<List<SchemaFormFile>?> Function(SchemaProperty property)
+      fileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -42,7 +42,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
   Widget build(BuildContext context) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-    return FormField<List<String>>(
+    return FormField<List<SchemaFormFile>>(
       key: Key(widget.property.idKey),
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
@@ -55,8 +55,9 @@ class _FileJFormFieldState extends State<FileJFormField> {
       },
       onSaved: (newValue) {
         if (newValue != null) {
-          final response =
-              widget.property.isMultipleFile ? newValue : (newValue.first);
+          final response = widget.property.isMultipleFile
+              ? newValue.map((f) => f.value).toList()
+              : (newValue.first.value);
 
           widget.onSaved(response);
         }
@@ -84,11 +85,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: field.value?.length ?? 0,
               itemBuilder: (context, index) {
-                final currentData = field.value![index];
-                final urlData = UriData.parse(currentData);
-                final name = urlData.parameters['name'];
+                final currentFile = field.value![index];
+                final name = currentFile.name;
                 return ListTile(
-                  title: Text(name ?? '',
+                  title: Text(name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: widget.property.readOnly
@@ -100,7 +100,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                       change(
                           field,
                           field.value!
-                            ..removeWhere((element) => element == currentData));
+                            ..removeWhere((element) => element.name == name));
                     },
                   ),
                 );
@@ -113,56 +113,49 @@ class _FileJFormFieldState extends State<FileJFormField> {
     );
   }
 
-  void change(FormFieldState<List<String>> field, List<String>? values) {
+  void change(
+    FormFieldState<List<SchemaFormFile>> field,
+    List<SchemaFormFile>? values,
+  ) {
     field.didChange(values);
 
     if (widget.onChanged != null) {
       final response = widget.property.isMultipleFile
-          ? values
-          : (values != null && values.isNotEmpty ? values.first : null);
+          ? values?.map((e) => e.value).toList()
+          : (values != null && values.isNotEmpty ? values.first.value : null);
       widget.onChanged!(response);
     }
   }
 
-  List<Uint8List>? _extractImages(List<String>? data) {
+  List<Uint8List>? _extractImages(List<SchemaFormFile>? data) {
     return data
-        // convert the data to UriData
-        ?.map((e) => UriData.parse(e))
         // filter only images
-        .where((e) => e.mimeType.startsWith('image/'))
-        // convert the UriData to bytes
-        .map((e) => e.contentAsBytes())
+        ?.where(
+          (e) =>
+              lookupMimeType(e.name, headerBytes: e.bytes)
+                  ?.startsWith('image/') ==
+              true,
+        )
+        // map as only bytes
+        .map((e) => e.bytes)
         .toList();
   }
 
-  VoidCallback? _onTap(FormFieldState<List<String>> field) {
+  VoidCallback? _onTap(FormFieldState<List<SchemaFormFile>> field) {
     if (widget.property.readOnly) return null;
 
     return () async {
       final result = await widget.fileHandler(widget.property);
 
       if (result != null) {
-        final urlData = await Future.wait(
-          result.map(
-            (file) async {
-              final bytes = await file.readAsBytes();
-              return UriData.fromBytes(
-                bytes,
-                mimeType: lookupMimeType(file.name, headerBytes: bytes) ?? '',
-                parameters: {'name': file.name},
-              );
-            },
-          ),
-        );
-        final data = urlData.map((e) => e.uri.toString()).toList();
-        change(field, data);
+        change(field, result);
       }
     };
   }
 
   Widget _buildButton(
     WidgetBuilderInherited widgetBuilderInherited,
-    FormFieldState<List<String>> field,
+    FormFieldState<List<SchemaFormFile>> field,
   ) {
     final addFileButtonBuilder =
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;
