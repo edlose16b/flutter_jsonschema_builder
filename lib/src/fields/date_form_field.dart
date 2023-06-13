@@ -61,8 +61,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
             if (widget.property.required && (value == null || value.isEmpty)) {
               return uiConfig.requiredText ?? 'Required';
             }
-            if (widget.customValidator != null)
-              return widget.customValidator!(value);
+            if (widget.customValidator != null) return widget.customValidator!(value);
             return null;
           },
           // inputFormatters: [DateTextInputJsonFormatter()],
@@ -72,7 +71,9 @@ class _DateJFormFieldState extends State<DateJFormField> {
               : WidgetBuilderInherited.of(context).uiConfig.label,
 
           onSaved: (value) {
-            if (value != null) widget.onSaved(formatter.parse(value));
+            if (value != null && DateTime.tryParse(value) != null) {
+              widget.onSaved(formatter.parse(value));
+            }
           },
           onChanged: (value) {
             try {
@@ -84,10 +85,9 @@ class _DateJFormFieldState extends State<DateJFormField> {
           },
           decoration: InputDecoration(
             hintText: dateFormatString.toUpperCase(),
-            helperText:
-                widget.property.help != null && widget.property.help!.isNotEmpty
-                    ? widget.property.help
-                    : null,
+            helperText: widget.property.help != null && widget.property.help!.isNotEmpty
+                ? widget.property.help
+                : null,
             suffixIcon: IconButton(
               icon: const Icon(Icons.date_range_outlined),
               onPressed: widget.property.readOnly ? null : _openCalendar,
