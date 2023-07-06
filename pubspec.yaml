@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.17.0
+  intl: ^0.18.0
   extended_masked_text: ^2.3.1
   mime: ^1.0.4
 
