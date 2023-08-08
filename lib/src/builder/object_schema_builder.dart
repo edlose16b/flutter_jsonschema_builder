@@ -9,10 +9,12 @@ class ObjectSchemaBuilder extends StatefulWidget {
     Key? key,
     required this.mainSchema,
     required this.schemaObject,
+    this.showDebugLabels = true,
   }) : super(key: key);
 
   final Schema mainSchema;
   final SchemaObject schemaObject;
+  final bool showDebugLabels;
 
   @override
   State<ObjectSchemaBuilder> createState() => _ObjectSchemaBuilderState();
@@ -50,6 +52,7 @@ class _ObjectSchemaBuilderState extends State<ObjectSchemaBuilder> {
                 .map((e) => FormFromSchemaBuilder(
                     schemaObject: widget.schemaObject,
                     mainSchema: widget.mainSchema,
+                    showDebugLabels: widget.showDebugLabels,
                     schema: e))
                 .toList(),
         ],

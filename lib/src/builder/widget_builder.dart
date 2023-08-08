@@ -13,18 +13,22 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-typedef FileHandler = Map<String, Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
+typedef FileHandler = Map<String,
+        Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
     Function();
-typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)> Function();
+typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
+    Function();
 
-typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?> Function();
+typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
+    Function();
 
 class JsonForm extends StatefulWidget {
   const JsonForm({
     Key? key,
     required this.jsonSchema,
-    this.uiSchema,
     required this.onFormDataSaved,
+    this.showDebugLabels = true,
+    this.uiSchema,
     this.fileHandler,
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
@@ -49,6 +53,11 @@ class JsonForm extends StatefulWidget {
 
   final Map<String, dynamic>? initialData;
 
+  /// Whether to show debug labels for each field or not, this defaults to `true`
+  ///
+  /// Debug labels only show when the app is built for debugging
+  final bool showDebugLabels;
+
   @override
   _JsonFormState createState() => _JsonFormState();
 }
@@ -64,7 +73,8 @@ class _JsonFormState extends State<JsonForm> {
   void initState() {
     mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
         id: kGenesisIdKey, initialData: widget.initialData) as SchemaObject)
-      ..setUiSchema(widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
+      ..setUiSchema(
+          widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
 
     super.initState();
   }
@@ -98,6 +108,7 @@ class _JsonFormState extends State<JsonForm> {
                 FormFromSchemaBuilder(
                   mainSchema: mainSchema,
                   schema: mainSchema,
+                  showDebugLabels: widget.showDebugLabels,
                 ),
                 const SizedBox(height: 20),
                 widgetBuilderInherited.uiConfig.submitButtonBuilder == null
@@ -105,8 +116,8 @@ class _JsonFormState extends State<JsonForm> {
                         onPressed: () => onSubmit(widgetBuilderInherited),
                         child: const Text('Submit'),
                       )
-                    : widgetBuilderInherited
-                        .uiConfig.submitButtonBuilder!(() => onSubmit(widgetBuilderInherited)),
+                    : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
+                        () => onSubmit(widgetBuilderInherited)),
               ],
             ),
           ),
@@ -158,10 +169,12 @@ class FormFromSchemaBuilder extends StatelessWidget {
     Key? key,
     required this.mainSchema,
     required this.schema,
+    this.showDebugLabels = true,
     this.schemaObject,
   }) : super(key: key);
   final Schema mainSchema;
   final Schema schema;
+  final bool showDebugLabels;
   final SchemaObject? schemaObject;
 
   @override
@@ -170,12 +183,14 @@ class FormFromSchemaBuilder extends StatelessWidget {
       return PropertySchemaBuilder(
         mainSchema: mainSchema,
         schemaProperty: schema as SchemaProperty,
+        showDebugLabels: showDebugLabels,
       );
     }
     if (schema is SchemaArray) {
       return ArraySchemaBuilder(
         mainSchema: mainSchema,
         schemaArray: schema as SchemaArray,
+        showDebugLabels: showDebugLabels,
       );
     }
 
@@ -183,6 +198,7 @@ class FormFromSchemaBuilder extends StatelessWidget {
       return ObjectSchemaBuilder(
         mainSchema: mainSchema,
         schemaObject: schema as SchemaObject,
+        showDebugLabels: showDebugLabels,
       );
     }
 
