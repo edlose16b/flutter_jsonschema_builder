@@ -10,12 +10,12 @@ class ArraySchemaBuilder extends StatefulWidget {
     Key? key,
     required this.mainSchema,
     required this.schemaArray,
-    this.showDebugLabels = true,
+    this.showDebugElements = true,
   }) : super(key: key);
 
   final Schema mainSchema;
   final SchemaArray schemaArray;
-  final bool showDebugLabels;
+  final bool showDebugElements;
   @override
   State<ArraySchemaBuilder> createState() => _ArraySchemaBuilderState();
 }
@@ -70,7 +70,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                   FormFromSchemaBuilder(
                     mainSchema: widget.mainSchema,
                     schema: schemaLoop,
-                    showDebugLabels: widget.showDebugLabels,
+                    showDebugElements: widget.showDebugElements,
                   ),
                   if (widget.schemaArray.items.length > 1) const Divider(),
                   const SizedBox(height: 10),
