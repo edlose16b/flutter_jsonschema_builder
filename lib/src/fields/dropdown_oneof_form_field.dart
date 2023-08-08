@@ -82,11 +82,14 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
   Widget build(BuildContext context) {
     assert(widget.property.oneOf != null, 'oneOf is required');
 
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: uiConfig.fieldTitle,
+        ),
         GestureDetector(
           onTap: _onTap,
           child: AbsorbPointer(
@@ -95,11 +98,11 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               key: Key(widget.property.idKey),
               value: valueSelected,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              hint: const Text('Seleccione'),
+              hint: Text(uiConfig.selectionTitle ?? 'Select'),
               isExpanded: false,
               validator: (value) {
                 if (widget.property.required && value == null) {
-                  return 'required';
+                  return uiConfig.requiredText ?? 'Required';
                 }
                 if (widget.customValidator != null)
                   return widget.customValidator!(value);

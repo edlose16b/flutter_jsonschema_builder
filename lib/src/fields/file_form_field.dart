@@ -1,7 +1,9 @@
-import 'package:cross_file/cross_file.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
+import 'package:mime/mime.dart';
 
 import './shared.dart';
 import '../models/models.dart';
@@ -22,7 +24,8 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
           customValidator: customValidator,
         );
 
-  final Future<List<XFile>?> Function() fileHandler;
+  final Future<List<SchemaFormFile>?> Function(SchemaProperty property)
+      fileHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
@@ -39,11 +42,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
   Widget build(BuildContext context) {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-    return FormField<List<XFile>>(
+    return FormField<List<SchemaFormFile>>(
       key: Key(widget.property.idKey),
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
-          return 'Required';
+          return widgetBuilderInherited.uiConfig.requiredText ?? 'Required';
         }
 
         if (widget.customValidator != null)
@@ -52,13 +55,19 @@ class _FileJFormFieldState extends State<FileJFormField> {
       },
       onSaved: (newValue) {
         if (newValue != null) {
-          final response =
-              widget.property.isMultipleFile ? newValue : (newValue.first);
+          final response = widget.property.isMultipleFile
+              ? newValue.map((f) => f.value).toList()
+              : (newValue.first.value);
 
           widget.onSaved(response);
         }
       },
       builder: (field) {
+        final images = _extractImages(field.value);
+        final shouldBuildImages = widget.property.filePreview &&
+            widgetBuilderInherited.uiConfig.imagesBuilder != null &&
+            images != null &&
+            images.isNotEmpty;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -67,6 +76,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
               style: widgetBuilderInherited.uiConfig.fieldTitle,
             ),
             const SizedBox(height: 10),
+            if (shouldBuildImages)
+              widgetBuilderInherited.uiConfig.imagesBuilder!(images!),
             _buildButton(widgetBuilderInherited, field),
             const SizedBox(height: 10),
             ListView.builder(
@@ -74,13 +85,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: field.value?.length ?? 0,
               itemBuilder: (context, index) {
-                final file = field.value![index];
-
+                final currentFile = field.value![index];
+                final name = currentFile.name;
                 return ListTile(
-                  title: Text(
-                      file.path.characters
-                          .takeLastWhile((p0) => p0 != '/')
-                          .string,
+                  title: Text(name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: widget.property.readOnly
@@ -92,8 +100,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                       change(
                           field,
                           field.value!
-                            ..removeWhere(
-                                (element) => element.path == file.path));
+                            ..removeWhere((element) => element.name == name));
                     },
                   ),
                 );
@@ -106,22 +113,39 @@ class _FileJFormFieldState extends State<FileJFormField> {
     );
   }
 
-  void change(FormFieldState<List<XFile>> field, List<XFile>? values) {
+  void change(
+    FormFieldState<List<SchemaFormFile>> field,
+    List<SchemaFormFile>? values,
+  ) {
     field.didChange(values);
 
     if (widget.onChanged != null) {
       final response = widget.property.isMultipleFile
-          ? values
-          : (values != null && values.isNotEmpty ? values.first : null);
+          ? values?.map((e) => e.value).toList()
+          : (values != null && values.isNotEmpty ? values.first.value : null);
       widget.onChanged!(response);
     }
   }
 
-  VoidCallback? _onTap(FormFieldState<List<XFile>> field) {
+  List<Uint8List>? _extractImages(List<SchemaFormFile>? data) {
+    return data
+        // filter only images
+        ?.where(
+          (e) =>
+              lookupMimeType(e.name, headerBytes: e.bytes)
+                  ?.startsWith('image/') ==
+              true,
+        )
+        // map as only bytes
+        .map((e) => e.bytes)
+        .toList();
+  }
+
+  VoidCallback? _onTap(FormFieldState<List<SchemaFormFile>> field) {
     if (widget.property.readOnly) return null;
 
     return () async {
-      final result = await widget.fileHandler();
+      final result = await widget.fileHandler(widget.property);
 
       if (result != null) {
         change(field, result);
@@ -131,14 +155,14 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
   Widget _buildButton(
     WidgetBuilderInherited widgetBuilderInherited,
-    FormFieldState<List<XFile>> field,
+    FormFieldState<List<SchemaFormFile>> field,
   ) {
     final addFileButtonBuilder =
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;
 
     if (addFileButtonBuilder != null &&
-        addFileButtonBuilder(_onTap(field), widget.property.idKey) != null) {
-      return addFileButtonBuilder(_onTap(field), widget.property.idKey)!;
+        addFileButtonBuilder(_onTap(field), widget.property) != null) {
+      return addFileButtonBuilder(_onTap(field), widget.property)!;
     }
 
     return ElevatedButton(

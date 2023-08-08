@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/array_schema_builder.dart';
@@ -14,12 +13,11 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-typedef FileHandler = Map<String, Future<List<XFile>?> Function()?> Function();
-typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
+typedef FileHandler = Map<String, Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
     Function();
+typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)> Function();
 
-typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
-    Function();
+typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?> Function();
 
 class JsonForm extends StatefulWidget {
   const JsonForm({
@@ -31,6 +29,8 @@ class JsonForm extends StatefulWidget {
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
     this.customValidatorHandler,
+    this.onChanged,
+    this.initialData,
   }) : super(key: key);
 
   final String jsonSchema;
@@ -44,6 +44,11 @@ class JsonForm extends StatefulWidget {
   final CustomPickerHandler? customPickerHandler;
 
   final CustomValidatorHandler? customValidatorHandler;
+
+  final ValueChanged<dynamic>? onChanged;
+
+  final Map<String, dynamic>? initialData;
+
   @override
   _JsonFormState createState() => _JsonFormState();
 }
@@ -58,9 +63,8 @@ class _JsonFormState extends State<JsonForm> {
   @override
   void initState() {
     mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
-        id: kGenesisIdKey) as SchemaObject)
-      ..setUiSchema(
-          widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
+        id: kGenesisIdKey, initialData: widget.initialData) as SchemaObject)
+      ..setUiSchema(widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
 
     super.initState();
   }
@@ -72,38 +76,38 @@ class _JsonFormState extends State<JsonForm> {
       fileHandler: widget.fileHandler,
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
+      onChanged: widget.onChanged,
+      initialData: widget.initialData,
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
-        return SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: <Widget>[
-                  if (!kReleaseMode)
-                    TextButton(
-                      onPressed: () {
-                        inspect(mainSchema);
-                      },
-                      child: const Text('INSPECT'),
-                    ),
-                  _buildHeaderTitle(context),
-                  FormFromSchemaBuilder(
-                    mainSchema: mainSchema,
-                    schema: mainSchema,
+        return Form(
+          key: _formKey,
+          child: Container(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: <Widget>[
+                if (!kReleaseMode)
+                  TextButton(
+                    onPressed: () {
+                      inspect(mainSchema);
+                    },
+                    child: const Text('INSPECT'),
                   ),
-                  const SizedBox(height: 20),
-                  widgetBuilderInherited.uiConfig.submitButtonBuilder == null
-                      ? ElevatedButton(
-                          onPressed: () => onSubmit(widgetBuilderInherited),
-                          child: const Text('Submit'),
-                        )
-                      : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
-                          () => onSubmit(widgetBuilderInherited)),
-                ],
-              ),
+                _buildHeaderTitle(context),
+                FormFromSchemaBuilder(
+                  mainSchema: mainSchema,
+                  schema: mainSchema,
+                ),
+                const SizedBox(height: 20),
+                widgetBuilderInherited.uiConfig.submitButtonBuilder == null
+                    ? ElevatedButton(
+                        onPressed: () => onSubmit(widgetBuilderInherited),
+                        child: const Text('Submit'),
+                      )
+                    : widgetBuilderInherited
+                        .uiConfig.submitButtonBuilder!(() => onSubmit(widgetBuilderInherited)),
+              ],
             ),
           ),
         );

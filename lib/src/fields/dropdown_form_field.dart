@@ -58,11 +58,14 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
       return true;
     }(), '[enumNames] and [enum]  must be the same size ');
 
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: uiConfig.fieldTitle,
+        ),
         GestureDetector(
           onTap: _onTap,
           child: AbsorbPointer(
@@ -70,11 +73,11 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
             child: DropdownButtonFormField<dynamic>(
               key: Key(widget.property.idKey),
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              hint: const Text('Seleccione'),
+              hint: Text(uiConfig.selectionTitle ?? 'Select'),
               isExpanded: false,
               validator: (value) {
                 if (widget.property.required && value == null) {
-                  return 'required';
+                  return uiConfig.requiredText ?? 'Required';
                 }
                 if (widget.customValidator != null)
                   return widget.customValidator!(value);

@@ -18,6 +18,7 @@ class SchemaObject extends Schema {
     String id,
     Map<String, dynamic> json, {
     Schema? parent,
+    Map<String, dynamic>? initialData,
   }) {
     final schema = SchemaObject(
       id: id,
@@ -33,10 +34,10 @@ class SchemaObject extends Schema {
     schema.dependentsAddedBy.addAll(parent?.dependentsAddedBy ?? []);
 
     if (json['properties'] != null) {
-      schema.setProperties(json['properties'], schema);
+      schema.setProperties(json['properties'], schema, initialData);
     }
     if (json['oneOf'] != null) {
-      schema.setOneOf(json['oneOf'], schema);
+      schema.setOneOf(json['oneOf'], schema, initialData);
     }
 
     return schema;
@@ -137,6 +138,7 @@ class SchemaObject extends Schema {
   void setProperties(
     dynamic properties,
     SchemaObject schema,
+    Map<String, dynamic>? initialData,
   ) {
     if (properties == null) return;
     var props = <Schema>[];
@@ -149,6 +151,7 @@ class SchemaObject extends Schema {
         _property,
         id: key,
         parent: schema,
+        initialData: initialData,
       );
 
       if (property is SchemaProperty) {
@@ -165,13 +168,21 @@ class SchemaObject extends Schema {
     this.properties = props;
   }
 
-  void setOneOf(List<dynamic>? oneOf, SchemaObject schema) {
+  void setOneOf(
+    List<dynamic>? oneOf,
+    SchemaObject schema,
+    Map<String, dynamic>? initialData,
+  ) {
     if (oneOf == null) return;
     oneOf.map((e) => Map<String, dynamic>.from(e));
     var oneOfs = <Schema>[];
     for (var element in oneOf) {
       print(element);
-      oneOfs.add(Schema.fromJson(element, parent: schema));
+      oneOfs.add(Schema.fromJson(
+        element,
+        parent: schema,
+        initialData: initialData,
+      ));
     }
 
     this.oneOf = oneOfs;

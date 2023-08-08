@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/object_schema_logic.dart';
@@ -309,17 +308,20 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
   }
 
-  Future<List<XFile>?> Function() getCustomFileHanlder(
-      FileHandler customFileHandler, String key) {
+  Future<List<SchemaFormFile>?> Function(SchemaProperty property)
+      getCustomFileHanlder(FileHandler customFileHandler, String key) {
     final handlers = customFileHandler();
     assert(handlers.isNotEmpty, 'CustomFileHandler must not be empty');
 
-    if (handlers.containsKey(key))
-      return handlers[key] as Future<List<XFile>?> Function();
+    if (handlers.containsKey(key)) {
+      return handlers[key] as Future<List<SchemaFormFile>?> Function(
+          SchemaProperty);
+    }
 
     if (handlers.containsKey('*')) {
       assert(handlers['*'] != null, 'Default file handler must not be null');
-      return handlers['*'] as Future<List<XFile>?> Function();
+      return handlers['*'] as Future<List<SchemaFormFile>?> Function(
+          SchemaProperty);
     }
 
     throw Exception('no file handler found');
@@ -327,12 +329,12 @@ class PropertySchemaBuilder extends StatelessWidget {
 
   Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(
       BuildContext context, String key) {
-    final customFileHandler =
+    final customPickerHandler =
         WidgetBuilderInherited.of(context).customPickerHandler;
 
-    if (customFileHandler == null) return null;
+    if (customPickerHandler == null) return null;
 
-    final handlers = customFileHandler();
+    final handlers = customPickerHandler();
 
     if (handlers.containsKey(key)) return handlers[key];
 

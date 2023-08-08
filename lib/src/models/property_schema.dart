@@ -58,13 +58,14 @@ class SchemaProperty extends Schema {
     String id,
     Map<String, dynamic> json, {
     Schema? parent,
+    Map<String, dynamic>? initialData,
   }) {
     final property = SchemaProperty(
       id: id,
       title: json['title'],
       type: schemaTypeFromString(json['type']),
       format: propertyFormatFromString(json['format']),
-      defaultValue: safeDefaultValue(json),
+      defaultValue: initialData?[id] ?? safeDefaultValue(json),
       description: json['description'],
       enumm: json['enum'],
       enumNames: json['enumNames'],
@@ -145,6 +146,9 @@ class SchemaProperty extends Schema {
   dynamic dependents;
   bool readOnly;
   bool isMultipleFile = false;
+  bool filePreview = false;
+  String? fileType;
+  List<String>? acceptedFiles;
 
   /// indica si sus dependentes han sido activados por XDependencies
   bool isDependentsActive = false;
@@ -199,6 +203,16 @@ class SchemaProperty extends Schema {
           break;
         case "ui:widget":
           widget = data as String;
+          break;
+        case "ui:options":
+          filePreview = data["filePreview"] ?? false;
+          fileType = data["fileType"];
+          acceptedFiles = data["accept"] != null
+              ? (data["accept"] as String)
+                  .split(',')
+                  .map((e) => e.trim())
+                  .toList()
+              : null;
           break;
         default:
           break;

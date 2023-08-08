@@ -42,11 +42,14 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final uiConfig = WidgetBuilderInherited.of(context).uiConfig;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle),
+        Text(
+          '${widget.property.title} ${widget.property.required ? "*" : ""}',
+          style: uiConfig.fieldTitle,
+        ),
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
@@ -69,7 +72,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
               : WidgetBuilderInherited.of(context).uiConfig.label,
           validator: (String? value) {
             if (widget.property.required && value != null && value.isEmpty) {
-              return 'Required';
+              return uiConfig.requiredText ?? 'Required';
             }
             if (widget.property.minLength != null &&
                 value != null &&

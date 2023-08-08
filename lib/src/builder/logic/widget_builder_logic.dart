@@ -13,14 +13,18 @@ class WidgetBuilderInherited extends InheritedWidget {
     this.fileHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
-  }) : super(key: key, child: child);
+    this.onChanged,
+    Map<String, dynamic>? initialData,
+  })  : data = initialData ?? {},
+        super(key: key, child: child);
 
   final Schema mainSchema;
-  final data = {};
+  final Map<String, dynamic> data;
 
   final FileHandler? fileHandler;
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
+  final ValueChanged<dynamic>? onChanged;
   late final JsonFormSchemaUiConfig uiConfig;
 
   void setJsonFormSchemaStyle(
@@ -44,6 +48,9 @@ class WidgetBuilderInherited extends InheritedWidget {
       removeItemBuilder: uiConfig?.removeItemBuilder,
       submitButtonBuilder: uiConfig?.submitButtonBuilder,
       addFileButtonBuilder: uiConfig?.addFileButtonBuilder,
+      imagesBuilder: uiConfig?.imagesBuilder,
+      selectionTitle: uiConfig?.selectionTitle,
+      requiredText: uiConfig?.requiredText,
     );
   }
 
@@ -80,6 +87,7 @@ class WidgetBuilderInherited extends InheritedWidget {
 
     object[_keyNumeric ?? _key] = value;
     stack.removeAt(0);
+    onChanged?.call(data);
   }
 
   /// add a new value into a schema,
