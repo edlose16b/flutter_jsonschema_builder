@@ -11,6 +11,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     required this.mainSchema,
     required Widget child,
     this.fileHandler,
+    this.initialFileValueHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
     this.onChanged,
@@ -22,6 +23,7 @@ class WidgetBuilderInherited extends InheritedWidget {
   final Map<String, dynamic> data;
 
   final FileHandler? fileHandler;
+  final InitialFileValueHandler? initialFileValueHandler;
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
   final ValueChanged<dynamic>? onChanged;

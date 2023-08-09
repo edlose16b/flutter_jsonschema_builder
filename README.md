@@ -133,6 +133,46 @@ customFileHandler: () => {
 }
 ```
 
+### Initial File Value Handler
+
+As file can be represented as any string, even a URL, so we need a way to convert back that string into an actual file value, we can provide `initialFileValueHandler` for this case
+
+```dart
+initialFileValueHandler: () => {
+  'profile_photo': (dynamic defaultValue) async {
+    if(defaultValue is List) 
+    // fetch list of images logic here
+    return;
+    if(defaultValue is String){
+      final file = await fetchOurFileFromUrl(defaultValue);
+      return [SchemaFormFile(name: file.name, bytes: await file.readAsBytes(), value: defaultValue )]
+    }
+    
+  },
+  '*': null
+}
+
+Future<List<SchemaFormFile>?> _defaultInitialFileValueHandler(
+    dynamic defaultValue) async {
+  Future<SchemaFormFile?> schemaFileFromUrl(String url) async {
+    // file fetching logic here
+  }
+
+  if (defaultValue is List) {
+    final result =
+        await Future.wait(defaultValue.cast<String>().map(schemaFileFromUrl));
+    return result.whereType<SchemaFormFile>().toList();
+  }
+
+  if (defaultValue is String) {
+    final file = await schemaFileFromUrl(defaultValue);
+    if (file != null) return [file];
+  }
+
+  return null;
+}
+```
+
 ### Using Custom Validator
 
 ```dart

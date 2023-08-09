@@ -13,11 +13,17 @@ import 'package:flutter_jsonschema_builder/src/models/json_form_schema_style.dar
 
 import '../models/models.dart';
 
-typedef FileHandler = Map<String, Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
+typedef FileHandler = Map<String,
+        Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
     Function();
-typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)> Function();
+typedef InitialFileValueHandler
+    = Map<String, Future<List<SchemaFormFile>?> Function(dynamic defaultValue)?>
+        Function();
+typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
+    Function();
 
-typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?> Function();
+typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
+    Function();
 
 class JsonForm extends StatefulWidget {
   const JsonForm({
@@ -26,6 +32,7 @@ class JsonForm extends StatefulWidget {
     this.uiSchema,
     required this.onFormDataSaved,
     this.fileHandler,
+    this.initialFileValueHandler,
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
     this.customValidatorHandler,
@@ -38,6 +45,10 @@ class JsonForm extends StatefulWidget {
 
   final String? uiSchema;
   final FileHandler? fileHandler;
+
+  /// This handler is for getting the correct initial value for each file, as file is just represented as string sometimes,
+  /// so we would need this handler to turn value into actual representable file field value
+  final InitialFileValueHandler? initialFileValueHandler;
 
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
 
@@ -64,7 +75,8 @@ class _JsonFormState extends State<JsonForm> {
   void initState() {
     mainSchema = (Schema.fromJson(json.decode(widget.jsonSchema),
         id: kGenesisIdKey, initialData: widget.initialData) as SchemaObject)
-      ..setUiSchema(widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
+      ..setUiSchema(
+          widget.uiSchema != null ? json.decode(widget.uiSchema!) : null);
 
     super.initState();
   }
@@ -74,6 +86,7 @@ class _JsonFormState extends State<JsonForm> {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
       fileHandler: widget.fileHandler,
+      initialFileValueHandler: widget.initialFileValueHandler,
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
       onChanged: widget.onChanged,
@@ -105,8 +118,8 @@ class _JsonFormState extends State<JsonForm> {
                         onPressed: () => onSubmit(widgetBuilderInherited),
                         child: const Text('Submit'),
                       )
-                    : widgetBuilderInherited
-                        .uiConfig.submitButtonBuilder!(() => onSubmit(widgetBuilderInherited)),
+                    : widgetBuilderInherited.uiConfig.submitButtonBuilder!(
+                        () => onSubmit(widgetBuilderInherited)),
               ],
             ),
           ),

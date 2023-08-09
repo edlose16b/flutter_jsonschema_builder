@@ -137,8 +137,11 @@ class PropertySchemaBuilder extends StatelessWidget {
                 'File handler can not be null when using file inputs');
             _field = FileJFormField(
               property: schemaPropertySorted,
-              fileHandler: getCustomFileHanlder(
+              fileHandler: getCustomFileHandler(
                   WidgetBuilderInherited.of(context).fileHandler!,
+                  schemaProperty.id),
+              initialFileValueHandler: getCustomInitialFileValueHandler(
+                  WidgetBuilderInherited.of(context).initialFileValueHandler,
                   schemaProperty.id),
               onSaved: (val) {
                 log('onSaved: FileJFormField  ${schemaProperty.idKey}  : $val');
@@ -309,7 +312,7 @@ class PropertySchemaBuilder extends StatelessWidget {
   }
 
   Future<List<SchemaFormFile>?> Function(SchemaProperty property)
-      getCustomFileHanlder(FileHandler customFileHandler, String key) {
+      getCustomFileHandler(FileHandler customFileHandler, String key) {
     final handlers = customFileHandler();
     assert(handlers.isNotEmpty, 'CustomFileHandler must not be empty');
 
@@ -325,6 +328,30 @@ class PropertySchemaBuilder extends StatelessWidget {
     }
 
     throw Exception('no file handler found');
+  }
+
+  Future<List<SchemaFormFile>?> Function(dynamic defaultValue)?
+      getCustomInitialFileValueHandler(
+    InitialFileValueHandler? initialFileValueHandler,
+    String key,
+  ) {
+    if (initialFileValueHandler == null) return null;
+    final handlers = initialFileValueHandler();
+    assert(handlers.isNotEmpty, 'InitialFileValueHandlers must not be empty');
+
+    if (handlers.containsKey(key)) {
+      return handlers[key] as Future<List<SchemaFormFile>?> Function(dynamic);
+    }
+
+    if (handlers.containsKey('*')) {
+      assert(
+        handlers['*'] != null,
+        'Default initial file value handler must not be null',
+      );
+      return handlers['*'] as Future<List<SchemaFormFile>?> Function(dynamic);
+    }
+
+    throw Exception('no initial file value handler found');
   }
 
   Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(
