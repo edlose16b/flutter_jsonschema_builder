@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import '../models/models.dart';
@@ -62,10 +63,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: uiConfig.fieldTitle,
-        ),
+        FieldHeader(property: widget.property),
         GestureDetector(
           onTap: _onTap,
           child: AbsorbPointer(

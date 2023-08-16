@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:mime/mime.dart';
@@ -80,10 +81,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${widget.property.title} ${widget.property.required ? "*" : ""}',
-              style: widgetBuilderInherited.uiConfig.fieldTitle,
-            ),
+            FieldHeader(property: widget.property),
             const SizedBox(height: 10),
             if (shouldBuildImages)
               widgetBuilderInherited.uiConfig.imagesBuilder!(images!),
