@@ -83,8 +83,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
                   onRemove: (name) => change(field.value!
                     ..removeWhere((element) => element.name == name))),
             _buildButton(widgetBuilderInherited),
-            const SizedBox(height: 10),
-            if (filesBuilder == null)
+            if (filesBuilder == null) ...[
+              const SizedBox(height: 10),
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -109,6 +109,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                   );
                 },
               ),
+            ],
             if (field.hasError) CustomErrorText(text: field.errorText!),
           ],
         );
