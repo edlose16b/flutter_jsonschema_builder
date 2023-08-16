@@ -19,11 +19,13 @@ class PropertySchemaBuilder extends StatelessWidget {
     Key? key,
     required this.mainSchema,
     required this.schemaProperty,
+    this.showDebugElements = true,
     this.onChangeListen,
   }) : super(key: key);
   final Schema mainSchema;
   final SchemaProperty schemaProperty;
   final ValueChanged<dynamic>? onChangeListen;
+  final bool showDebugElements;
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +257,7 @@ class PropertySchemaBuilder extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        if (!kReleaseMode)
+        if (!kReleaseMode && showDebugElements)
           Text(
             'key: ${schemaProperty.idKey}',
             style: const TextStyle(

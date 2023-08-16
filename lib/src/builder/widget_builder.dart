@@ -29,8 +29,9 @@ class JsonForm extends StatefulWidget {
   const JsonForm({
     Key? key,
     required this.jsonSchema,
-    this.uiSchema,
     required this.onFormDataSaved,
+    this.showDebugElements = true,
+    this.uiSchema,
     this.fileHandler,
     this.initialFileValueHandler,
     this.jsonFormSchemaUiConfig,
@@ -59,6 +60,12 @@ class JsonForm extends StatefulWidget {
   final ValueChanged<dynamic>? onChanged;
 
   final Map<String, dynamic>? initialData;
+
+  /// Whether to show debug elements like debug labels for each field and inspect button
+  ///
+  /// defaults to `true`,
+  /// Debug labels only show when the app is built for debugging
+  final bool showDebugElements;
 
   @override
   _JsonFormState createState() => _JsonFormState();
@@ -100,7 +107,7 @@ class _JsonFormState extends State<JsonForm> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: <Widget>[
-                if (!kReleaseMode)
+                if (!kReleaseMode && widget.showDebugElements)
                   TextButton(
                     onPressed: () {
                       inspect(mainSchema);
@@ -111,6 +118,7 @@ class _JsonFormState extends State<JsonForm> {
                 FormFromSchemaBuilder(
                   mainSchema: mainSchema,
                   schema: mainSchema,
+                  showDebugElements: widget.showDebugElements,
                 ),
                 const SizedBox(height: 20),
                 widgetBuilderInherited.uiConfig.submitButtonBuilder == null
@@ -171,10 +179,12 @@ class FormFromSchemaBuilder extends StatelessWidget {
     Key? key,
     required this.mainSchema,
     required this.schema,
+    this.showDebugElements = true,
     this.schemaObject,
   }) : super(key: key);
   final Schema mainSchema;
   final Schema schema;
+  final bool showDebugElements;
   final SchemaObject? schemaObject;
 
   @override
@@ -183,12 +193,14 @@ class FormFromSchemaBuilder extends StatelessWidget {
       return PropertySchemaBuilder(
         mainSchema: mainSchema,
         schemaProperty: schema as SchemaProperty,
+        showDebugElements: showDebugElements,
       );
     }
     if (schema is SchemaArray) {
       return ArraySchemaBuilder(
         mainSchema: mainSchema,
         schemaArray: schema as SchemaArray,
+        showDebugElements: showDebugElements,
       );
     }
 
@@ -196,6 +208,7 @@ class FormFromSchemaBuilder extends StatelessWidget {
       return ObjectSchemaBuilder(
         mainSchema: mainSchema,
         schemaObject: schema as SchemaObject,
+        showDebugElements: showDebugElements,
       );
     }
 

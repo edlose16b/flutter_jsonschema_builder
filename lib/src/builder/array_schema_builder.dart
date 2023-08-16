@@ -6,12 +6,16 @@ import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class ArraySchemaBuilder extends StatefulWidget {
-  const ArraySchemaBuilder(
-      {Key? key, required this.mainSchema, required this.schemaArray})
-      : super(key: key);
+  const ArraySchemaBuilder({
+    Key? key,
+    required this.mainSchema,
+    required this.schemaArray,
+    this.showDebugElements = true,
+  }) : super(key: key);
+
   final Schema mainSchema;
   final SchemaArray schemaArray;
-
+  final bool showDebugElements;
   @override
   State<ArraySchemaBuilder> createState() => _ArraySchemaBuilderState();
 }
@@ -66,6 +70,7 @@ class _ArraySchemaBuilderState extends State<ArraySchemaBuilder> {
                   FormFromSchemaBuilder(
                     mainSchema: widget.mainSchema,
                     schema: schemaLoop,
+                    showDebugElements: widget.showDebugElements,
                   ),
                   if (widget.schemaArray.items.length > 1) const Divider(),
                   const SizedBox(height: 10),
