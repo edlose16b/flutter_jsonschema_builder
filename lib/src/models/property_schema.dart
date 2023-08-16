@@ -146,7 +146,6 @@ class SchemaProperty extends Schema {
   dynamic dependents;
   bool readOnly;
   bool isMultipleFile = false;
-  bool filePreview = false;
   String? fileType;
   List<String>? acceptedFiles;
 
@@ -205,7 +204,6 @@ class SchemaProperty extends Schema {
           widget = data as String;
           break;
         case "ui:options":
-          filePreview = data["filePreview"] ?? false;
           fileType = data["fileType"];
           acceptedFiles = data["accept"] != null
               ? (data["accept"] as String)
