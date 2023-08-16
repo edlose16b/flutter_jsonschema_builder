@@ -6,6 +6,7 @@ import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 class JsonFormSchemaUiConfig {
   JsonFormSchemaUiConfig({
     this.fieldTitle,
+    this.fieldDescription,
     this.error,
     this.title,
     this.titleAlign,
@@ -22,6 +23,7 @@ class JsonFormSchemaUiConfig {
   });
 
   TextStyle? fieldTitle;
+  TextStyle? fieldDescription;
   TextStyle? error;
   TextStyle? title;
   TextAlign? titleAlign;

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import '../models/models.dart';
@@ -46,10 +47,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: uiConfig.fieldTitle,
-        ),
+        FieldHeader(property: widget.property),
         TextFormField(
           key: Key(widget.property.idKey),
           keyboardType: TextInputType.number,
@@ -96,7 +94,4 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
       ],
     );
   }
-
-  String get decorationLabelText =>
-      '${widget.property.title} ${widget.property.required ? "*" : ""} ${widget.property.description ?? ""}';
 }

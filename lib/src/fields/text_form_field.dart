@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/utils/input_validation_json_schema.dart';
@@ -49,8 +50,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${widget.property.title} ${widget.property.required ? "*" : ""}',
-            style: uiConfig.fieldTitle),
+        FieldHeader(property: widget.property),
         AbsorbPointer(
           absorbing: widget.property.disabled ?? false,
           child: TextFormField(

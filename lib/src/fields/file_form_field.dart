@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:mime/mime.dart';
@@ -15,6 +17,7 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
     required final ValueSetter<dynamic> onSaved,
     ValueChanged<dynamic>? onChanged,
     required this.fileHandler,
+    this.initialFileValueHandler,
     final String? Function(dynamic)? customValidator,
   }) : super(
           key: key,
@@ -26,15 +29,22 @@ class FileJFormField extends PropertyFieldWidget<dynamic> {
 
   final Future<List<SchemaFormFile>?> Function(SchemaProperty property)
       fileHandler;
+  final Future<List<SchemaFormFile>?> Function(dynamic initialValue)?
+      initialFileValueHandler;
 
   @override
   _FileJFormFieldState createState() => _FileJFormFieldState();
 }
 
 class _FileJFormFieldState extends State<FileJFormField> {
+  bool hasTriggeredInitialValue = false;
+  final GlobalKey<FormFieldState<List<SchemaFormFile>>> _fieldKey =
+      GlobalKey<FormFieldState<List<SchemaFormFile>>>();
+
   @override
   void initState() {
     widget.triggetDefaultValue();
+    _triggerInitialValue();
     super.initState();
   }
 
@@ -43,7 +53,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
     final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
     return FormField<List<SchemaFormFile>>(
-      key: Key(widget.property.idKey),
+      key: _fieldKey,
       validator: (value) {
         if ((value == null || value.isEmpty) && widget.property.required) {
           return widgetBuilderInherited.uiConfig.requiredText ?? 'Required';
@@ -71,14 +81,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${widget.property.title} ${widget.property.required ? "*" : ""}',
-              style: widgetBuilderInherited.uiConfig.fieldTitle,
-            ),
+            FieldHeader(property: widget.property),
             const SizedBox(height: 10),
             if (shouldBuildImages)
               widgetBuilderInherited.uiConfig.imagesBuilder!(images!),
-            _buildButton(widgetBuilderInherited, field),
+            _buildButton(widgetBuilderInherited),
             const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -97,10 +104,8 @@ class _FileJFormFieldState extends State<FileJFormField> {
                   trailing: IconButton(
                     icon: const Icon(Icons.close, size: 14),
                     onPressed: () {
-                      change(
-                          field,
-                          field.value!
-                            ..removeWhere((element) => element.name == name));
+                      change(field.value!
+                        ..removeWhere((element) => element.name == name));
                     },
                   ),
                 );
@@ -113,11 +118,22 @@ class _FileJFormFieldState extends State<FileJFormField> {
     );
   }
 
-  void change(
-    FormFieldState<List<SchemaFormFile>> field,
-    List<SchemaFormFile>? values,
-  ) {
-    field.didChange(values);
+  Future<void> _triggerInitialValue() async {
+    final shouldTrigger = !hasTriggeredInitialValue &&
+        widget.initialFileValueHandler != null &&
+        widget.property.defaultValue != null;
+    if (shouldTrigger) {
+      hasTriggeredInitialValue = true;
+      final initialValue =
+          await widget.initialFileValueHandler!(widget.property.defaultValue);
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        change(initialValue);
+      });
+    }
+  }
+
+  void change(List<SchemaFormFile>? values) {
+    _fieldKey.currentState!.didChange(values);
 
     if (widget.onChanged != null) {
       final response = widget.property.isMultipleFile
@@ -141,32 +157,29 @@ class _FileJFormFieldState extends State<FileJFormField> {
         .toList();
   }
 
-  VoidCallback? _onTap(FormFieldState<List<SchemaFormFile>> field) {
+  VoidCallback? _onTap() {
     if (widget.property.readOnly) return null;
 
     return () async {
       final result = await widget.fileHandler(widget.property);
 
       if (result != null) {
-        change(field, result);
+        change(result);
       }
     };
   }
 
-  Widget _buildButton(
-    WidgetBuilderInherited widgetBuilderInherited,
-    FormFieldState<List<SchemaFormFile>> field,
-  ) {
+  Widget _buildButton(WidgetBuilderInherited widgetBuilderInherited) {
     final addFileButtonBuilder =
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;
 
     if (addFileButtonBuilder != null &&
-        addFileButtonBuilder(_onTap(field), widget.property) != null) {
-      return addFileButtonBuilder(_onTap(field), widget.property)!;
+        addFileButtonBuilder(_onTap(), widget.property) != null) {
+      return addFileButtonBuilder(_onTap(), widget.property)!;
     }
 
     return ElevatedButton(
-      onPressed: _onTap(field),
+      onPressed: _onTap(),
       child: const Text('Add File'),
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),

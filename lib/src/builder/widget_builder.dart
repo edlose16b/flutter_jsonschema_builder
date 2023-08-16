@@ -16,6 +16,9 @@ import '../models/models.dart';
 typedef FileHandler = Map<String,
         Future<List<SchemaFormFile>?> Function(SchemaProperty property)?>
     Function();
+typedef InitialFileValueHandler
+    = Map<String, Future<List<SchemaFormFile>?> Function(dynamic defaultValue)?>
+        Function();
 typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
     Function();
 
@@ -30,6 +33,7 @@ class JsonForm extends StatefulWidget {
     this.showDebugElements = true,
     this.uiSchema,
     this.fileHandler,
+    this.initialFileValueHandler,
     this.jsonFormSchemaUiConfig,
     this.customPickerHandler,
     this.customValidatorHandler,
@@ -42,6 +46,10 @@ class JsonForm extends StatefulWidget {
 
   final String? uiSchema;
   final FileHandler? fileHandler;
+
+  /// This handler is for getting the correct initial value for each file, as file is just represented as string sometimes,
+  /// so we would need this handler to turn value into actual representable file field value
+  final InitialFileValueHandler? initialFileValueHandler;
 
   final JsonFormSchemaUiConfig? jsonFormSchemaUiConfig;
 
@@ -85,6 +93,7 @@ class _JsonFormState extends State<JsonForm> {
     return WidgetBuilderInherited(
       mainSchema: mainSchema,
       fileHandler: widget.fileHandler,
+      initialFileValueHandler: widget.initialFileValueHandler,
       customPickerHandler: widget.customPickerHandler,
       customValidatorHandler: widget.customValidatorHandler,
       onChanged: widget.onChanged,
