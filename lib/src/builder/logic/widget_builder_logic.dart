@@ -44,6 +44,7 @@ class WidgetBuilderInherited extends InheritedWidget {
               color: Theme.of(context).colorScheme.error,
               fontSize: textTheme.bodySmall!.fontSize),
       fieldTitle: uiConfig?.fieldTitle ?? textTheme.bodyMedium,
+      fieldDescription: uiConfig?.fieldDescription ?? textTheme.bodySmall,
       label: uiConfig?.label,
       //builders
       addItemBuilder: uiConfig?.addItemBuilder,

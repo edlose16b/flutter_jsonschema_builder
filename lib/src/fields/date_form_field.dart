@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:intl/intl.dart';
@@ -49,10 +50,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: uiConfig.fieldTitle,
-        ),
+        FieldHeader(property: widget.property),
         TextFormField(
           key: Key(widget.property.idKey),
           controller: txtDateCtrl,
@@ -61,7 +59,8 @@ class _DateJFormFieldState extends State<DateJFormField> {
             if (widget.property.required && (value == null || value.isEmpty)) {
               return uiConfig.requiredText ?? 'Required';
             }
-            if (widget.customValidator != null) return widget.customValidator!(value);
+            if (widget.customValidator != null)
+              return widget.customValidator!(value);
             return null;
           },
           // inputFormatters: [DateTextInputJsonFormatter()],
@@ -85,9 +84,10 @@ class _DateJFormFieldState extends State<DateJFormField> {
           },
           decoration: InputDecoration(
             hintText: dateFormatString.toUpperCase(),
-            helperText: widget.property.help != null && widget.property.help!.isNotEmpty
-                ? widget.property.help
-                : null,
+            helperText:
+                widget.property.help != null && widget.property.help!.isNotEmpty
+                    ? widget.property.help
+                    : null,
             suffixIcon: IconButton(
               icon: const Icon(Icons.date_range_outlined),
               onPressed: widget.property.readOnly ? null : _openCalendar,

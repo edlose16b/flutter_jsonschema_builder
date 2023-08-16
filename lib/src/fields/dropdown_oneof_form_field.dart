@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/models/one_of_model.dart';
@@ -86,10 +87,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.property.title} ${widget.property.required ? "*" : ""}',
-          style: uiConfig.fieldTitle,
-        ),
+        FieldHeader(property: widget.property),
         GestureDetector(
           onTap: _onTap,
           child: AbsorbPointer(
