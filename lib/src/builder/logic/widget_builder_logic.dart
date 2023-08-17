@@ -51,7 +51,7 @@ class WidgetBuilderInherited extends InheritedWidget {
       removeItemBuilder: uiConfig?.removeItemBuilder,
       submitButtonBuilder: uiConfig?.submitButtonBuilder,
       addFileButtonBuilder: uiConfig?.addFileButtonBuilder,
-      imagesBuilder: uiConfig?.imagesBuilder,
+      filesBuilder: uiConfig?.filesBuilder,
       selectionTitle: uiConfig?.selectionTitle,
       requiredText: uiConfig?.requiredText,
     );

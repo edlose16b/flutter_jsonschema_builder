@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
@@ -17,7 +15,7 @@ class JsonFormSchemaUiConfig {
     this.removeItemBuilder,
     this.submitButtonBuilder,
     this.addFileButtonBuilder,
-    this.imagesBuilder,
+    this.filesBuilder,
     this.selectionTitle,
     this.requiredText,
   });
@@ -51,9 +49,14 @@ class JsonFormSchemaUiConfig {
   Widget? Function(VoidCallback? onPressed, SchemaProperty property)?
       addFileButtonBuilder;
 
-  /// render a custom image preview, it takes a list of Uint8List (image bytes) as a parameter
+  /// render a custom files preview
+  ///
   /// this widget is typically shown above the [addFileButtonBuilder] or default button in file field
   ///
-  /// if it returns null or it is null, images won't be rendered
-  Widget Function(List<Uint8List> images)? imagesBuilder;
+  /// The builder decides what to build based on the [files] provided,
+  /// and [onRemove] callback is provided so you can handle files removal from cusotm widgets
+  ///
+  /// if it returns `null`, default files names widget will be displayed
+  Widget Function(List<SchemaFormFile>? files,
+      {required ValueChanged<String> onRemove})? filesBuilder;
 }

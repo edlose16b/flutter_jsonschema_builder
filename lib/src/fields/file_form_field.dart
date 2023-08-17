@@ -1,11 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
 import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
-import 'package:mime/mime.dart';
 
 import './shared.dart';
 import '../models/models.dart';
@@ -73,44 +70,44 @@ class _FileJFormFieldState extends State<FileJFormField> {
         }
       },
       builder: (field) {
-        final images = _extractImages(field.value);
-        final shouldBuildImages = widget.property.filePreview &&
-            widgetBuilderInherited.uiConfig.imagesBuilder != null &&
-            images != null &&
-            images.isNotEmpty;
+        final filesBuilder = widgetBuilderInherited.uiConfig.filesBuilder;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FieldHeader(property: widget.property),
             const SizedBox(height: 10),
-            if (shouldBuildImages)
-              widgetBuilderInherited.uiConfig.imagesBuilder!(images!),
+            if (filesBuilder != null)
+              filesBuilder(field.value,
+                  onRemove: (name) => change(field.value!
+                    ..removeWhere((element) => element.name == name))),
             _buildButton(widgetBuilderInherited),
-            const SizedBox(height: 10),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: field.value?.length ?? 0,
-              itemBuilder: (context, index) {
-                final currentFile = field.value![index];
-                final name = currentFile.name;
-                return ListTile(
-                  title: Text(name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: widget.property.readOnly
-                          ? const TextStyle(color: Colors.grey)
-                          : widgetBuilderInherited.uiConfig.label),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.close, size: 14),
-                    onPressed: () {
-                      change(field.value!
-                        ..removeWhere((element) => element.name == name));
-                    },
-                  ),
-                );
-              },
-            ),
+            if (filesBuilder == null) ...[
+              const SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: field.value?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final currentFile = field.value![index];
+                  final name = currentFile.name;
+                  return ListTile(
+                    title: Text(name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: widget.property.readOnly
+                            ? const TextStyle(color: Colors.grey)
+                            : widgetBuilderInherited.uiConfig.label),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.close, size: 14),
+                      onPressed: () {
+                        change(field.value!
+                          ..removeWhere((element) => element.name == name));
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
             if (field.hasError) CustomErrorText(text: field.errorText!),
           ],
         );
@@ -141,20 +138,6 @@ class _FileJFormFieldState extends State<FileJFormField> {
           : (values != null && values.isNotEmpty ? values.first.value : null);
       widget.onChanged!(response);
     }
-  }
-
-  List<Uint8List>? _extractImages(List<SchemaFormFile>? data) {
-    return data
-        // filter only images
-        ?.where(
-          (e) =>
-              lookupMimeType(e.name, headerBytes: e.bytes)
-                  ?.startsWith('image/') ==
-              true,
-        )
-        // map as only bytes
-        .map((e) => e.bytes)
-        .toList();
   }
 
   VoidCallback? _onTap() {
