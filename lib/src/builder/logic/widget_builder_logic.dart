@@ -46,14 +46,14 @@ class WidgetBuilderInherited extends InheritedWidget {
       fieldTitle: uiConfig?.fieldTitle ?? textTheme.bodyMedium,
       fieldDescription: uiConfig?.fieldDescription ?? textTheme.bodySmall,
       label: uiConfig?.label,
+      selectionTitle: uiConfig?.selectionTitle,
+      requiredText: uiConfig?.requiredText,
       //builders
       addItemBuilder: uiConfig?.addItemBuilder,
       removeItemBuilder: uiConfig?.removeItemBuilder,
       submitButtonBuilder: uiConfig?.submitButtonBuilder,
       addFileButtonBuilder: uiConfig?.addFileButtonBuilder,
       filesBuilder: uiConfig?.filesBuilder,
-      selectionTitle: uiConfig?.selectionTitle,
-      requiredText: uiConfig?.requiredText,
     );
   }
 

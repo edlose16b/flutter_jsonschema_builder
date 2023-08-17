@@ -39,6 +39,7 @@ class JsonForm extends StatefulWidget {
     this.customValidatorHandler,
     this.onChanged,
     this.initialData,
+    this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
 
   final String jsonSchema;
@@ -60,6 +61,8 @@ class JsonForm extends StatefulWidget {
   final ValueChanged<dynamic>? onChanged;
 
   final Map<String, dynamic>? initialData;
+
+  final EdgeInsets padding;
 
   /// Whether to show debug elements like debug labels for each field and inspect button
   ///
@@ -104,7 +107,7 @@ class _JsonFormState extends State<JsonForm> {
         return Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.all(15.0),
+            padding: widget.padding,
             child: Column(
               children: <Widget>[
                 if (!kReleaseMode && widget.showDebugElements)
