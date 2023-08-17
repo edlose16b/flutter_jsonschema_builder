@@ -18,7 +18,6 @@ class JsonFormSchemaUiConfig {
     this.filesBuilder,
     this.selectionTitle,
     this.requiredText,
-    this.padding = const EdgeInsets.all(16),
   });
 
   TextStyle? fieldTitle;
@@ -60,7 +59,4 @@ class JsonFormSchemaUiConfig {
   /// if it returns `null`, default files names widget will be displayed
   Widget Function(List<SchemaFormFile>? files,
       {required ValueChanged<String> onRemove})? filesBuilder;
-
-  /// The padding of the Form
-  EdgeInsets? padding;
 }

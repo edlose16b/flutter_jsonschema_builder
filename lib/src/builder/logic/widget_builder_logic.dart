@@ -48,7 +48,6 @@ class WidgetBuilderInherited extends InheritedWidget {
       label: uiConfig?.label,
       selectionTitle: uiConfig?.selectionTitle,
       requiredText: uiConfig?.requiredText,
-      padding: uiConfig?.padding,
       //builders
       addItemBuilder: uiConfig?.addItemBuilder,
       removeItemBuilder: uiConfig?.removeItemBuilder,
