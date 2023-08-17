@@ -101,10 +101,12 @@ class _JsonFormState extends State<JsonForm> {
       child: Builder(builder: (context) {
         final widgetBuilderInherited = WidgetBuilderInherited.of(context);
 
+        final padding =
+            widget.jsonFormSchemaUiConfig?.padding ?? const EdgeInsets.all(16);
         return Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.all(15.0),
+            padding: padding,
             child: Column(
               children: <Widget>[
                 if (!kReleaseMode && widget.showDebugElements)
