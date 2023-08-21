@@ -27,6 +27,7 @@ class DropDownJFormField extends PropertyFieldWidget<dynamic> {
 
 class _DropDownJFormFieldState extends State<DropDownJFormField> {
   dynamic value;
+  String? propertieKey;
   @override
   void initState() {
     // fill enum property
@@ -38,12 +39,12 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
           break;
         default:
           widget.property.enumm =
-              widget.property.enumNames?.map((e) => e.toString()).toList() ??
-                  [];
+              widget.property.enumNames?.map((e) => e.toString()).toList() ?? [];
       }
     }
 
     value = widget.property.defaultValue;
+    propertieKey = widget.property.id;
     widget.triggetDefaultValue();
     super.initState();
   }
@@ -53,8 +54,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     assert(widget.property.enumm != null, 'enum is required');
     assert(() {
       if (widget.property.enumNames != null) {
-        return widget.property.enumNames!.length ==
-            widget.property.enumm!.length;
+        return widget.property.enumNames!.length == widget.property.enumm!.length;
       }
       return true;
     }(), '[enumNames] and [enum]  must be the same size ');
@@ -80,8 +80,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
                 if (widget.property.required && value == null) {
                   return uiConfig.requiredText ?? 'Required';
                 }
-                if (widget.customValidator != null)
-                  return widget.customValidator!(value);
+                if (widget.customValidator != null) return widget.customValidator!(value);
                 return null;
               },
               items: _buildItems(),
@@ -104,7 +103,8 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   void _onTap() async {
     print('ontap');
     if (widget.customPickerHandler == null) return;
-    final response = await widget.customPickerHandler!(_getItems());
+    final items = _getItems();
+    final response = await widget.customPickerHandler!({...items, 'propertyTitle': propertieKey});
     if (response != null) _onChanged(response);
   }
 
