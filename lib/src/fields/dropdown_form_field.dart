@@ -104,7 +104,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
     print('ontap');
     if (widget.customPickerHandler == null) return;
     final items = _getItems();
-    final response = await widget.customPickerHandler!({...items, 'propertyTitle': propertieKey});
+    final response = await widget.customPickerHandler!({...items, 'propertyKey': propertieKey});
     if (response != null) _onChanged(response);
   }
 
