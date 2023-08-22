@@ -356,7 +356,7 @@ class PropertySchemaBuilder extends StatelessWidget {
     throw Exception('no initial file value handler found');
   }
 
-  Future<dynamic> Function(Map<dynamic, dynamic>)? _getCustomPickerHanlder(
+  Future<dynamic> Function(SchemaProperty)? _getCustomPickerHanlder(
       BuildContext context, String key) {
     final customPickerHandler =
         WidgetBuilderInherited.of(context).customPickerHandler;
