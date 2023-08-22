@@ -19,8 +19,8 @@ typedef FileHandler = Map<String,
 typedef InitialFileValueHandler
     = Map<String, Future<List<SchemaFormFile>?> Function(dynamic defaultValue)?>
         Function();
-typedef CustomPickerHandler = Map<String, Future<dynamic> Function(Map data)>
-    Function();
+typedef CustomPickerHandler
+    = Map<String, Future<dynamic> Function(SchemaProperty data)> Function();
 
 typedef CustomValidatorHandler = Map<String, String? Function(dynamic)?>
     Function();

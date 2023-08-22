@@ -171,6 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 customPickerHandler: () => {
                   '*': (data) async {
+                    final myEnums = data.enumm ?? [];
                     return showDialog(
                         context: context,
                         builder: (context) {
@@ -182,14 +183,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const Text('My Custom Picker'),
                                   ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: data.keys.length,
+                                    itemCount: myEnums.length,
                                     itemBuilder: (context, index) {
                                       return ListTile(
-                                        title: Text(data.values
+                                        title: Text(data.enumNames!
                                             .toList()[index]
                                             .toString()),
                                         onTap: () => Navigator.pop(
-                                            context, data.keys.toList()[index]),
+                                            context, myEnums.toList()[index]),
                                       );
                                     },
                                   ),
