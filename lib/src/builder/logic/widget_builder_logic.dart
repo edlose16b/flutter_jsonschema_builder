@@ -34,6 +34,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     final textTheme = Theme.of(context).textTheme;
 
     this.uiConfig = JsonFormSchemaUiConfig(
+      selectFieldTitle: uiConfig?.selectFieldTitle ?? textTheme.bodyLarge,
       title: uiConfig?.title ?? textTheme.titleLarge,
       titleAlign: uiConfig?.titleAlign ?? TextAlign.center,
       subtitle: uiConfig?.subtitle ??

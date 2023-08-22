@@ -71,7 +71,12 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
             child: DropdownButtonFormField<dynamic>(
               key: Key(widget.property.idKey),
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              hint: Text(uiConfig.selectionTitle ?? 'Select'),
+              hint: Text(
+                uiConfig.selectionTitle ?? 'Select',
+                style: WidgetBuilderInherited.of(context)
+                    .uiConfig
+                    .selectFieldTitle,
+              ),
               isExpanded: false,
               validator: (value) {
                 if (widget.property.required && value == null) {

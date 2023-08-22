@@ -18,6 +18,7 @@ class JsonFormSchemaUiConfig {
     this.filesBuilder,
     this.selectionTitle,
     this.requiredText,
+    this.selectFieldTitle,
   });
 
   TextStyle? fieldTitle;
@@ -28,6 +29,7 @@ class JsonFormSchemaUiConfig {
   TextStyle? subtitle;
   TextStyle? description;
   TextStyle? label;
+  TextStyle? selectFieldTitle;
 
   /// title of the selection widget
   /// if it is null, it will default to "Select"
