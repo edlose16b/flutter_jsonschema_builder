@@ -73,9 +73,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               hint: Text(
                 uiConfig.selectionTitle ?? 'Select',
-                style: WidgetBuilderInherited.of(context)
-                    .uiConfig
-                    .selectFieldTitle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               isExpanded: false,
               validator: (value) {
@@ -92,9 +90,9 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
               onSaved: widget.onSaved,
               style: widget.property.readOnly
                   ? const TextStyle(color: Colors.grey)
-                  : WidgetBuilderInherited.of(context).uiConfig.label,
+                  : Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
-                errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+                errorStyle: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ),

@@ -201,12 +201,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 },
                 jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
-                  title: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                  fieldTitle: const TextStyle(color: Colors.pink, fontSize: 12),
                   submitButtonBuilder: (onSubmit) => TextButton.icon(
                     onPressed: onSubmit,
                     icon: const Icon(Icons.heart_broken),

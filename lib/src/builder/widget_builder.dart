@@ -147,7 +147,7 @@ class _JsonFormState extends State<JsonForm> {
           width: double.infinity,
           child: Text(
             mainSchema.title,
-            style: WidgetBuilderInherited.of(context).uiConfig.title,
+            style: Theme.of(context).textTheme.titleLarge,
             textAlign: WidgetBuilderInherited.of(context).uiConfig.titleAlign,
           ),
         ),
@@ -157,7 +157,7 @@ class _JsonFormState extends State<JsonForm> {
             width: double.infinity,
             child: Text(
               mainSchema.description!,
-              style: WidgetBuilderInherited.of(context).uiConfig.description,
+              style: Theme.of(context).textTheme.bodyMedium,
               textAlign: WidgetBuilderInherited.of(context).uiConfig.titleAlign,
             ),
           ),

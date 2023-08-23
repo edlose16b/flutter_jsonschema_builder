@@ -67,7 +67,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
           readOnly: widget.property.readOnly,
           style: widget.property.readOnly
               ? const TextStyle(color: Colors.grey)
-              : WidgetBuilderInherited.of(context).uiConfig.label,
+              : Theme.of(context).textTheme.titleMedium,
 
           onSaved: (value) {
             if (value != null && DateTime.tryParse(value) != null) {
@@ -92,7 +92,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
               icon: const Icon(Icons.date_range_outlined),
               onPressed: widget.property.readOnly ? null : _openCalendar,
             ),
-            errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+            errorStyle: Theme.of(context).textTheme.bodySmall,
           ),
         ),
       ],

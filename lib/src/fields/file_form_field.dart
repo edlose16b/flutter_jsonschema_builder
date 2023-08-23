@@ -96,7 +96,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
                         overflow: TextOverflow.ellipsis,
                         style: widget.property.readOnly
                             ? const TextStyle(color: Colors.grey)
-                            : widgetBuilderInherited.uiConfig.label),
+                            : Theme.of(context).textTheme.titleMedium),
                     trailing: IconButton(
                       icon: const Icon(Icons.close, size: 14),
                       onPressed: () {

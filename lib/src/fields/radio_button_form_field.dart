@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
-import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import '../models/models.dart';
@@ -101,9 +100,7 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                         title: Text(widget.property.enumNames?[i],
                             style: widget.property.readOnly
                                 ? const TextStyle(color: Colors.grey)
-                                : WidgetBuilderInherited.of(context)
-                                    .uiConfig
-                                    .label),
+                                : Theme.of(context).textTheme.titleMedium),
                         groupValue: groupValue,
                         onChanged: widget.property.readOnly
                             ? null

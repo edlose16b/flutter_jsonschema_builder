@@ -98,9 +98,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               hint: Text(
                 uiConfig.selectionTitle ?? 'Select',
-                style: WidgetBuilderInherited.of(context)
-                    .uiConfig
-                    .selectFieldTitle,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               isExpanded: false,
               validator: (value) {
@@ -115,8 +113,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               onChanged: _onChanged,
               onSaved: widget.onSaved,
               decoration: InputDecoration(
-                  errorStyle:
-                      WidgetBuilderInherited.of(context).uiConfig.error),
+                  errorStyle: Theme.of(context).textTheme.bodySmall),
             ),
           ),
         ),
@@ -155,7 +152,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
                 item.title ?? '',
                 style: widget.property.readOnly
                     ? const TextStyle(color: Colors.grey)
-                    : WidgetBuilderInherited.of(context).uiConfig.label,
+                    : Theme.of(context).textTheme.titleMedium,
               ),
             ))
         .toList();

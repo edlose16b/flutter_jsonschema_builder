@@ -90,14 +90,14 @@ class _TextJFormFieldState extends State<TextJFormField> {
             },
             style: widget.property.readOnly
                 ? const TextStyle(color: Colors.grey)
-                : WidgetBuilderInherited.of(context).uiConfig.label,
+                : Theme.of(context).textTheme.titleMedium,
             decoration: InputDecoration(
               helperText: widget.property.help != null &&
                       widget.property.help!.isNotEmpty
                   ? widget.property.help
                   : null,
               labelStyle: const TextStyle(color: Colors.blue),
-              errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+              errorStyle: Theme.of(context).textTheme.bodySmall,
             ),
           ),
         ),
