@@ -66,7 +66,10 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
             });
           },
           style: widget.property.readOnly
-              ? const TextStyle(color: Colors.grey)
+              ? Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .apply(color: Colors.grey)
               : Theme.of(context).textTheme.titleMedium,
           validator: (String? value) {
             if (widget.property.required && value != null && value.isEmpty) {
@@ -88,7 +91,10 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                 widget.property.help != null && widget.property.help!.isNotEmpty
                     ? widget.property.help
                     : null,
-            errorStyle: Theme.of(context).textTheme.bodyMedium,
+            errorStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .apply(color: Colors.red),
           ),
         ),
       ],

@@ -99,7 +99,10 @@ class _RadioButtonJFormFieldState extends State<RadioButtonJFormField> {
                             : i,
                         title: Text(widget.property.enumNames?[i],
                             style: widget.property.readOnly
-                                ? const TextStyle(color: Colors.grey)
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .apply(color: Colors.grey)
                                 : Theme.of(context).textTheme.titleMedium),
                         groupValue: groupValue,
                         onChanged: widget.property.readOnly

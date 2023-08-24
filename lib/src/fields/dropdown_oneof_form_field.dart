@@ -113,7 +113,11 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               onChanged: _onChanged,
               onSaved: widget.onSaved,
               decoration: InputDecoration(
-                  errorStyle: Theme.of(context).textTheme.bodyMedium),
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .apply(color: Colors.red),
+              ),
             ),
           ),
         ),
@@ -151,22 +155,13 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
               child: Text(
                 item.title ?? '',
                 style: widget.property.readOnly
-                    ? const TextStyle(color: Colors.grey)
+                    ? Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .apply(color: Colors.grey)
                     : Theme.of(context).textTheme.titleMedium,
               ),
             ))
         .toList();
   }
-
-  // Not needed anymore
-  /* Map _getItems() {
-    if (listOfModel.isEmpty) return {};
-
-    var data = {};
-    for (final element in listOfModel) {
-      data[element] = element.title;
-    }
-
-    return data;
-  } */
 }

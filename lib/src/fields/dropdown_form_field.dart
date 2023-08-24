@@ -89,10 +89,16 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
               onChanged: _onChanged,
               onSaved: widget.onSaved,
               style: widget.property.readOnly
-                  ? const TextStyle(color: Colors.grey)
+                  ? Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .apply(color: Colors.grey)
                   : Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
-                errorStyle: Theme.of(context).textTheme.bodyMedium,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .apply(color: Colors.red),
               ),
             ),
           ),

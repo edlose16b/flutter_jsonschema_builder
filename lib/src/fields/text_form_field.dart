@@ -89,7 +89,10 @@ class _TextJFormFieldState extends State<TextJFormField> {
               return null;
             },
             style: widget.property.readOnly
-                ? const TextStyle(color: Colors.grey)
+                ? Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .apply(color: Colors.grey)
                 : Theme.of(context).textTheme.titleMedium,
             decoration: InputDecoration(
               helperText: widget.property.help != null &&
@@ -97,7 +100,10 @@ class _TextJFormFieldState extends State<TextJFormField> {
                   ? widget.property.help
                   : null,
               labelStyle: const TextStyle(color: Colors.blue),
-              errorStyle: Theme.of(context).textTheme.bodyMedium,
+              errorStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .apply(color: Colors.red),
             ),
           ),
         ),

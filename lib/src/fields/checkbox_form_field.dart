@@ -58,7 +58,10 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
                   title: Text(
                     widget.property.title,
                     style: widget.property.readOnly
-                        ? const TextStyle(color: Colors.grey)
+                        ? Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .apply(color: Colors.grey)
                         : Theme.of(context).textTheme.titleMedium,
                   ),
                   controlAffinity: ListTileControlAffinity.leading,
