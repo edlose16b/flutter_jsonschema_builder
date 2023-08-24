@@ -155,16 +155,4 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
             ))
         .toList();
   }
-
-  // Not needed anymore
-  /* Map _getItems() {
-    if (listOfModel.isEmpty) return {};
-
-    var data = {};
-    for (final element in listOfModel) {
-      data[element] = element.title;
-    }
-
-    return data;
-  } */
 }
