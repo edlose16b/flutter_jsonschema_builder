@@ -20,7 +20,7 @@ class DropDownJFormField extends PropertyFieldWidget<dynamic> {
           customValidator: customValidator,
         );
 
-  final Future<dynamic> Function(Map)? customPickerHandler;
+  final Future<dynamic> Function(SchemaProperty)? customPickerHandler;
   @override
   _DropDownJFormFieldState createState() => _DropDownJFormFieldState();
 }
@@ -104,7 +104,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
   void _onTap() async {
     print('ontap');
     if (widget.customPickerHandler == null) return;
-    final response = await widget.customPickerHandler!(_getItems());
+    final response = await widget.customPickerHandler!(widget.property);
     if (response != null) _onChanged(response);
   }
 
