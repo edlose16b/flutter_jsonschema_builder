@@ -29,7 +29,7 @@ class GeneralSubtitle extends StatelessWidget {
         if (description != null && description != nainSchemaDescription)
           Text(
             description!,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
       ],
     );

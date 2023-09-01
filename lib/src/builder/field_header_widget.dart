@@ -12,13 +12,13 @@ class FieldHeader extends StatelessWidget {
       children: [
         Text(
           '${property.title} ${property.required ? "*" : ""}',
-          style: Theme.of(context).textTheme.bodySmall,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         if (description != null && description.isNotEmpty) ...[
           const SizedBox(height: 4),
           Text(
             description,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ]
       ],

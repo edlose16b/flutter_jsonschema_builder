@@ -92,7 +92,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
               icon: const Icon(Icons.date_range_outlined),
               onPressed: widget.property.readOnly ? null : _openCalendar,
             ),
-            errorStyle: Theme.of(context).textTheme.bodySmall,
+            errorStyle: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
       ],

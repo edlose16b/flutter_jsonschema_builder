@@ -97,7 +97,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
                   ? widget.property.help
                   : null,
               labelStyle: const TextStyle(color: Colors.blue),
-              errorStyle: Theme.of(context).textTheme.bodySmall,
+              errorStyle: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ),

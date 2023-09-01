@@ -157,7 +157,7 @@ class _JsonFormState extends State<JsonForm> {
             width: double.infinity,
             child: Text(
               mainSchema.description!,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodySmall,
               textAlign: WidgetBuilderInherited.of(context).uiConfig.titleAlign,
             ),
           ),

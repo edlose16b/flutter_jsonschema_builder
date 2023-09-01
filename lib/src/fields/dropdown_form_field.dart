@@ -92,7 +92,7 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
                   ? const TextStyle(color: Colors.grey)
                   : Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
-                errorStyle: Theme.of(context).textTheme.bodySmall,
+                errorStyle: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ),

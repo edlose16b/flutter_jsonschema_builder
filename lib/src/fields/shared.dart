@@ -9,7 +9,7 @@ class CustomErrorText extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, bottom: 5),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.bodySmall,
+        style: Theme.of(context).textTheme.bodyMedium,
       ),
     );
   }

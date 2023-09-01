@@ -88,7 +88,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                 widget.property.help != null && widget.property.help!.isNotEmpty
                     ? widget.property.help
                     : null,
-            errorStyle: Theme.of(context).textTheme.bodySmall,
+            errorStyle: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
       ],
