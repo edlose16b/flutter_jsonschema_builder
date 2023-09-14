@@ -3,14 +3,7 @@ import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
 class JsonFormSchemaUiConfig {
   JsonFormSchemaUiConfig({
-    this.fieldTitle,
-    this.fieldDescription,
-    this.error,
-    this.title,
     this.titleAlign,
-    this.subtitle,
-    this.description,
-    this.label,
     this.addItemBuilder,
     this.removeItemBuilder,
     this.submitButtonBuilder,
@@ -20,14 +13,7 @@ class JsonFormSchemaUiConfig {
     this.requiredText,
   });
 
-  TextStyle? fieldTitle;
-  TextStyle? fieldDescription;
-  TextStyle? error;
-  TextStyle? title;
   TextAlign? titleAlign;
-  TextStyle? subtitle;
-  TextStyle? description;
-  TextStyle? label;
 
   /// title of the selection widget
   /// if it is null, it will default to "Select"

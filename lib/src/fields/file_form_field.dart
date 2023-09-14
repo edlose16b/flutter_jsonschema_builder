@@ -95,8 +95,11 @@ class _FileJFormFieldState extends State<FileJFormField> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: widget.property.readOnly
-                            ? const TextStyle(color: Colors.grey)
-                            : widgetBuilderInherited.uiConfig.label),
+                            ? Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .apply(color: Colors.grey)
+                            : Theme.of(context).textTheme.titleMedium),
                     trailing: IconButton(
                       icon: const Icon(Icons.close, size: 14),
                       onPressed: () {

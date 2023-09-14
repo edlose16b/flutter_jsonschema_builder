@@ -66,8 +66,11 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
             });
           },
           style: widget.property.readOnly
-              ? const TextStyle(color: Colors.grey)
-              : WidgetBuilderInherited.of(context).uiConfig.label,
+              ? Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .apply(color: Colors.grey)
+              : Theme.of(context).textTheme.titleMedium,
           validator: (String? value) {
             if (widget.property.required && value != null && value.isEmpty) {
               return uiConfig.requiredText ?? 'Required';
@@ -88,7 +91,10 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
                 widget.property.help != null && widget.property.help!.isNotEmpty
                     ? widget.property.help
                     : null,
-            errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+            errorStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .apply(color: Theme.of(context).colorScheme.error),
           ),
         ),
       ],

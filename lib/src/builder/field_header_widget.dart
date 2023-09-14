@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
-import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 
 class FieldHeader extends StatelessWidget {
   const FieldHeader({required this.property, Key? key}) : super(key: key);
@@ -13,13 +12,13 @@ class FieldHeader extends StatelessWidget {
       children: [
         Text(
           '${property.title} ${property.required ? "*" : ""}',
-          style: WidgetBuilderInherited.of(context).uiConfig.fieldTitle,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         if (description != null && description.isNotEmpty) ...[
           const SizedBox(height: 4),
           Text(
             description,
-            style: WidgetBuilderInherited.of(context).uiConfig.fieldDescription,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ]
       ],

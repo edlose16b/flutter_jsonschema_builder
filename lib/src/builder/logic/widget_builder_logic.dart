@@ -31,21 +31,8 @@ class WidgetBuilderInherited extends InheritedWidget {
 
   void setJsonFormSchemaStyle(
       BuildContext context, JsonFormSchemaUiConfig? uiConfig) {
-    final textTheme = Theme.of(context).textTheme;
-
     this.uiConfig = JsonFormSchemaUiConfig(
-      title: uiConfig?.title ?? textTheme.titleLarge,
       titleAlign: uiConfig?.titleAlign ?? TextAlign.center,
-      subtitle: uiConfig?.subtitle ??
-          textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
-      description: uiConfig?.description ?? textTheme.bodyMedium,
-      error: uiConfig?.error ??
-          TextStyle(
-              color: Theme.of(context).colorScheme.error,
-              fontSize: textTheme.bodySmall!.fontSize),
-      fieldTitle: uiConfig?.fieldTitle ?? textTheme.bodyMedium,
-      fieldDescription: uiConfig?.fieldDescription ?? textTheme.bodySmall,
-      label: uiConfig?.label,
       selectionTitle: uiConfig?.selectionTitle,
       requiredText: uiConfig?.requiredText,
       //builders

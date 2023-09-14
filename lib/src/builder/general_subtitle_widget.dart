@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart';
 import 'package:flutter_jsonschema_builder/src/models/models.dart';
 
 class GeneralSubtitle extends StatelessWidget {
@@ -19,18 +18,18 @@ class GeneralSubtitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height:25),
+        const SizedBox(height: 25),
         if (mainSchemaTitle != title && title != kNoTitle) ...[
           Text(
             title,
-            style:  WidgetBuilderInherited.of(context).uiConfig.subtitle,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           const Divider()
         ],
         if (description != null && description != nainSchemaDescription)
           Text(
             description!,
-            style:  WidgetBuilderInherited.of(context).uiConfig.description,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
       ],
     );

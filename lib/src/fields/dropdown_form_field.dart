@@ -71,7 +71,10 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
             child: DropdownButtonFormField<dynamic>(
               key: Key(widget.property.idKey),
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              hint: Text(uiConfig.selectionTitle ?? 'Select'),
+              hint: Text(
+                uiConfig.selectionTitle ?? 'Select',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               isExpanded: false,
               validator: (value) {
                 if (widget.property.required && value == null) {
@@ -86,10 +89,16 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
               onChanged: _onChanged,
               onSaved: widget.onSaved,
               style: widget.property.readOnly
-                  ? const TextStyle(color: Colors.grey)
-                  : WidgetBuilderInherited.of(context).uiConfig.label,
+                  ? Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .apply(color: Colors.grey)
+                  : Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
-                errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .apply(color: Theme.of(context).colorScheme.error),
               ),
             ),
           ),
