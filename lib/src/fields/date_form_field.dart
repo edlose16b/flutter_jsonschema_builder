@@ -98,7 +98,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
             errorStyle: Theme.of(context)
                 .textTheme
                 .bodyMedium!
-                .apply(color: Colors.red),
+                .apply(color: Theme.of(context).colorScheme.error),
           ),
         ),
       ],

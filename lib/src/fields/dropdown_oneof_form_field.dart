@@ -116,7 +116,7 @@ class _SelectedFormFieldState extends State<DropdownOneOfJFormField> {
                 errorStyle: Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .apply(color: Colors.red),
+                    .apply(color: Theme.of(context).colorScheme.error),
               ),
             ),
           ),

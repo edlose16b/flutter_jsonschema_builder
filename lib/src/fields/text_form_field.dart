@@ -103,7 +103,7 @@ class _TextJFormFieldState extends State<TextJFormField> {
               errorStyle: Theme.of(context)
                   .textTheme
                   .bodyMedium!
-                  .apply(color: Colors.red),
+                  .apply(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ),
