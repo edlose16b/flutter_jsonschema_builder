@@ -143,16 +143,14 @@ class _FileJFormFieldState extends State<FileJFormField> {
     }
   }
 
-  VoidCallback? _onTap() {
-    if (widget.property.readOnly) return null;
+  Future<void> _onTap() async {
+    if (widget.property.readOnly) return;
 
-    return () async {
-      final result = await widget.fileHandler(widget.property);
+    final result = await widget.fileHandler(widget.property);
 
-      if (result != null) {
-        change(result);
-      }
-    };
+    if (result != null) {
+      change(result);
+    }
   }
 
   Widget _buildButton(WidgetBuilderInherited widgetBuilderInherited) {
@@ -160,12 +158,12 @@ class _FileJFormFieldState extends State<FileJFormField> {
         widgetBuilderInherited.uiConfig.addFileButtonBuilder;
 
     if (addFileButtonBuilder != null &&
-        addFileButtonBuilder(_onTap(), widget.property) != null) {
-      return addFileButtonBuilder(_onTap(), widget.property)!;
+        addFileButtonBuilder(_onTap, widget.property) != null) {
+      return addFileButtonBuilder(_onTap, widget.property)!;
     }
 
     return ElevatedButton(
-      onPressed: _onTap(),
+      onPressed: _onTap,
       child: const Text('Add File'),
       style: ButtonStyle(
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),
