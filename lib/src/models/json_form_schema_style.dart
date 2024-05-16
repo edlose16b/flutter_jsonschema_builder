@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/flutter_jsonschema_builder.dart';
 
@@ -32,7 +33,7 @@ class JsonFormSchemaUiConfig {
 
   /// render a custom button
   /// if it returns null or it is null, it will build default buttom
-  Widget? Function(VoidCallback? onPressed, SchemaProperty property)?
+  Widget? Function(AsyncCallback? onPressed, SchemaProperty property)?
       addFileButtonBuilder;
 
   /// render a custom files preview
