@@ -27,9 +27,9 @@ class JsonFormSchemaUiConfig {
   Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
   Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
 
-  /// render a custom submit button
-  /// @param [VoidCallback] submit function
-  Widget Function(VoidCallback onSubmit)? submitButtonBuilder;
+  /// render a custom submit button, it returns whether the form is valid or not
+  /// @param [ValueGetter] submit function
+  Widget Function(ValueGetter<bool> onSubmit)? submitButtonBuilder;
 
   /// render a custom button
   /// if it returns null or it is null, it will build default buttom

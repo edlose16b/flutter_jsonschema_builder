@@ -166,14 +166,16 @@ class _JsonFormState extends State<JsonForm> {
   }
 
   //  Form methods
-  void onSubmit(WidgetBuilderInherited widgetBuilderInherited) {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+  bool onSubmit(WidgetBuilderInherited widgetBuilderInherited) {
+    final isValid =
+        _formKey.currentState != null && _formKey.currentState!.validate();
+    if (isValid) {
       _formKey.currentState?.save();
-
-      print(widgetBuilderInherited.data);
 
       widget.onFormDataSaved(widgetBuilderInherited.data);
     }
+
+    return isValid;
   }
 }
 
