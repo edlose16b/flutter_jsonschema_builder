@@ -166,7 +166,7 @@ class _FileJFormFieldState extends State<FileJFormField> {
       onPressed: _onTap,
       child: const Text('Add File'),
       style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),
+        minimumSize: WidgetStateProperty.all(const Size(double.infinity, 40)),
       ),
     );
   }

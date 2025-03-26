@@ -5,6 +5,7 @@ import '../models/models.dart';
 enum SchemaType { string, number, boolean, integer, object, array, enumm }
 
 SchemaType schemaTypeFromString(String value) {
+  // ignore: deprecated_member_use
   return SchemaType.values.where((e) => describeEnum(e) == value).first;
 }
 

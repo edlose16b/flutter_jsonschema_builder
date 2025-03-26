@@ -219,14 +219,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: onPressed,
                         child: Text('+ Agregar archivo $key'),
                         style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
+                            minimumSize: WidgetStateProperty.all(
                                 const Size(double.infinity, 40)),
-                            backgroundColor: MaterialStateProperty.all(
+                            backgroundColor: WidgetStateProperty.all(
                               const Color(0xffcee5ff),
                             ),
-                            side: MaterialStateProperty.all(
+                            side: WidgetStateProperty.all(
                                 const BorderSide(color: Color(0xffafd5ff))),
-                            textStyle: MaterialStateProperty.all(
+                            textStyle: WidgetStateProperty.all(
                                 const TextStyle(color: Color(0xff057afb)))),
                       );
                     }
