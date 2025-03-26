@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_jsonschema_builder/src/builder/field_header_widget.dart';
+import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logic.dart'
+    show WidgetBuilderInherited;
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 import 'package:flutter_jsonschema_builder/src/fields/shared.dart';
 import '../models/models.dart';
@@ -46,6 +48,12 @@ class _CheckboxJFormFieldState extends State<CheckboxJFormField> {
           validator: (value) {
             if (widget.customValidator != null)
               return widget.customValidator!(value);
+
+            // If the field is required and the value is false, fail validation
+            if (widget.property.required && (value == null || value == false)) {
+              return WidgetBuilderInherited.of(context).uiConfig.requiredText ??
+                  'Required';
+            }
 
             return null;
           },
