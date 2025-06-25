@@ -28,7 +28,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     final textTheme = Theme.of(context).textTheme;
 
     this.uiConfig = JsonFormSchemaUiConfig(
-      title: uiConfig?.title ?? textTheme.titleLarge,
+      title: uiConfig?.title ?? textTheme.headlineSmall,
       titleAlign: uiConfig?.titleAlign ?? TextAlign.center,
       subtitle: uiConfig?.subtitle ??
           textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),

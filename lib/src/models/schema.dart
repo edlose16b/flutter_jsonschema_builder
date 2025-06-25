@@ -34,7 +34,7 @@ class Schema {
 
     json['type'] ??= 'object';
 
-    switch (schemaTypeFromString(json['type'])) {
+    switch (schemaTypeFromString(json['type'].toString())) {
       case SchemaType.object:
         schema = SchemaObject.fromJson(id, json, parent: parent);
         break;

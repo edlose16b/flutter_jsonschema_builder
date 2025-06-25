@@ -16,16 +16,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -44,58 +42,168 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
- {
-  "title": "Texto",
-  "type": "object",
-  "properties": {
-    
-    "files": {
-      "type": "array",
-      "title": "Multiple files",
-      "items": {
-        "type": "string",
-        "format": "data-url"
-      }
-    },
-    "select": {
-      "title" : "Select your Cola",
-      "type": "string",
-      "description": "This is the select-description",
-      "enum" : [0,1,2,3,4],
-      "enumNames" : ["Vale 0","Vale 1","Vale 2","Vale 3","Vale 4"],
-      "default" : 3
-    },
-    "profession" :  {
-      "type":"string",
-      "default" : "investor",
-      "oneOf":[
-          {
-            "enum":[
-                "trader"
-            ],
-            "type":"string",
-            "title":"Trader"
-          },
-          {
-            "enum":[
-                "investor"
-            ],
-            "type":"string",
-            "title":"Inversionista"
-          },      
-          {
-            "enum":[
-                "manager_officier"
-            ],
-            "type":"string",
-            "title":"Gerente / Director(a)"
-          }
-      ],
-      "title":"Ocupación o profesión"
-    }
-
-  }
-}
+ 
+	{
+			"type": "object",
+			"required": [
+				"amount",
+				"currency",
+				"work_longevity",
+				"work_documents",
+				"last_salaries_documents"
+			],
+			"properties": {
+				"amount": {
+					"type": "number",
+					"title": "Ingreso mensual en esta compañía es de"
+				},
+				"currency": {
+					"type": "string",
+					"oneOf": [
+						{
+							"enum": [
+								"ARS"
+							],
+							"type": "string",
+							"title": "Peso Argentino (ARS)"
+						},
+						{
+							"enum": [
+								"BRL"
+							],
+							"type": "string",
+							"title": "Real Brasileño (BRL)"
+						},
+						{
+							"enum": [
+								"COP"
+							],
+							"type": "string",
+							"title": "Peso Colombiano (COP)"
+						},
+						{
+							"enum": [
+								"CLP"
+							],
+							"type": "string",
+							"title": "Peso Chileno (CLP)"
+						},
+						{
+							"enum": [
+								"EUR"
+							],
+							"type": "string",
+							"title": "Euro (EUR)"
+						},
+						{
+							"enum": [
+								"MXN"
+							],
+							"type": "string",
+							"title": "Peso Mexicano (MXN)"
+						},
+						{
+							"enum": [
+								"PEN"
+							],
+							"type": "string",
+							"title": "Sol (PEN)"
+						},
+						{
+							"enum": [
+								"other"
+							],
+							"type": "string",
+							"title": "Otro"
+						}
+					],
+					"title": "Moneda"
+				},
+				"company_name": {
+					"type": "string",
+					"title": "Nombre de la compañía"
+				},
+				"work_documents": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "data-url"
+					},
+					"title": "Ingrese documentación de tu contrato laboral",
+					"maxItems": 10,
+					"minItems": 1,
+					"override": true
+				},
+				"work_longevity": {
+					"type": "string",
+					"oneOf": [
+						{
+							"enum": [
+								"less_than_a_year"
+							],
+							"type": "string",
+							"title": "Menos de un año"
+						},
+						{
+							"enum": [
+								"one_year"
+							],
+							"type": "string",
+							"title": "Un año"
+						},
+						{
+							"enum": [
+								"two_years"
+							],
+							"type": "string",
+							"title": "Dos años"
+						},
+						{
+							"enum": [
+								"three_years_or_more"
+							],
+							"type": "string",
+							"title": "Más de 3 años"
+						}
+					],
+					"title": "Antigüedad Laboral"
+				},
+				"last_salaries_documents": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "data-url"
+					},
+					"title": "Ingrese liquidaciones o comprobantes de pago de sueldo (últimos 3 meses)",
+					"maxItems": 10,
+					"minItems": 1,
+					"override": true
+				}
+			},
+			"dependencies": {
+				"currency": {
+					"oneOf": [
+						{
+							"required": [
+								"currency_alternative"
+							],
+							"properties": {
+								"currency": {
+									"enum": [
+										"other"
+									]
+								},
+								"currency_alternative": {
+									"type": "string",
+									"title": "Moneda alternativa"
+								}
+							}
+						}
+					]
+				}
+			}
+		}
+	
 
 
   ''';
@@ -114,11 +222,14 @@ class _MyHomePageState extends State<MyHomePage> {
     await Future.delayed(const Duration(seconds: 3));
 
     final file1 = XFile(
-        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+    );
     final file2 = XFile(
-        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+    );
     final file3 = XFile(
-        'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg');
+      'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+    );
 
     return [file1, file2, file3];
   }
@@ -138,47 +249,56 @@ class _MyHomePageState extends State<MyHomePage> {
                 onFormDataSaved: (data) {
                   inspect(data);
                 },
-                fileHandler: () => {
-                  'files': defaultCustomFileHandler,
-                  'file': () async {
-                    return [
-                      XFile(
-                          'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg')
-                    ];
-                  },
-                  '*': defaultCustomFileHandler
-                },
-                customPickerHandler: () => {
-                  '*': (data) async {
-                    return showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Scaffold(
-                            body: Container(
-                              margin: const EdgeInsets.all(20),
-                              child: Column(
-                                children: [
-                                  const Text('My Custom Picker'),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: data.keys.length,
-                                    itemBuilder: (context, index) {
-                                      return ListTile(
-                                        title: Text(data.values
-                                            .toList()[index]
-                                            .toString()),
-                                        onTap: () => Navigator.pop(
-                                            context, data.keys.toList()[index]),
-                                      );
-                                    },
-                                  ),
-                                ],
+                fileHandler:
+                    () => {
+                      'files': defaultCustomFileHandler,
+                      'file': () async {
+                        return [
+                          XFile(
+                            'https://cdn.mos.cms.futurecdn.net/LEkEkAKZQjXZkzadbHHsVj-970-80.jpg',
+                          ),
+                        ];
+                      },
+                      '*': defaultCustomFileHandler,
+                    },
+                customPickerHandler:
+                    () => {
+                      '*': (data) async {
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Scaffold(
+                              body: Container(
+                                margin: const EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    const Text('My Custom Picker'),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: data.keys.length,
+                                      itemBuilder: (context, index) {
+                                        return ListTile(
+                                          title: Text(
+                                            data.values
+                                                .toList()[index]
+                                                .toString(),
+                                          ),
+                                          onTap:
+                                              () => Navigator.pop(
+                                                context,
+                                                data.keys.toList()[index],
+                                              ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        });
-                  }
-                },
+                            );
+                          },
+                        );
+                      },
+                    },
                 jsonFormSchemaUiConfig: JsonFormSchemaUiConfig(
                   title: const TextStyle(
                     color: Colors.black,
@@ -186,44 +306,51 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontSize: 24,
                   ),
                   fieldTitle: const TextStyle(color: Colors.pink, fontSize: 12),
-                  submitButtonBuilder: (onSubmit) => TextButton.icon(
-                    onPressed: onSubmit,
-                    icon: const Icon(Icons.heart_broken),
-                    label: const Text('Enviar'),
-                  ),
-                  addItemBuilder: (onPressed, key) => TextButton.icon(
-                    onPressed: onPressed,
-                    icon: const Icon(Icons.plus_one),
-                    label: const Text('Add Item'),
-                  ),
+                  submitButtonBuilder:
+                      (onSubmit) => TextButton.icon(
+                        onPressed: onSubmit,
+                        icon: const Icon(Icons.heart_broken),
+                        label: const Text('Enviar'),
+                      ),
+                  addItemBuilder:
+                      (onPressed, key) => TextButton.icon(
+                        onPressed: onPressed,
+                        icon: const Icon(Icons.plus_one),
+                        label: const Text('Add Item'),
+                      ),
                   addFileButtonBuilder: (onPressed, key) {
                     if (['file', 'file3'].contains(key)) {
                       return OutlinedButton(
                         onPressed: onPressed,
                         child: Text('+ Agregar archivo $key'),
                         style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(double.infinity, 40)),
-                            backgroundColor: MaterialStateProperty.all(
-                              const Color(0xffcee5ff),
-                            ),
-                            side: MaterialStateProperty.all(
-                                const BorderSide(color: Color(0xffafd5ff))),
-                            textStyle: MaterialStateProperty.all(
-                                const TextStyle(color: Color(0xff057afb)))),
+                          minimumSize: WidgetStatePropertyAll(
+                            const Size(double.infinity, 40),
+                          ),
+                          backgroundColor: WidgetStatePropertyAll(
+                            const Color(0xffcee5ff),
+                          ),
+                          side: WidgetStatePropertyAll(
+                            const BorderSide(color: Color(0xffafd5ff)),
+                          ),
+                          textStyle: WidgetStatePropertyAll(
+                            const TextStyle(color: Color(0xff057afb)),
+                          ),
+                        ),
                       );
                     }
 
                     return null;
                   },
                 ),
-                customValidatorHandler: () => {
-                  'files': (value) {
-                    return null;
-                  }
-                },
+                customValidatorHandler:
+                    () => {
+                      'files': (value) {
+                        return null;
+                      },
+                    },
               ),
-            )
+            ),
           ],
         ),
       ),
