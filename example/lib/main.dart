@@ -42,170 +42,58 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final json = '''
- 
-	{
-			"type": "object",
-			"required": [
-				"amount",
-				"currency",
-				"work_longevity",
-				"work_documents",
-				"last_salaries_documents"
-			],
-			"properties": {
-				"amount": {
-					"type": "number",
-					"title": "Ingreso mensual en esta compañía es de"
-				},
-				"currency": {
-					"type": "string",
-					"oneOf": [
-						{
-							"enum": [
-								"ARS"
-							],
-							"type": "string",
-							"title": "Peso Argentino (ARS)"
-						},
-						{
-							"enum": [
-								"BRL"
-							],
-							"type": "string",
-							"title": "Real Brasileño (BRL)"
-						},
-						{
-							"enum": [
-								"COP"
-							],
-							"type": "string",
-							"title": "Peso Colombiano (COP)"
-						},
-						{
-							"enum": [
-								"CLP"
-							],
-							"type": "string",
-							"title": "Peso Chileno (CLP)"
-						},
-						{
-							"enum": [
-								"EUR"
-							],
-							"type": "string",
-							"title": "Euro (EUR)"
-						},
-						{
-							"enum": [
-								"MXN"
-							],
-							"type": "string",
-							"title": "Peso Mexicano (MXN)"
-						},
-						{
-							"enum": [
-								"PEN"
-							],
-							"type": "string",
-							"title": "Sol (PEN)"
-						},
-						{
-							"enum": [
-								"other"
-							],
-							"type": "string",
-							"title": "Otro"
-						}
-					],
-					"title": "Moneda"
-				},
-				"company_name": {
-					"type": "string",
-					"title": "Nombre de la compañía"
-				},
-				"work_documents": {
-					"type": "array",
-					"items": {
-						"type": "string",
-						"format": "data-url"
-					},
-					"title": "Ingrese documentación de tu contrato laboral",
-					"maxItems": 10,
-					"minItems": 1,
-					"override": true
-				},
-				"work_longevity": {
-					"type": "string",
-					"oneOf": [
-						{
-							"enum": [
-								"less_than_a_year"
-							],
-							"type": "string",
-							"title": "Menos de un año"
-						},
-						{
-							"enum": [
-								"one_year"
-							],
-							"type": "string",
-							"title": "Un año"
-						},
-						{
-							"enum": [
-								"two_years"
-							],
-							"type": "string",
-							"title": "Dos años"
-						},
-						{
-							"enum": [
-								"three_years_or_more"
-							],
-							"type": "string",
-							"title": "Más de 3 años"
-						}
-					],
-					"title": "Antigüedad Laboral"
-				},
-				"last_salaries_documents": {
-					"type": "array",
-					"items": {
-						"type": "string",
-						"format": "data-url"
-					},
-					"title": "Ingrese liquidaciones o comprobantes de pago de sueldo (últimos 3 meses)",
-					"maxItems": 10,
-					"minItems": 1,
-					"override": true
-				}
-			},
-			"dependencies": {
-				"currency": {
-					"oneOf": [
-						{
-							"required": [
-								"currency_alternative"
-							],
-							"properties": {
-								"currency": {
-									"enum": [
-										"other"
-									]
-								},
-								"currency_alternative": {
-									"type": "string",
-									"title": "Moneda alternativa"
-								}
-							}
-						}
-					]
-				}
-			}
-		}
-	
+ {
+  "title": "Texto",
+  "type": "object",
+  "properties": {
+    
+    "files": {
+      "type": "array",
+      "title": "Multiple files",
+      "items": {
+        "type": "string",
+        "format": "data-url"
+      }
+    },
+    "select": {
+      "title" : "Select your Cola",
+      "type": "string",
+      "description": "This is the select-description",
+      "enum" : [0,1,2,3,4],
+      "enumNames" : ["Vale 0","Vale 1","Vale 2","Vale 3","Vale 4"],
+      "default" : 3
+    },
+    "profession" :  {
+      "type":"string",
+      "default" : "investor",
+      "oneOf":[
+          {
+            "enum":[
+                "trader"
+            ],
+            "type":"string",
+            "title":"Trader"
+          },
+          {
+            "enum":[
+                "investor"
+            ],
+            "type":"string",
+            "title":"Inversionista"
+          },      
+          {
+            "enum":[
+                "manager_officier"
+            ],
+            "type":"string",
+            "title":"Gerente / Director(a)"
+          }
+      ],
+      "title":"Ocupación o profesión"
+    }
 
-
+  }
+}
   ''';
 
   final uiSchema = '''
