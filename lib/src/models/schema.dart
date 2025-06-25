@@ -5,7 +5,7 @@ import '../models/models.dart';
 enum SchemaType { string, number, boolean, integer, object, array, enumm }
 
 SchemaType schemaTypeFromString(String value) {
-  return SchemaType.values.where((e) => describeEnum(e) == value).first;
+  return SchemaType.values.where((e) => e.name == value).first;
 }
 
 class Schema {

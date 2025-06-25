@@ -33,10 +33,10 @@ dynamic safeDefaultValue(Map<String, dynamic> json) {
 
 class SchemaProperty extends Schema {
   SchemaProperty({
-    required String id,
-    required SchemaType type,
+    required super.id,
+    required super.type,
     String? title,
-    String? description,
+    super.description,
     this.defaultValue,
     this.enumm,
     this.enumNames,
@@ -48,10 +48,7 @@ class SchemaProperty extends Schema {
     this.oneOf,
     this.readOnly = false,
   }) : super(
-          id: id,
           title: title ?? 'no-title',
-          type: type,
-          description: description,
         );
 
   factory SchemaProperty.fromJson(
