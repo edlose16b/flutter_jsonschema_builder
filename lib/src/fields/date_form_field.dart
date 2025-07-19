@@ -56,6 +56,7 @@ class _DateJFormFieldState extends State<DateJFormField> {
           key: Key(widget.property.idKey),
           controller: txtDateCtrl,
           keyboardType: TextInputType.phone,
+          initialValue: widget.property.defaultValue,
           validator: (value) {
             if (widget.property.required && (value == null || value.isEmpty)) {
               return 'Required';

@@ -54,6 +54,7 @@ class _NumberJFormFieldState extends State<NumberJFormField> {
             FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
           ],
           autofocus: false,
+          initialValue: widget.property.defaultValue,
           onSaved: widget.onSaved,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           readOnly: widget.property.readOnly,
