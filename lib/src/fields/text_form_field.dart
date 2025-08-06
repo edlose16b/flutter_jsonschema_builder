@@ -11,18 +11,13 @@ import '../models/models.dart';
 
 class TextJFormField extends PropertyFieldWidget<String> {
   const TextJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<String?> onSaved,
-    required final ValueChanged<String?> onChanged,
-    String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.key,
+    required super.property,
+    required super.onSaved,
+    required ValueChanged<String?> super.onChanged,
+    super.customValidator,
+    super.decoration,
+  });
 
   @override
   _TextJFormFieldState createState() => _TextJFormFieldState();
@@ -86,14 +81,15 @@ class _TextJFormFieldState extends State<TextJFormField> {
             style: widget.property.readOnly
                 ? const TextStyle(color: Colors.grey)
                 : WidgetBuilderInherited.of(context).uiConfig.label,
-            decoration: InputDecoration(
-              helperText: widget.property.help != null &&
-                      widget.property.help!.isNotEmpty
-                  ? widget.property.help
-                  : null,
-              labelStyle: const TextStyle(color: Colors.blue),
-              errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
-            ),
+            decoration: widget.decoration ??
+                InputDecoration(
+                  helperText: widget.property.help != null &&
+                          widget.property.help!.isNotEmpty
+                      ? widget.property.help
+                      : null,
+                  labelStyle: const TextStyle(color: Colors.blue),
+                  errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
+                ),
           ),
         ),
       ],

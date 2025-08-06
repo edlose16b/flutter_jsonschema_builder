@@ -13,6 +13,7 @@ class WidgetBuilderInherited extends InheritedWidget {
     this.fileHandler,
     this.customPickerHandler,
     this.customValidatorHandler,
+    this.inputDecoration,
   }) : super(key: key, child: child);
 
   final Schema mainSchema;
@@ -22,6 +23,7 @@ class WidgetBuilderInherited extends InheritedWidget {
   final CustomPickerHandler? customPickerHandler;
   final CustomValidatorHandler? customValidatorHandler;
   late final JsonFormSchemaUiConfig uiConfig;
+  final InputDecoration? inputDecoration;
 
   void setJsonFormSchemaStyle(
       BuildContext context, JsonFormSchemaUiConfig? uiConfig) {
@@ -44,6 +46,7 @@ class WidgetBuilderInherited extends InheritedWidget {
       removeItemBuilder: uiConfig?.removeItemBuilder,
       submitButtonBuilder: uiConfig?.submitButtonBuilder,
       addFileButtonBuilder: uiConfig?.addFileButtonBuilder,
+      inputDecoration: uiConfig?.inputDecoration,
     );
   }
 

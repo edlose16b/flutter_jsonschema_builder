@@ -5,19 +5,14 @@ import '../models/models.dart';
 
 class DropDownJFormField extends PropertyFieldWidget<dynamic> {
   const DropDownJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<dynamic> onSaved,
-    ValueChanged<dynamic>? onChanged,
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
     this.customPickerHandler,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.customValidator,
+    super.decoration,
+  });
 
   final Future<dynamic> Function(Map)? customPickerHandler;
   @override
@@ -87,9 +82,11 @@ class _DropDownJFormFieldState extends State<DropDownJFormField> {
               style: widget.property.readOnly
                   ? const TextStyle(color: Colors.grey)
                   : WidgetBuilderInherited.of(context).uiConfig.label,
-              decoration: InputDecoration(
-                errorStyle: WidgetBuilderInherited.of(context).uiConfig.error,
-              ),
+              decoration: widget.decoration ??
+                  InputDecoration(
+                    errorStyle:
+                        WidgetBuilderInherited.of(context).uiConfig.error,
+                  ),
             ),
           ),
         ),

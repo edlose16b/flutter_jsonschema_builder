@@ -46,7 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
   "title": "Texto",
   "type": "object",
   "properties": {
-    
+    "name" : {
+      "type" : "string",
+      "title" : "Name"
+    },
     "files": {
       "type": "array",
       "title": "Multiple files",
@@ -230,6 +233,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     return null;
                   },
+                  inputDecoration: InputDecoration(
+                    // labelText: 'Custom Input Decoration',
+                    // labelStyle: TextStyle(color: Colors.blue),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                    fillColor: Colors.blue,
+                    filled: true,
+                  ),
                 ),
                 customValidatorHandler:
                     () => {

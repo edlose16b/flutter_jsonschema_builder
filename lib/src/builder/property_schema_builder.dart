@@ -48,6 +48,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           updateData(context, val);
         },
         customValidator: _getCustomValidator(context, schemaProperty.idKey),
+        decoration:
+            WidgetBuilderInherited.of(context).uiConfig.inputDecoration,
       );
     } else if (schemaProperty.enumm != null &&
         (schemaProperty.enumm!.isNotEmpty ||
@@ -70,6 +72,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           widgetBuilderInherited.notifyChanges();
         },
         customValidator: _getCustomValidator(context, schemaProperty.idKey),
+        decoration:
+            WidgetBuilderInherited.of(context).uiConfig.inputDecoration,
       );
     } else if (schemaProperty.oneOf != null) {
       _field = DropdownOneOfJFormField(
@@ -94,6 +98,8 @@ class PropertySchemaBuilder extends StatelessWidget {
           }
         },
         customValidator: _getCustomValidator(context, schemaProperty.idKey),
+        decoration:
+            WidgetBuilderInherited.of(context).uiConfig.inputDecoration,
       );
     } else {
       switch (schemaProperty.type) {
@@ -129,6 +135,9 @@ class PropertySchemaBuilder extends StatelessWidget {
               },
               customValidator:
                   _getCustomValidator(context, schemaProperty.idKey),
+              decoration: WidgetBuilderInherited.of(context)
+                  .uiConfig
+                  .inputDecoration,
             );
             break;
           }
@@ -159,6 +168,9 @@ class PropertySchemaBuilder extends StatelessWidget {
               },
               customValidator:
                   _getCustomValidator(context, schemaProperty.idKey),
+              decoration: WidgetBuilderInherited.of(context)
+                  .uiConfig
+                  .inputDecoration,
             );
             break;
           }
@@ -175,6 +187,8 @@ class PropertySchemaBuilder extends StatelessWidget {
               widgetBuilderInherited.notifyChanges();
             },
             customValidator: _getCustomValidator(context, schemaProperty.idKey),
+            decoration:
+                WidgetBuilderInherited.of(context).uiConfig.inputDecoration,
           );
           break;
         case SchemaType.integer:

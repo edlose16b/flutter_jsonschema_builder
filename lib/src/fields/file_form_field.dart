@@ -4,23 +4,17 @@ import 'package:flutter_jsonschema_builder/src/builder/logic/widget_builder_logi
 import 'package:flutter_jsonschema_builder/src/fields/fields.dart';
 
 import './shared.dart';
-import '../models/models.dart';
 
 class FileJFormField extends PropertyFieldWidget<dynamic> {
   const FileJFormField({
-    Key? key,
-    required SchemaProperty property,
-    required final ValueSetter<dynamic> onSaved,
-    ValueChanged<dynamic>? onChanged,
+    super.key,
+    required super.property,
+    required super.onSaved,
+    super.onChanged,
     required this.fileHandler,
-    final String? Function(dynamic)? customValidator,
-  }) : super(
-          key: key,
-          property: property,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          customValidator: customValidator,
-        );
+    super.customValidator,
+    super.decoration,
+  });
 
   final Future<List<XFile>?> Function() fileHandler;
 
@@ -143,10 +137,10 @@ class _FileJFormFieldState extends State<FileJFormField> {
 
     return ElevatedButton(
       onPressed: _onTap(field),
-      child: const Text('Add File'),
       style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 40)),
+        minimumSize: WidgetStateProperty.all(const Size(double.infinity, 40)),
       ),
+      child: const Text('Add File'),
     );
   }
 }

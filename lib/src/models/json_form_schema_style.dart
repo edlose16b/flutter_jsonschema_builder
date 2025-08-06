@@ -13,6 +13,7 @@ class JsonFormSchemaUiConfig {
     this.removeItemBuilder,
     this.submitButtonBuilder,
     this.addFileButtonBuilder,
+    this.inputDecoration,
   });
 
   TextStyle? fieldTitle;
@@ -23,8 +24,8 @@ class JsonFormSchemaUiConfig {
   TextStyle? description;
   TextStyle? label;
 
-  Widget Function(VoidCallback onPressed,String key)? addItemBuilder;
-  Widget Function(VoidCallback onPressed,String key)? removeItemBuilder;
+  Widget Function(VoidCallback onPressed, String key)? addItemBuilder;
+  Widget Function(VoidCallback onPressed, String key)? removeItemBuilder;
 
   /// render a custom submit button
   /// @param [VoidCallback] submit function
@@ -34,4 +35,6 @@ class JsonFormSchemaUiConfig {
   /// if it returns null or it is null, it will build default buttom
   Widget? Function(VoidCallback? onPressed, String key)? addFileButtonBuilder;
 
+  /// decoration for text fields
+  InputDecoration? inputDecoration;
 }
