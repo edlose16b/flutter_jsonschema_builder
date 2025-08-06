@@ -1,3 +1,8 @@
+## 0.1.3
+
+* Added `inputDecoration` to `JsonForm` widget
+* Added `decoration` to `PropertyFieldWidget` and `PropertySchemaBuilder`
+  
 ## 0.1.2
 
 * Added `inputDecoration` to `JsonForm` widget
